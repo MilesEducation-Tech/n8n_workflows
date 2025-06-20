@@ -1,0 +1,522 @@
+{
+  "createdAt": "2025-05-06T11:39:31.049Z",
+  "updatedAt": "2025-06-19T11:21:57.000Z",
+  "id": "BoUOS50SjtLAUcar",
+  "name": "Activate Webinars",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "65b62246-7b59-4637-bebc-b403b5da0353",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "webinar",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": true,
+            "id": "={{ $json.id }}",
+            "is_meet_and_greet": false,
+            "auto_register": true
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_by",
+              "displayName": "created_by",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "updated_by",
+              "displayName": "updated_by",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "webinar_id",
+              "displayName": "webinar_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "webinar_name",
+              "displayName": "webinar_name",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "host",
+              "displayName": "host",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "title_on_website",
+              "displayName": "title_on_website",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "date_string",
+              "displayName": "date_string",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "time_string",
+              "displayName": "time_string",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "duration",
+              "displayName": "duration",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "webinar_type",
+              "displayName": "webinar_type",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "courseId",
+              "displayName": "courseId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tagline_1",
+              "displayName": "tagline_1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tagline_2",
+              "displayName": "tagline_2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "about",
+              "displayName": "about",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "text_highlight",
+              "displayName": "text_highlight",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "what_you_learn",
+              "displayName": "what_you_learn",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "acc_city_id",
+              "displayName": "acc_city_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "isOffline",
+              "displayName": "isOffline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "card_banner_image",
+              "displayName": "card_banner_image",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "date_time",
+              "displayName": "date_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "zoomAccount",
+              "displayName": "zoomAccount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "options",
+              "canBeUsedToMatch": true,
+              "options": [
+                {
+                  "name": "webinar@miles.one",
+                  "value": "webinar@miles.one"
+                },
+                {
+                  "name": "cpa@mileseducation.us",
+                  "value": "cpa@mileseducation.us"
+                },
+                {
+                  "name": "cma@mileseducation.us",
+                  "value": "cma@mileseducation.us"
+                },
+                {
+                  "name": "webinar@milestalenthub.com",
+                  "value": "webinar@milestalenthub.com"
+                },
+                {
+                  "name": "milescpareview@mastercampus.com",
+                  "value": "milescpareview@mastercampus.com"
+                },
+                {
+                  "name": "pallavi.parekh@mastercampus.com",
+                  "value": "pallavi.parekh@mastercampus.com"
+                },
+                {
+                  "name": "events@mileseducation.com",
+                  "value": "events@mileseducation.com"
+                }
+              ],
+              "removed": true
+            },
+            {
+              "id": "enrol_status",
+              "displayName": "enrol_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "options",
+              "canBeUsedToMatch": true,
+              "options": [
+                {
+                  "name": "enrolled",
+                  "value": "enrolled"
+                },
+                {
+                  "name": "not_enrolled",
+                  "value": "not_enrolled"
+                },
+                {
+                  "name": "none",
+                  "value": "none"
+                }
+              ],
+              "removed": true
+            },
+            {
+              "id": "is_meet_and_greet",
+              "displayName": "is_meet_and_greet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "auto_register",
+              "displayName": "auto_register",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        520,
+        0
+      ],
+      "id": "08193813-bb0e-4ae8-aaa7-1892b35cc953",
+      "name": "Postgres4",
+      "credentials": {
+        "postgres": {
+          "id": "VPJUosohtvWNBW4H",
+          "name": "MF Prod (DO NOT USE)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "webinar",
+          "mode": "name"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "id",
+              "value": "85"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        260,
+        0
+      ],
+      "id": "68b99c57-21d9-4807-b3a1-340492b4058f",
+      "name": "Postgres5",
+      "credentials": {
+        "postgres": {
+          "id": "VPJUosohtvWNBW4H",
+          "name": "MF Prod (DO NOT USE)"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Postgres5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres5": {
+      "main": [
+        [
+          {
+            "node": "Postgres4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "When clicking ‘Test workflow’": [
+      {
+        "json": {}
+      }
+    ]
+  },
+  "versionId": "bb99f87c-6a41-418f-a9f5-148dff96cdd9",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-05-06T11:39:31.055Z",
+      "updatedAt": "2025-05-06T11:39:31.055Z",
+      "role": "workflow:owner",
+      "workflowId": "BoUOS50SjtLAUcar",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

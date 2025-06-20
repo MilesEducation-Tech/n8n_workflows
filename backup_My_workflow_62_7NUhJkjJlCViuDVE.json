@@ -1,0 +1,192 @@
+{
+  "createdAt": "2025-06-10T10:34:05.424Z",
+  "updatedAt": "2025-06-10T10:34:05.424Z",
+  "id": "7NUhJkjJlCViuDVE",
+  "name": "My workflow 62",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -940,
+        820
+      ],
+      "id": "a2eba8c8-f520-4e29-852b-9e351618f248",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "contact_list",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b3142505-21fb-420a-aeea-72b206668188",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        220,
+        0
+      ],
+      "id": "a8ce6f95-ddda-47dd-a11d-f4e8027072f9",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "url": "https://live-mt-server.wati.io/444763/api/v1/getContacts",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "pageSize",
+              "value": "100"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "*/*"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwZTRjYTEwYy1jODVlLTRjMGYtODlmNy0wYTRiNTEwMzU4NzMiLCJ1bmlxdWVfbmFtZSI6Im1hbmRhbGFtLmthcmFuQG1pbGVzZWR1Y2F0aW9uLmNvbSIsIm5hbWVpZCI6Im1hbmRhbGFtLmthcmFuQG1pbGVzZWR1Y2F0aW9uLmNvbSIsImVtYWlsIjoibWFuZGFsYW0ua2FyYW5AbWlsZXNlZHVjYXRpb24uY29tIiwiYXV0aF90aW1lIjoiMDUvMjAvMjAyNSAxMToyMToxMiIsInRlbmFudF9pZCI6IjQ0NDc2MyIsImRiX25hbWUiOiJtdC1wcm9kLVRlbmFudHMiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBRE1JTklTVFJBVE9SIiwiZXhwIjoyNTM0MDIzMDA4MDAsImlzcyI6IkNsYXJlX0FJIiwiYXVkIjoiQ2xhcmVfQUkifQ.2zFIONy1a5VrqbaIb6jHiqvVcQp6FO1jX-6JcJFQz2k"
+            }
+          ]
+        },
+        "options": {
+          "pagination": {
+            "pagination": {
+              "paginationMode": "responseContainsNextURL",
+              "nextURL": "={{ $response.body.link.nextPage }}",
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.body.link.nextPage.isEmpty() }}",
+              "requestInterval": 2000
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -380,
+        440
+      ],
+      "id": "2bea1359-c51f-4693-b299-4eef36807c11",
+      "name": "HTTP Request2"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "2d66b419-0582-4eed-86aa-f5e568c5020a",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-06-10T10:34:05.453Z",
+      "updatedAt": "2025-06-10T10:34:05.453Z",
+      "role": "workflow:owner",
+      "workflowId": "7NUhJkjJlCViuDVE",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

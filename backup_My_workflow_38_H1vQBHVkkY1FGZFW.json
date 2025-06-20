@@ -1,0 +1,139 @@
+{
+  "createdAt": "2025-03-12T07:28:55.882Z",
+  "updatedAt": "2025-03-12T07:28:55.882Z",
+  "id": "H1vQBHVkkY1FGZFW",
+  "name": "My workflow 38",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -220,
+        -80
+      ],
+      "id": "79b44b5b-269c-4770-9e3b-1513de428d73",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "leads_dump",
+        "returnAll": true,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "course",
+              "condition": "eq",
+              "keyValue": "6"
+            },
+            {
+              "keyName": "course",
+              "condition": "eq",
+              "keyValue": "7"
+            },
+            {
+              "keyName": "course",
+              "condition": "eq",
+              "keyValue": "17"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -80
+      ],
+      "id": "928ed083-fd38-4601-b36d-a30b4aaac6e8",
+      "name": "Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "c2542386-a8f6-4ae2-a9ef-39fe926cf545",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-03-12T07:28:55.914Z",
+      "updatedAt": "2025-03-12T07:28:55.914Z",
+      "role": "workflow:owner",
+      "workflowId": "H1vQBHVkkY1FGZFW",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

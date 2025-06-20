@@ -1,0 +1,90 @@
+{
+  "createdAt": "2024-01-17T13:19:10.780Z",
+  "updatedAt": "2024-01-17T13:19:10.000Z",
+  "id": "FOwUN3ToGgPaCp9v",
+  "name": "My workflow 7",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "create-chat",
+        "options": {}
+      },
+      "id": "3aed89ed-2eda-4ac6-9d0c-6241df2969b0",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        600,
+        320
+      ],
+      "webhookId": "107531e6-8a5c-4bb1-80ad-389947c2924f"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "083c6e1f-5bf1-461d-848d-bff54603a238",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2024-01-17T13:19:10.785Z",
+      "updatedAt": "2024-01-17T13:19:10.785Z",
+      "role": "workflow:owner",
+      "workflowId": "FOwUN3ToGgPaCp9v",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

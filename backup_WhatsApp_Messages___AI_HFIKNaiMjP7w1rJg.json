@@ -1,0 +1,1156 @@
+{
+  "createdAt": "2025-04-08T10:06:55.878Z",
+  "updatedAt": "2025-04-16T06:12:55.000Z",
+  "id": "HFIKNaiMjP7w1rJg",
+  "name": "WhatsApp Messages - AI",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "send-outgoing-whatsapp",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2000,
+        0
+      ],
+      "id": "3db45478-e8e0-4560-8b24-f864d1f967ff",
+      "name": "Webhook",
+      "webhookId": "52b001a3-f94b-4e34-86f7-25b9238b1a33"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body }}",
+        "options": {
+          "systemMessage": "You are an intelligent agent embedded within our real-time communication workflow. Your primary responsibility is to process incoming event data and determine the appropriate communication template along with the corresponding variable mappings. \n\nInput:\n- You will receive a JSON payload that includes:\n  - \"leadId\": Identifier for the user. This is the primary identifier and key for searches for postgres node. \n  - \"event_name\": Descriptive name of the event.\n  - \"event_params\": An object containing key-value pairs with additional parameters.\n  - \"channels\": an array of channels on which the message nedds to be sent out. \n\nTask:\n1. Parse and validate the input data.\n2. Based on the \"event_name\" and provided parameters, determine which communication template and channels are needed.\n3. Retrieve any additional information from the Postgres database (if applicable) to ensure the full context for mapping. Construct user_detail object for quick reference for that particular run for quick access to user data. \n4. Ensure that no required variable is missing; if a variable cannot be populated, indicate the error clearly in your response.\n5. If any errors are encountered during processing (e.g., missing critical data), return a structured error response with an appropriate message.\n6. Use generated WhatsApp and Email to send out comms using the respective nodes and ensure there are no failures. You have access to respective nodes. \n\nAvailable Tools:\n- SQL querying capabilities to fetch templates and user data from a Postgres database.\n- Logging utilities to record events, processing outcomes, and errors.\n- HTTP dispatch functionalities if further external calls are required.\n- WhatsApp Web node\n- Mandrill Email node\n\nConstraints:\n- Your output must be deterministic and accurate to ensure that every variable in the communication template is correctly populated.\n- Operate in real time and maintain high reliability and low latency.\n- Follow the workflow design provided by n8n and ensure that your output is structured to integrate seamlessly into the subsequent nodes (e.g., template merging, messaging dispatch).\n\n\nYour goal is to ensure the end-to-end communication message is ready for dispatch without further intervention. Execute your logic carefully to handle both standard and edge cases.\nAdd summary to tasks done, incomplete and failed tasks in the output.\n",
+          "returnIntermediateSteps": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        1960,
+        380
+      ],
+      "id": "90588dda-bbd4-498e-9f45-18a524200281",
+      "name": "AI Agent",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "model": "mistralai/mistral-large-2411",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        760
+      ],
+      "id": "8056c7ad-26f1-4b4f-ba31-9aac1c963efa",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "7JUQlMKIiSlGnibP",
+          "name": "Miles AI/ML - Analytics Account - Open Router"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.event_id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1980,
+        680
+      ],
+      "id": "71a944bc-2d66-42fb-8376-2a7ecfe0a822",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "email_templates",
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}"
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        2680,
+        640
+      ],
+      "id": "2c089922-99a3-4c8c-88a3-5890dc074012",
+      "name": "Supabase Fetch Email Templates",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "whatsapp_templates",
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}"
+      },
+      "type": "n8n-nodes-base.supabaseTool",
+      "typeVersion": 1,
+      "position": [
+        2660,
+        840
+      ],
+      "id": "255bfe86-37a3-4a52-84c7-7c715ccfab35",
+      "name": "Supabase Fetch WA Templates",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "This tool is only to fetch data from Milesforce. The Agent can use this tool to fetch details from the lead table. The identifier to fetch details is leadId, which is the primary key of the table. Ensure leadId is being passed correctly.",
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "lead",
+          "mode": "name"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "where": {
+          "values": [
+            {
+              "column": "id",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.5,
+      "position": [
+        2140,
+        1000
+      ],
+      "id": "d74cd0a4-eb4c-47e4-baa5-50646660d461",
+      "name": "Postgres Read - Lead",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "This tool is only to fetch data from Milesforce. The Agent can use this tool to fetch details from the phone table. The identifier to fetch details is leadId.",
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "=phone",
+          "mode": "name"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "where": {
+          "values": [
+            {
+              "column": "leadId",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.5,
+      "position": [
+        2260,
+        1160
+      ],
+      "id": "62cefe77-b12e-4d77-b865-e2446333e3b9",
+      "name": "Postgres Read - Phone",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "This tool is only to fetch data from Milesforce. The Agent can use this tool to fetch details from the Email table. The identifier to fetch details is leadId.",
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "=email",
+          "mode": "name"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "where": {
+          "values": [
+            {
+              "column": "leadId",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.5,
+      "position": [
+        2040,
+        1200
+      ],
+      "id": "ad2e09d7-a194-4029-8856-164c4b2b2045",
+      "name": "Postgres Read - Email",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "template": "={{ $fromAI(\"email_template_name\",\"this is the name of the email template that eneeds to be sent\") }}",
+        "fromEmail": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('From_Email', ``, 'string') }}",
+        "toEmail": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To_Email', ``, 'string') }}",
+        "jsonParameters": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('JSON_Parameters', ``, 'boolean') }}",
+        "options": {},
+        "mergeVarsJson": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Merge_Vars', ``, 'json') }}",
+        "metadataJson": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Metadata', ``, 'json') }}",
+        "attachmentsJson": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Attachments', ``, 'json') }}",
+        "headersJson": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Headers', ``, 'json') }}"
+      },
+      "type": "n8n-nodes-base.mandrillTool",
+      "typeVersion": 1,
+      "position": [
+        3240,
+        420
+      ],
+      "id": "e9278adb-8c42-418c-95ee-a276c7b03e54",
+      "name": "Mandrill",
+      "credentials": {
+        "mandrillApi": {
+          "id": "t5XAtcUI45PwVrj0",
+          "name": "Mandrill account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "This node is used to fetch upcoming webinars based on the courseId. Ensure variables are correctly passed. here, courseId is integer.\n",
+        "operation": "executeQuery",
+        "query": "SELECT\n  \"public\".\"webinar\".\"id\" AS \"id\",\n  \"public\".\"webinar\".\"webinar_id\" AS \"webinar_id\",\n  \"public\".\"webinar\".\"webinar_name\" AS \"webinar_name\",\n  \"public\".\"webinar\".\"date_string\" AS \"date_string\",\n  \"public\".\"webinar\".\"time_string\" AS \"time_string\",\n  \"public\".\"webinar\".\"courseId\" AS \"course_id\"\nFROM\n  \"public\".\"webinar\"\nWHERE\n  (\n    \"public\".\"webinar\".\"date_time\" >= CAST(CAST(NOW() AS date) AS timestamptz)\n  )\n \n   AND (\n    \"public\".\"webinar\".\"date_time\" < CAST(\n      CAST((NOW() + INTERVAL '15 day') AS date) AS timestamptz\n    )\n  )\n  AND (\"public\".\"webinar\".\"courseId\" = $1)",
+        "options": {
+          "queryReplacement": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query_Parameters', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.5,
+      "position": [
+        2400,
+        1000
+      ],
+      "id": "d268a804-8b15-445b-a3ad-9c14f9e97acc",
+      "name": "Postgres read - webinar table",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "This node fetches registration details of a particular lead (leadId) registered to a particular upcoming webinar (webinarId). Ensure variables are correctly passed. here, leadId and webinarId is integer.",
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "webinar_registration",
+          "mode": "name"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "where": {
+          "values": [
+            {
+              "column": "leadId",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', ``, 'string') }}"
+            },
+            {
+              "column": "webinarId",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.5,
+      "position": [
+        2580,
+        1080
+      ],
+      "id": "a6d9a069-8c96-41c8-825d-6fdebb10ec6f",
+      "name": "Postgres - Webinar Registration",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "This node formats the json to be sent to meta graph api to send whatsapp message based on template. \n\n\nThe agent must:\n\nIdentify the appropriate WhatsApp template for the event.\n\nUnderstand the structure of the template:\n\nDoes it have headers (text/image/video)?\n\nDoes it have buttons (URL, call, quick reply)?\n\nHow many body variables are required, and in what order?\n\nUse the user_phone_number and build a final request JSON conforming to the WhatsApp Business template message format expected by the Facebook Graph API.\n\n\n\nOnce the template and variable mapping is finalized, construct a valid JSON payload according to the Facebook Graph API for WhatsApp. Ensure the structure dynamically matches the template's schema (headers, buttons, variable count/type). Your output must be valid JSON ready for sending via HTTP POST to the API endpoint.",
+        "method": "POST",
+        "url": "https://graph.facebook.com/v18.0/171009622770823/messages",
+        "sendHeaders": true,
+        "parametersHeaders": {
+          "values": [
+            {
+              "name": "Authorization",
+              "valueProvider": "fieldValue",
+              "value": "Bearer EAAERpNdf2aYBO9sU1QltjB6ZCQZArH5MwBZCZCNsiUgH0sT4mihs6TNa6xMCDqEQ6ncUy5B3qCfXH5tbCiBC5RnvZAeYwqArMJRthWGdbUHJaBdS4PBS9gkJ6o0uGZBEA73ubwkFMkQSWI7kVEywwZBH8bmLEaL3KHm5eo2QxWbLwz4KRxtENrk0QfDPrZA5NTVU"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "model"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        2980,
+        660
+      ],
+      "id": "5db8b835-4c70-4335-86d7-ac5ed3c4358c",
+      "name": "Send WhatsApp"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are responsible for creating a normalized user event payload. Extract and format relevant data such as lead ID, user name, phone, email, and event name from the incoming event object. This payload will be passed to downstream agents for channel logic and delivery handling. Do not perform any logic related to message template mapping or formatting for delivery.\nFetch all relevant information avaiable within tables for a particular leadId, before parsing it in the expected output format. \n\nThis is the user input:\n{{ $json.body.keys() }}\n{{ $json.body.values() }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -460,
+        140
+      ],
+      "id": "a189c7ba-39fb-43e5-9b70-278b381a96ee",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+      "typeVersion": 1,
+      "position": [
+        500,
+        640
+      ],
+      "id": "58245ca9-2763-4f77-a705-4d45c35ca3f1",
+      "name": "Auto-fixing Output Parser"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        540,
+        960
+      ],
+      "id": "e274a6df-448a-4b2c-a4ee-71af4feeae2e",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "7JUQlMKIiSlGnibP",
+          "name": "Miles AI/ML - Analytics Account - Open Router"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"lead_details\": \n  [\n    {\n  \"leadID\": \"leadID of the user for whom the event has been raised\",\n      \"name\": \"first name of the user\",\n      \"phone\": \"phone number of the user, pick primary phone\",\n      \"email\": \"email of the lead\",\n      \"candidate_id\": \"candidate id of the lead\",\n      \"uuid\": \"uuid of the lead from the lead table\",\n      \"spoc_name\": \"allocated spoc of the lead\"\n    }\n  ],\n  \"course_id\" : \"course_id for which ethe event was raised\",\n  \"channels\": \"array of channels for which the event communications should be triggered\",\n  \"event_parameters\": [\n    {\n    \"event_name\": \"name of the event raised\",\n      \"event_description\": \"description of the event context passed in the event trigger\",\n      \"event parameters\": \"array of details with key-value mapping that will be used to trigger communications\"\n    }\n  ]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        680,
+        960
+      ],
+      "id": "23be9047-927c-4557-b412-fa72a70fc0db",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -660,
+        380
+      ],
+      "id": "89eae3d9-aef1-48b2-acc3-66dc9e34e82f",
+      "name": "OpenRouter Chat Model2",
+      "credentials": {
+        "openRouterApi": {
+          "id": "7JUQlMKIiSlGnibP",
+          "name": "Miles AI/ML - Analytics Account - Open Router"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "This tool is only to fetch data from Milesforce. The Agent can use this tool to fetch details from the lead table. The identifier to fetch details is lead_id, which is the primary key of the table. Ensure lead_id is being passed correctly.",
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "lead",
+          "mode": "name"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "where": {
+          "values": [
+            {
+              "column": "id",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.5,
+      "position": [
+        -340,
+        660
+      ],
+      "id": "703d9698-f510-4d4e-8b24-0f20cf42ed37",
+      "name": "Postgres Read - Lead1",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "This tool is only to fetch data from Milesforce. The Agent can use this tool to fetch details from the phone table. The identifier to fetch details is lead_id.",
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "=phone",
+          "mode": "name"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "where": {
+          "values": [
+            {
+              "column": "leadId",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.5,
+      "position": [
+        -220,
+        820
+      ],
+      "id": "eede028e-e35e-4eea-8ee9-c82a5085faed",
+      "name": "Postgres Read - Phone1",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "This tool is only to fetch data from Milesforce. The Agent can use this tool to fetch details from the Email table. The identifier to fetch details is lead_id.",
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "=email",
+          "mode": "name"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "where": {
+          "values": [
+            {
+              "column": "leadId",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.5,
+      "position": [
+        -440,
+        860
+      ],
+      "id": "7131e849-5841-4ff8-a970-3a3a6ed148f0",
+      "name": "Postgres Read - Email1",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "This node is used to fetch upcoming webinars based on the course_id. Ensure variables are correctly passed. here, course_id is integer.\n",
+        "operation": "executeQuery",
+        "query": "SELECT\n  \"public\".\"webinar\".\"id\" AS \"id\",\n  \"public\".\"webinar\".\"webinar_id\" AS \"webinar_id\",\n  \"public\".\"webinar\".\"webinar_name\" AS \"webinar_name\",\n  \"public\".\"webinar\".\"date_string\" AS \"date_string\",\n  \"public\".\"webinar\".\"time_string\" AS \"time_string\",\n  \"public\".\"webinar\".\"courseId\" AS \"course_id\"\nFROM\n  \"public\".\"webinar\"\nWHERE\n  (\n    \"public\".\"webinar\".\"date_time\" >= CAST(CAST(NOW() AS date) AS timestamptz)\n  )\n \n   AND (\n    \"public\".\"webinar\".\"date_time\" < CAST(\n      CAST((NOW() + INTERVAL '15 day') AS date) AS timestamptz\n    )\n  )\n  AND (\"public\".\"webinar\".\"courseId\" = $1)",
+        "options": {
+          "queryReplacement": "={{ $fromAI(\"course_id\",\"this is the course_id of the event\") }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.5,
+      "position": [
+        -80,
+        660
+      ],
+      "id": "2ba40eb4-4aec-4125-8c2d-17700feab5af",
+      "name": "Postgres read - webinar table1",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "This node fetches registration details of a particular lead (lead_id) registered to a particular upcoming webinar (webinarId). Ensure variables are correctly passed. here, lead_id and webinarId are integers.",
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "webinar_registration",
+          "mode": "name"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "where": {
+          "values": [
+            {
+              "column": "leadId",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', ``, 'string') }}"
+            },
+            {
+              "column": "webinarId",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.5,
+      "position": [
+        100,
+        740
+      ],
+      "id": "f8d9179e-de50-4f98-94f5-7a39f03c8f5c",
+      "name": "Postgres - Webinar Registration1",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Fetch user details as per the allocated spoc_id in lead table. ",
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "user",
+          "mode": "name"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "where": {
+          "values": [
+            {
+              "column": "id",
+              "value": "={{ $fromAI(\"spoc_id\",\"spoc id of the lead\") }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6,
+      "position": [
+        260,
+        680
+      ],
+      "id": "6a9d52d5-1819-45ee-8e59-c35bcbc11232",
+      "name": "Postgres - Get SPOC Details",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "program",
+          "mode": "name"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "where": {
+          "values": [
+            {
+              "column": "id",
+              "value": "={{ $fromAI(\"course_id\") }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6,
+      "position": [
+        -520,
+        780
+      ],
+      "id": "d15fd892-5ea8-413e-b320-3c1f908fd499",
+      "name": "Postgres - Read Course Details",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "lead_program",
+          "mode": "name"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "where": {
+          "values": [
+            {
+              "column": "leadId",
+              "value": "={{ $fromAI(\"lead_id\")}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6,
+      "position": [
+        -700,
+        860
+      ],
+      "id": "09bca7bf-0455-4387-a02e-3f69690c8ab1",
+      "name": "Postgres - Read Courses asociated with lead",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Lead Detail Agent",
+        "height": 240,
+        "width": 420,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -520,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "b66eff9a-2303-4de6-a1b1-aa4b8726ae44",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        []
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        []
+      ]
+    },
+    "Supabase Fetch Email Templates": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Fetch WA Templates": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Read - Lead": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Read - Phone": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Read - Email": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mandrill": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres read - webinar table": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Postgres - Webinar Registration": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WhatsApp": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Read - Lead1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres read - webinar table1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Read - Email1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Read - Phone1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres - Webinar Registration1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres - Get SPOC Details": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres - Read Course Details": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres - Read Courses asociated with lead": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "JugK3JVukMVLS3ax"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.miles-api.com",
+            "x-real-ip": "162.158.111.206",
+            "x-forwarded-host": "webhook.miles-api.com",
+            "x-forwarded-server": "webhook.miles-api.com",
+            "x-forwarded-for": "49.204.70.102, 162.158.111.206",
+            "connection": "close",
+            "content-length": "113",
+            "cf-ray": "92d0fe5fbff73683-FRA",
+            "cf-ipcountry": "IN",
+            "accept-encoding": "gzip, br",
+            "origin": "https://hoppscotch.io",
+            "x-forwarded-proto": "https",
+            "priority": "u=1, i",
+            "referer": "https://hoppscotch.io/",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "cf-connecting-ip": "49.204.70.102",
+            "cdn-loop": "cloudflare; loops=1",
+            "sec-fetch-site": "cross-site",
+            "sec-ch-ua-platform": "\"macOS\"",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36",
+            "accept": "application/json, text/plain, */*",
+            "sec-ch-ua": "\"Brave\";v=\"135\", \"Not-A.Brand\";v=\"8\", \"Chromium\";v=\"135\"",
+            "content-type": "application/json",
+            "sec-ch-ua-mobile": "?0",
+            "sec-gpc": "1",
+            "accept-language": "en-US,en;q=0.8"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "lead_id": 78711,
+            "event_name": "webinar_confirmation",
+            "channels": [
+              "whatsapp",
+              "emai"
+            ],
+            "event_params": {
+              "course_id": "2"
+            },
+            "event_context": "This event indicates that a user has signed up for the webinar - refernce is leadId. The event name 'webinar_confirmation' provides context only. The correct communication template might not necessarily be named 'webinar_confirmation' – it could be a variation such as 'webinar_confirmation_success', 'webinar_registration', or another related template based on additional internal business rules."
+          },
+          "webhookUrl": "https://webhook.miles-api.com/webhook/send-outgoing-whatsapp",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "versionId": "ca7d3926-6e62-4b7b-a4af-e4839b81aafa",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-04-08T10:06:55.899Z",
+      "updatedAt": "2025-04-08T10:06:55.899Z",
+      "role": "workflow:owner",
+      "workflowId": "HFIKNaiMjP7w1rJg",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

@@ -1,0 +1,252 @@
+{
+  "createdAt": "2025-04-22T15:16:12.344Z",
+  "updatedAt": "2025-04-22T15:32:51.000Z",
+  "id": "DqAcXRge2oL48bqc",
+  "name": "GP Level Comms Workflow copy",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "f1b24316-a2ec-4d9c-9b46-52144672e815",
+        "options": {}
+      },
+      "id": "f3a3a204-55f8-4408-99ce-bd820316e7b8",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        740,
+        540
+      ],
+      "webhookId": "f1b24316-a2ec-4d9c-9b46-52144672e815"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api.netcoresmartech.com/apiv2",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "type",
+              "value": "=contact"
+            },
+            {
+              "name": "activity",
+              "value": "add"
+            },
+            {
+              "name": "apikey",
+              "value": "8b61610ee5bc044df4a95a7d87c6e436"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/jsonapplication/x-www-form-urlencoded"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={\"UUID\": \"{{ $('Webhook').item.json[\"body\"][\"uuid\"] }}\",\"EMAIL\": \"{{ $('Webhook').item.json[\"body\"][\"email\"] }}\",\"MOBILE\": \"{{ $('Webhook').item.json[\"body\"][\"phone\"] }}\",\"FIRSTNAME\": \"{{ $('Webhook').item.json[\"body\"][\"first_name\"] }}\",\"LAST_NAME\": \"\"}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5dc58f80-2f9d-4bf6-9047-837b3ea76a59",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1140,
+        40
+      ]
+    },
+    {
+      "parameters": {
+        "unit": "minutes"
+      },
+      "id": "0f87f57e-0f60-4ff1-b199-3a9373a635bc",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        40
+      ],
+      "webhookId": "d417ca98-e2a7-4c41-bb7f-641281783ffe"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api2.netcoresmartech.com/v1/activity/upload",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9fe318e8ece9299a6945bea578bad979"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=[\n    {\n        \"asset_id\": \"5110a91370e379b21165d47435cf6106\",\n        \"activity_name\": \"GP_LEVEL_COMMS\",\n        \"timestamp\": \"{{ new Date().toISOString()\n }}\",\n        \"identity\": \"{{ $('Webhook').item.json[\"body\"][\"uuid\"] }}\",\n        \"activity_source\": \"web\",\n        \"activity_params\": {\n            \"level\": \"{{ $('Webhook').item.json[\"body\"][\"level\"] }}\",\n            \"first_name\": \"{{ $('Webhook').item.json[\"body\"][\"first_name\"] }}\",\n            \"phone\": \"{{ $('Webhook').item.json[\"body\"][\"phone\"] }}\",\n            \"email\": \"{{ $('Webhook').item.json[\"body\"][\"email\"] }}\",\n\"manager_name\": \"{{ $('Webhook').item.json[\"body\"][\"managerName\"] }}\",\n\"manager_phone\": \"{{ $('Webhook').item.json[\"body\"][\"managerPhone\"] }}\",\n\"event_name_LMS\": \"{{ $('Webhook').item.json[\"body\"][\"event_name\"] }}\",\n\"course\": \"{{ $('Webhook').item.json[\"body\"][\"course\"] }}\",\n\"description\": \"{{ $('Webhook').item.json[\"body\"][\"event_name\"] }}\",\n\"comments\":\"{{ $('Webhook').item.json[\"body\"][\"comments\"] }}\",\n\"subject\": \"{{ $('Webhook').item.json[\"body\"][\"subject\"] }}\"\n        }\n    }\n]\n",
+        "options": {}
+      },
+      "id": "e27579d3-cc4d-41c2-80bf-14f745f22132",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1600,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.miles-api.com",
+            "x-real-ip": "162.158.189.163",
+            "x-forwarded-host": "webhook.miles-api.com",
+            "x-forwarded-server": "webhook.miles-api.com",
+            "x-forwarded-for": "60.243.254.220, 162.158.189.163",
+            "connection": "close",
+            "content-length": "296",
+            "accept-encoding": "gzip, br",
+            "cf-ray": "8ec46cbdff6f4487-SIN",
+            "x-forwarded-proto": "https",
+            "accept": "application/json, text/plain, */*",
+            "content-type": "application/json",
+            "user-agent": "axios/1.6.2",
+            "cf-connecting-ip": "60.243.254.220"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event_name": "Passed all 4 Exams",
+            "level": "",
+            "course": "CPA",
+            "phone": "9731495515",
+            "first_name": "Kajal",
+            "email": "kajal.pandey@mileseducation.com",
+            "uuid": "f5f48124-61e6-4451-8df0-be4527823424",
+            "managerName": "Tanuj",
+            "managerPhone": "8668066480",
+            "comments": "test test karan karan",
+            "subject": "FAR"
+          }
+        }
+      }
+    ]
+  },
+  "versionId": "a36e58c9-8e03-42b9-8848-5e99fa178378",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-04-22T15:16:14.078Z",
+      "updatedAt": "2025-04-22T15:16:14.078Z",
+      "role": "workflow:owner",
+      "workflowId": "DqAcXRge2oL48bqc",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}
