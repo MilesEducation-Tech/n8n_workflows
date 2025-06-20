@@ -1,0 +1,182 @@
+{
+  "createdAt": "2025-04-24T06:26:41.139Z",
+  "updatedAt": "2025-06-09T10:32:45.000Z",
+  "id": "ly34zudh2NZ5ONX7",
+  "name": "new-send-all-details-to-mf",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "new-send-all-details-to-mf",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -180,
+        -120
+      ],
+      "id": "73846806-c622-45b2-b056-dbf17c5c915f",
+      "name": "Webhook",
+      "webhookId": "0642bd00-cebb-4a48-abb6-0cba4fe3e07d"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        400,
+        0
+      ],
+      "id": "9498e752-7f5b-4ef6-bf28-ab401411d56d",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mfx-prod-154625965269.asia-south1.run.app/enquiries/add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"first_name\":\"{{ $json.body.first_name }}\",\n\"last_name\":\" \",\n\"phone\":\"+{{ $json.body.phone }}\",\n\"contact_number\":\"+{{ $json.body.phone }}\",\n\"email\":\"{{ $json.body.email }}\",\n\"course_id\": {{ $json.body.course_id }},\n\"whatsapp_opt_in\":true,\n\"educational_qualification\":null,\n\"campaign_id\":{{ $json.body.campaign_id.toNumber() ?? 357}},\n\"register_for_webinar\":true,\n\"coming_from\": \"wati_{{ $json.body.campaign_id.toNumber() ?? 357}}\",\n\"page_full_url\": \"{{ $json.body.pageURL }}\"\n}",
+        "options": {}
+      },
+      "id": "c21a45eb-4ccc-49c7-85b7-d96876856b80",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        80,
+        -120
+      ],
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.miles-api.com",
+            "x-real-ip": "108.162.227.6",
+            "x-forwarded-host": "webhook.miles-api.com",
+            "x-forwarded-server": "webhook.miles-api.com",
+            "x-forwarded-for": "35.240.149.223, 108.162.227.6",
+            "connection": "close",
+            "content-length": "129",
+            "cf-ray": "94cfeb89cca65ce5-SIN",
+            "cf-connecting-ip": "35.240.149.223",
+            "accept-encoding": "gzip, br",
+            "x-forwarded-proto": "https",
+            "content-type": "application/json; charset=UTF-8",
+            "tracestate": "dd=s:0;p:5db4310d55edf01c",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "traceparent": "00-229610a5ef88fa12c184c6bee2da6908-5db4310d55edf01c-00",
+            "x-datadog-tags": "_dd.p.tid=229610a5ef88fa12",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-ipcountry": "SG",
+            "x-datadog-sampling-priority": "0",
+            "x-datadog-parent-id": "6752075674681208860",
+            "x-datadog-trace-id": "13944488869397948680"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "first_name": "karantest",
+            "campaign_id": "357",
+            "course_id": 33,
+            "email": "kmandalam@gmail.com",
+            "phone": "917349296479",
+            "pageURL": "wati-inbound"
+          },
+          "webhookUrl": "https://webhook.miles-api.com/webhook/new-send-all-details-to-mf",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "versionId": "3103582a-3049-4bd7-a67c-79dba20946c9",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-04-24T06:26:41.148Z",
+      "updatedAt": "2025-04-24T06:26:41.148Z",
+      "role": "workflow:owner",
+      "workflowId": "ly34zudh2NZ5ONX7",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

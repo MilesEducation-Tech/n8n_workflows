@@ -1,0 +1,4446 @@
+{
+  "createdAt": "2023-08-25T10:27:51.279Z",
+  "updatedAt": "2025-04-30T06:53:03.000Z",
+  "id": "YAQRSrjVleMY3eCQ",
+  "name": "register webinar from supabase webhook",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "registerwebinar",
+        "options": {}
+      },
+      "id": "40ae20a5-3d43-475b-8a9f-d64320b548de",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -1740,
+        1180
+      ],
+      "webhookId": "7b2d5f98-25a4-4614-a6d0-89d59c5caeae"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "campaign",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $json.body.camp_id ?? 65 }}"
+            }
+          ]
+        }
+      },
+      "id": "18b15b44-91c9-4b1d-a424-f81e38dcd4ae",
+      "name": "Supabase3",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        820
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.push_to_mf }}"
+            }
+          ]
+        }
+      },
+      "id": "6135925f-d74d-4d43-a88a-9bfb7394ae44",
+      "name": "IF2",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        380,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "fullName",
+              "value": "={{ $('Webhook').item.json.body.first_name }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $('Webhook').item.json.body.email ?? $('Webhook').item.json[\"body\"][\"questions__3\"]}}"
+            },
+            {
+              "name": "contact",
+              "value": "={{ $('Webhook').item.json.body.phone }}"
+            },
+            {
+              "name": "comingFrom",
+              "value": "={{ $('Supabase5').item.json.source_name }}"
+            },
+            {
+              "name": "campaign_name",
+              "value": "={{ $('Supabase3').item.json.campaign_name }}"
+            },
+            {
+              "name": "location",
+              "value": "={{ $json.location }}"
+            },
+            {
+              "name": "campaign_id",
+              "value": "={{ $('Supabase3').item.json.id }}"
+            },
+            {
+              "name": "platform_campaign_id",
+              "value": "={{ $('Supabase3').item.json.campaign_id }}"
+            },
+            {
+              "name": "english_proficiency",
+              "value": "={{ $('Webhook').item.json.body.english_proficiency }}"
+            },
+            {
+              "name": "education_qualification",
+              "value": "={{ $('Webhook').item.json.body.education_qualification }}"
+            },
+            {
+              "name": "body",
+              "value": "={{ $('Webhook').item.json.body }}"
+            },
+            {
+              "name": "outreach-remarketing",
+              "value": "={{ $('Supabase3').item.json['outreach_remarketing'] }}"
+            }
+          ],
+          "number": [
+            {
+              "name": "course",
+              "value": "={{ $('Supabase10').item.json.name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a9329b60-7fbf-4687-aa52-f1d1101ad495",
+      "name": "Set2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        1700,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "campaign_source",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $('Supabase3').item.json.source }}"
+            }
+          ]
+        }
+      },
+      "id": "ea87ef73-e921-4c76-9b97-5214dd6a8dfe",
+      "name": "Supabase5",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        740,
+        800
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "course_list",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $('Webhook').item.json.body.course ??2}}"
+            }
+          ]
+        }
+      },
+      "id": "ef97e6a6-27cd-4876-85e6-6375a91f568f",
+      "name": "Supabase10",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        160,
+        820
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "108019349036743",
+        "recipientPhoneNumber": "={{ $('Webhook').item.json.body.phone }}",
+        "template": "website_flow_1_thanks_for_reaching_out_to_miles|en",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $('Webhook').item.json.body.first_name }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "id": "e70bb86e-b9b5-4f10-b44f-507f9e5cefa7",
+      "name": "WhatsApp Business Cloud2",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        -1360,
+        -1760
+      ],
+      "webhookId": "33ab2665-0f64-438e-916a-bb738ee12532",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "KHcTD6EUGATb3z0D",
+          "name": "Secondary | Marketing Miles Education"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "message_status",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "send_status",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "send_time",
+              "fieldValue": "={{ $now }}"
+            },
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $json.messages[0].id }}"
+            },
+            {
+              "fieldId": "campaign_id",
+              "fieldValue": "47"
+            },
+            {
+              "fieldId": "next_flow_id",
+              "fieldValue": "bVz88YCSQeipe0DL"
+            },
+            {
+              "fieldId": "root",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "lead_dump_id",
+              "fieldValue": "={{ $('Webhook').item.json.body.id }}"
+            }
+          ]
+        }
+      },
+      "id": "013ae8c6-8da6-4d6f-9033-b760e15c4b6d",
+      "name": "Supabase11",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1140,
+        -1760
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.whatsapp }}",
+              "value2": true
+            },
+            {
+              "value1": "={{ $('Webhook').item.json.body.whatsapp_send_status }}"
+            },
+            {
+              "value1": "={{ $('Webhook').item.json.body.course != 6 && $('Webhook').item.json.body.course != 7 && $('Webhook').item.json.body.course != 8 && $('Webhook').item.json.body.course != 10}}",
+              "value2": true
+            },
+            {
+              "value1": "={{ $('Webhook').item.json.body.url_page_path == null }}",
+              "value2": true
+            }
+          ],
+          "number": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.camp_id }}",
+              "operation": "equal",
+              "value2": 48
+            }
+          ]
+        }
+      },
+      "id": "816ea61e-803d-4d5d-bf22-c712c50d1720",
+      "name": "IF6",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        3180,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "mergeByPosition",
+        "options": {}
+      },
+      "id": "d4f353ed-3a9b-4fb6-ab0f-aec8a018d9bd",
+      "name": "Merge1",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        4200,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.registration_status }}"
+            }
+          ]
+        }
+      },
+      "id": "662d10e9-5873-4bb4-b191-1180565251e7",
+      "name": "IF10",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        660,
+        1500
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "e953wrH53BK4gHbS",
+        "options": {}
+      },
+      "id": "e32933d7-17c1-4530-8888-ddf9852c0469",
+      "name": "Execute Workflow2",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        2140,
+        2060
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "webinar_id",
+              "value": "={{ $json.webinar_id }}"
+            },
+            {
+              "name": "first_name",
+              "value": "={{ $('Webhook').item.json.body.first_name }}"
+            },
+            {
+              "name": "last_name",
+              "value": "={{ $('Webhook').item.json.body.last_name }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $('Webhook').item.json.body.email }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $('Webhook').item.json.body.phone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9e410825-7697-46e5-8e6e-f3f9e2d46d61",
+      "name": "Set3",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        2060
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "webinar",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $json.id == 2 ? 119 :$json.id == 3 ? 118 : 120  }}"
+            }
+          ]
+        }
+      },
+      "id": "c51c9873-f795-40c3-8842-72d7327abbe0",
+      "name": "Supabase12",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1860,
+        2060
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads_dump",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Webhook').item.json.body.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "push_to_mf",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "whatsapp_send_status",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "registration_status",
+              "fieldValue": "={{ ($('Webhook').item.json.body.register_for_webinar == true) ? true : true  }} "
+            },
+            {
+              "fieldId": "unique_id",
+              "fieldValue": "={{ $json.uniq ?? \"\" }}"
+            }
+          ]
+        }
+      },
+      "id": "761ac833-1ada-43c4-9379-0fa0bf545e43",
+      "name": "Supabase13",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        4920,
+        820
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ !$json.hasOwnProperty('error') }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "bc7b4eb8-65b3-4df4-9792-6c6ce4e1994e",
+      "name": "IF12",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2320,
+        2060
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "webinar_registration",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "leads_dump_id",
+              "fieldValue": "={{ $('Webhook').item.json.body.id }}"
+            },
+            {
+              "fieldId": "webinar_id",
+              "fieldValue": "={{ $('Supabase12').item.json.id }}"
+            },
+            {
+              "fieldId": "join_url",
+              "fieldValue": "={{ $('Execute Workflow2').item.json.join_url }}"
+            },
+            {
+              "fieldId": "registration_email",
+              "fieldValue": "={{ $('Webhook').item.json.body.email }}"
+            }
+          ]
+        }
+      },
+      "id": "5390dd07-6949-4964-8aef-139992972877",
+      "name": "Supabase14",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2600,
+        2040
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.course  == 2 || $('Webhook').item.json.body.course  == 3}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "5e06a7d7-f3ba-4200-b202-f3d1a44f8b0a",
+      "name": "IF7",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2940,
+        2080
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "const results = [];\nconst elements = $('Webhook').item.json.body.json;\n// for (const item of elements){\n//   return { name: item };\n//    results.push({ name: item })\n// }\n\n\nreturn elements.map(el => {return {name: el}});\n\n// return newItems;\n// return results;"
+      },
+      "name": "FunctionItem - To Flow Data",
+      "type": "n8n-nodes-base.functionItem",
+      "typeVersion": 1,
+      "position": [
+        1640,
+        3000
+      ],
+      "id": "a1e3a428-aba2-48b9-94a6-a10d18c3f891"
+    },
+    {
+      "parameters": {
+        "functionCode": "return items[0].json.map(item => { \n  return {\n    json: item,\n  }\n})"
+      },
+      "name": "Create JSON-items1",
+      "type": "n8n-nodes-base.function",
+      "position": [
+        1810,
+        3000
+      ],
+      "typeVersion": 1,
+      "id": "25057db4-d3b0-44b4-a48c-01983af11774"
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "c50353e0-d9fc-42bc-a3e0-38278e96044f",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [
+        2020,
+        3000
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "e953wrH53BK4gHbS",
+        "options": {}
+      },
+      "id": "3af90e4e-4cdb-4d74-be7f-c3019c07d1ad",
+      "name": "Execute Workflow4",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        3010,
+        2980
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "webinar_id",
+              "value": "={{ $json.webinar_id }}"
+            },
+            {
+              "name": "first_name",
+              "value": "={{ $('Webhook').item.json.body.first_name }}"
+            },
+            {
+              "name": "last_name",
+              "value": "={{ $('Webhook').item.json.body.last_name }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $('Webhook').item.json.body.email }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $('Webhook').item.json.body.phone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7580b94e-a103-472a-81fd-9b7110b83dab",
+      "name": "Set6",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        2800,
+        2980
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "webinar",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $json.name  == 'CPA' ? 119 : $json.name  == 'CMA' ? 118 : 117 }}"
+            }
+          ]
+        }
+      },
+      "id": "f7ce4018-121e-4785-9859-96afb6c5f269",
+      "name": "Supabase17",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2580,
+        2980
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ !$json.hasOwnProperty('error') }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "0bba8e64-68ad-4518-83e7-6c65c6d0c9f1",
+      "name": "IF14",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        3180,
+        2980
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "tableId": "webinar_registration",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "leads_dump_id",
+              "fieldValue": "={{ $('Webhook').item.json.body.id }}"
+            },
+            {
+              "fieldId": "webinar_id",
+              "fieldValue": "={{ $('Supabase17').item.json.id }}"
+            },
+            {
+              "fieldId": "join_url",
+              "fieldValue": "={{ $('Execute Workflow4').item.json.join_url }}"
+            }
+          ]
+        }
+      },
+      "id": "b638fa43-12b0-4a91-8958-1ad33116028c",
+      "name": "Supabase18",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3400,
+        2960
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "limit"
+      },
+      "id": "bb890317-d43c-49ea-abc6-b24a49aba852",
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3,
+      "position": [
+        3910,
+        3000
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.camp_id }}",
+              "operation": "notEqual",
+              "value2": 24
+            }
+          ]
+        }
+      },
+      "id": "9c750bc0-e855-4424-9c8e-10e43901e745",
+      "name": "IF8",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        1560
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mileswebinars.2x2.ninja/api/webinarSource",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=Authorization",
+              "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjA2ZmRkZTY4NTAyMWU4NGQxNDRhOTYxNDVkMmE4OWQzNmJhZmU0YWRmOTk2YmQ5YzBlMTk4MDMyMjIxNjU5MmM2NTMxNjY5MjQ4YzlkNDNmIn0.eyJhdWQiOiIyIiwianRpIjoiMDZmZGRlNjg1MDIxZTg0ZDE0NGE5NjE0NWQyYTg5ZDM2YmFmZTRhZGY5OTZiZDljMGUxOTgwMzIyMjE2NTkyYzY1MzE2NjkyNDhjOWQ0M2YiLCJpYXQiOjE2OTcxODg1NzcsIm5iZiI6MTY5NzE4ODU3NywiZXhwIjoxODU1MDQxMzc3LCJzdWIiOiI0MTEiLCJzY29wZXMiOlsiKiJdfQ.QKi2JGFtBMqRpXwn21ksp5ri1CX2C6gPpD9TM-UvaFY7UqLzbc150tvmPy3jMJ9-Sl59_gvYontn6ULIqDahd4J4LqbCSlEtjLtJQEuuj36foB64X0IeRsMM9SFcbpXnRSE_D0K93EI7mY_HUrO9E1RNk089lR54okyH6NsOQVBjv46q7GTuEH3OOBEdPb2EaEUsZ9O2FrnF-MAkxJ4Ee6fcouvts3K22B7X2znq4Sa16fHkrEg3GJ67wdF35zVxMUlc980tLhLRNp_u3EN41a7jah8dYL_aT7GY9u7XFyMPIK4vmoJWG-58p58NbBN-ykDdpqWEJY5JyfPzLNMa9mpnx7uCjD6sV3UID4bptIWCKT9elKi_ehtTnFJbgYznHXA32dmIZ7Mz_xUfIsvlcHoIk4nUYKWtCyGy78H-umSp1hdI7LU8BdVT4ZdSvLf-9Y8ihuTcEfyCPlQUhQEpKJzQHKfESVxkexcZxLPGY7VNFEAPvQctTK6RzcabaFWvNhvdPbJ1OjBjSF2KfwXUlt2iKIWDKBzUasQcaWPF81HH_V72RWcajzhwQ5tYX5tsTUjPc6dZw5U1r0_9tsQcVZ8Bc2zK3jG_4rxmPMDTv2ix5fLjVbRmDp6c8K-fGgLTtKi3m4fYGWM8ucUPUOYU0kiIDVOtbzGmko9kE8-A_RA"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "= {\n  \"email\": \"{{ $('Set6').item.json.email }}\",\n  \"webinar_id\": {{ $('Set6').item.json.webinar_id }},\n  \"source\": \"MF\"\n}  ",
+        "options": {}
+      },
+      "id": "bf665971-2149-43b8-ba44-6ef07aa272b9",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3620,
+        2960
+      ],
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mileswebinars.2x2.ninja/api/webinarSource",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=Authorization",
+              "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjA2ZmRkZTY4NTAyMWU4NGQxNDRhOTYxNDVkMmE4OWQzNmJhZmU0YWRmOTk2YmQ5YzBlMTk4MDMyMjIxNjU5MmM2NTMxNjY5MjQ4YzlkNDNmIn0.eyJhdWQiOiIyIiwianRpIjoiMDZmZGRlNjg1MDIxZTg0ZDE0NGE5NjE0NWQyYTg5ZDM2YmFmZTRhZGY5OTZiZDljMGUxOTgwMzIyMjE2NTkyYzY1MzE2NjkyNDhjOWQ0M2YiLCJpYXQiOjE2OTcxODg1NzcsIm5iZiI6MTY5NzE4ODU3NywiZXhwIjoxODU1MDQxMzc3LCJzdWIiOiI0MTEiLCJzY29wZXMiOlsiKiJdfQ.QKi2JGFtBMqRpXwn21ksp5ri1CX2C6gPpD9TM-UvaFY7UqLzbc150tvmPy3jMJ9-Sl59_gvYontn6ULIqDahd4J4LqbCSlEtjLtJQEuuj36foB64X0IeRsMM9SFcbpXnRSE_D0K93EI7mY_HUrO9E1RNk089lR54okyH6NsOQVBjv46q7GTuEH3OOBEdPb2EaEUsZ9O2FrnF-MAkxJ4Ee6fcouvts3K22B7X2znq4Sa16fHkrEg3GJ67wdF35zVxMUlc980tLhLRNp_u3EN41a7jah8dYL_aT7GY9u7XFyMPIK4vmoJWG-58p58NbBN-ykDdpqWEJY5JyfPzLNMa9mpnx7uCjD6sV3UID4bptIWCKT9elKi_ehtTnFJbgYznHXA32dmIZ7Mz_xUfIsvlcHoIk4nUYKWtCyGy78H-umSp1hdI7LU8BdVT4ZdSvLf-9Y8ihuTcEfyCPlQUhQEpKJzQHKfESVxkexcZxLPGY7VNFEAPvQctTK6RzcabaFWvNhvdPbJ1OjBjSF2KfwXUlt2iKIWDKBzUasQcaWPF81HH_V72RWcajzhwQ5tYX5tsTUjPc6dZw5U1r0_9tsQcVZ8Bc2zK3jG_4rxmPMDTv2ix5fLjVbRmDp6c8K-fGgLTtKi3m4fYGWM8ucUPUOYU0kiIDVOtbzGmko9kE8-A_RA"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "= {\n  \"email\": \"{{ $('Set3').item.json.email }}\",\n  \"webinar_id\":{{ $('Set3').item.json.webinar_id }},\n  \"source\": \"{{ $json.source_name }}\"\n} ",
+        "options": {}
+      },
+      "id": "28bd96a3-d9b5-4b50-bc50-e2d471d9f556",
+      "name": "HTTP Request3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2640,
+        1900
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "campaign_source",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $('Supabase3').item.json.source }}"
+            }
+          ]
+        }
+      },
+      "id": "90a233d8-d444-4b2c-bffe-80584af35123",
+      "name": "Supabase19",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2480,
+        1900
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.id }}",
+              "operation": "equal",
+              "value2": 2
+            },
+            {
+              "value1": "={{ $json.id }}",
+              "operation": "equal",
+              "value2": 3
+            },
+            {
+              "value1": "={{ $json.id }}",
+              "operation": "equal",
+              "value2": 9
+            }
+          ]
+        },
+        "combineOperation": "any"
+      },
+      "id": "6160e92d-299b-40bc-a98c-19e04ebd5ca7",
+      "name": "IF1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1640,
+        2080
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "webinar_id",
+              "value": "=95283059248"
+            },
+            {
+              "name": "first_name",
+              "value": "={{ $('Webhook').item.json.body.first_name }}"
+            },
+            {
+              "name": "last_name",
+              "value": "={{ $('Webhook').item.json.body.last_name }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $('Webhook').item.json.body.email }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $('Webhook').item.json.body.phone }}"
+            },
+            {
+              "name": "intrested_in",
+              "value": "={{ $('Webhook').item.json.body.intrested_in }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c483fcd2-2300-48ac-8d8d-bd57b77f4bda",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        3640
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.id == 2 || $json.id == 3 }}",
+              "value2": true
+            },
+            {
+              "value1": "={{ $('Webhook').item.json.body.intrested_in == \"Yes\" || $('Webhook').item.json.body.intrested_in == \"Maybe\" }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "3dfabf66-dc8e-4907-a088-2582866dc44f",
+      "name": "IF3",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        3660
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "e953wrH53BK4gHbS",
+        "options": {}
+      },
+      "id": "9e17e103-71c9-4aa3-8f6a-f73c304d7e54",
+      "name": "Execute Workflow",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        2125,
+        3640
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ !$json.hasOwnProperty('error') }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "9ac1ed3c-10b1-439c-b7a9-32b993b67849",
+      "name": "IF15",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2285,
+        3640
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "webinar_registration",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "leads_dump_id",
+              "fieldValue": "={{ $('Webhook').item.json.body.id }}"
+            },
+            {
+              "fieldId": "webinar_id",
+              "fieldValue": "={{ $('Set').item.json.webinar_id }}"
+            },
+            {
+              "fieldId": "join_url",
+              "fieldValue": "={{ $('Execute Workflow').item.json.join_url }}"
+            },
+            {
+              "fieldId": "registration_email",
+              "fieldValue": "={{ $('Webhook').item.json.body.email }}"
+            }
+          ]
+        }
+      },
+      "id": "17dcfbc2-dd88-4916-a864-d08561a7c1b5",
+      "name": "Supabase",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2760,
+        3620
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mileswebinars.2x2.ninja/api/webinarSource",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=Authorization",
+              "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjA2ZmRkZTY4NTAyMWU4NGQxNDRhOTYxNDVkMmE4OWQzNmJhZmU0YWRmOTk2YmQ5YzBlMTk4MDMyMjIxNjU5MmM2NTMxNjY5MjQ4YzlkNDNmIn0.eyJhdWQiOiIyIiwianRpIjoiMDZmZGRlNjg1MDIxZTg0ZDE0NGE5NjE0NWQyYTg5ZDM2YmFmZTRhZGY5OTZiZDljMGUxOTgwMzIyMjE2NTkyYzY1MzE2NjkyNDhjOWQ0M2YiLCJpYXQiOjE2OTcxODg1NzcsIm5iZiI6MTY5NzE4ODU3NywiZXhwIjoxODU1MDQxMzc3LCJzdWIiOiI0MTEiLCJzY29wZXMiOlsiKiJdfQ.QKi2JGFtBMqRpXwn21ksp5ri1CX2C6gPpD9TM-UvaFY7UqLzbc150tvmPy3jMJ9-Sl59_gvYontn6ULIqDahd4J4LqbCSlEtjLtJQEuuj36foB64X0IeRsMM9SFcbpXnRSE_D0K93EI7mY_HUrO9E1RNk089lR54okyH6NsOQVBjv46q7GTuEH3OOBEdPb2EaEUsZ9O2FrnF-MAkxJ4Ee6fcouvts3K22B7X2znq4Sa16fHkrEg3GJ67wdF35zVxMUlc980tLhLRNp_u3EN41a7jah8dYL_aT7GY9u7XFyMPIK4vmoJWG-58p58NbBN-ykDdpqWEJY5JyfPzLNMa9mpnx7uCjD6sV3UID4bptIWCKT9elKi_ehtTnFJbgYznHXA32dmIZ7Mz_xUfIsvlcHoIk4nUYKWtCyGy78H-umSp1hdI7LU8BdVT4ZdSvLf-9Y8ihuTcEfyCPlQUhQEpKJzQHKfESVxkexcZxLPGY7VNFEAPvQctTK6RzcabaFWvNhvdPbJ1OjBjSF2KfwXUlt2iKIWDKBzUasQcaWPF81HH_V72RWcajzhwQ5tYX5tsTUjPc6dZw5U1r0_9tsQcVZ8Bc2zK3jG_4rxmPMDTv2ix5fLjVbRmDp6c8K-fGgLTtKi3m4fYGWM8ucUPUOYU0kiIDVOtbzGmko9kE8-A_RA"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "= {\n  \"email\": \"{{ $('Set').item.json.email }}\",\n  \"webinar_id\":{{ $('Set').item.json.webinar_id }},\n  \"source\": \"{{ $json.source_name }}\"\n}",
+        "options": {}
+      },
+      "id": "71f91e1e-21eb-4792-97bb-4475776da797",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2600,
+        3500
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "campaign_source",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $('Supabase3').item.json.source }}"
+            }
+          ]
+        }
+      },
+      "id": "6df6679f-307e-4f8d-bf50-82b44d00f84f",
+      "name": "Supabase21",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        2440,
+        3500
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "108019349036743",
+        "recipientPhoneNumber": "={{ $('Webhook').item.json.body.phone }}",
+        "template": "18th_nov_webinar_reg|en",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $('Webhook').item.json.body.first_name }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "id": "92720ce1-4eff-4ee2-800b-1b290171dec0",
+      "name": "WhatsApp Business Cloud4",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        3065,
+        3660
+      ],
+      "webhookId": "07b4b7fb-c152-487d-8926-008f567361c3",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "KHcTD6EUGATb3z0D",
+          "name": "Secondary | Marketing Miles Education"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.url_page_path }}",
+              "value2": "/"
+            }
+          ],
+          "boolean": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.course == 2 || $('Webhook').item.json.body.course == 3 || $('Webhook').item.json.body.course == 4 || $('Webhook').item.json.body.course == 5 || $('Webhook').item.json.body.course == 9}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "416224ad-66f6-4db6-803d-4d015c21699a",
+      "name": "IF5",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -1220,
+        -1940
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "message_status",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "send_status",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "send_time",
+              "fieldValue": "={{ $now }}"
+            },
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $json.messages[0].id }}"
+            },
+            {
+              "fieldId": "campaign_id",
+              "fieldValue": "47"
+            },
+            {
+              "fieldId": "next_flow_id",
+              "fieldValue": "1Ul1696FsBq1VdS2"
+            },
+            {
+              "fieldId": "root",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "lead_dump_id",
+              "fieldValue": "={{ $('Webhook').item.json.body.id }}"
+            }
+          ]
+        }
+      },
+      "id": "46aeb909-b1b8-451c-8f09-ba186dde32c8",
+      "name": "Supabase22",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        300,
+        -3100
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v17.0/108019349036743/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "whatsAppApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n   \"messaging_product\":\"whatsapp\",\n   \"recipient_type\":\"individual\",\n   \"to\":\"‪‪{{ $('Webhook').item.json.body.phone }}‬‬\",\n   \"type\":\"template\",\n   \"template\":{\n      \"name\":\"download_brochure_from_website_non_usp\",\n      \"language\":{\n         \"code\":\"en\"\n      },\n      \"components\":[\n         {\n            \"type\":\"header\",\n            \"parameters\":[\n               {\n                  \"type\":\"document\",\n                  \"document\":{\n\"link\":\"{{ $('Supabase10').item.json.brochure_url }}\",\n\"filename\":\"{{ $('Supabase10').item.json.name }}\"\n                  }\n               }\n            ]\n         },\n{\n   \"type\":\"body\",\n   \"parameters\":[\n      {\n         \"type\":\"text\",\n         \"text\":\"{{ $('Supabase10').item.json.name }}\"\n      }\n   ]\n}\n      ]\n   }\n}  ",
+        "options": {}
+      },
+      "id": "5e965dc8-cfa6-4722-ac54-e60913137798",
+      "name": "HTTP Request5",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        80,
+        -3100
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "KHcTD6EUGATb3z0D",
+          "name": "Secondary | Marketing Miles Education"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.course == 2 || $('Webhook').item.json.body.course == 3 || $('Webhook').item.json.body.course == 4 || $('Webhook').item.json.body.course == 5}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "1a3bd667-ea98-4a18-bafd-d2b68b93e7d4",
+      "name": "IF9",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        -2260
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "message_status",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "send_status",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "send_time",
+              "fieldValue": "={{ $now }}"
+            },
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $json.messages[0].id }}"
+            },
+            {
+              "fieldId": "campaign_id",
+              "fieldValue": "47"
+            },
+            {
+              "fieldId": "next_flow_id",
+              "fieldValue": "1Ul1696FsBq1VdS2"
+            },
+            {
+              "fieldId": "root",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "lead_dump_id",
+              "fieldValue": "={{ $('Webhook').item.json.body.id }}"
+            }
+          ]
+        }
+      },
+      "id": "09260a2e-557a-426d-8063-66c40fe9a5c4",
+      "name": "Supabase23",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        120,
+        -2580
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v17.0/108019349036743/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "whatsAppApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n   \"messaging_product\":\"whatsapp\",\n   \"recipient_type\":\"individual\",\n   \"to\":\"‪‪{{ $('Webhook').item.json.body.phone }}‬‬\",\n   \"type\":\"template\",\n   \"template\":{\n      \"name\":\"website_other_page_flow_1_1\",\n      \"language\":{\n         \"code\":\"en\"\n      },\n      \"components\":[\n         {\n            \"type\":\"header\",\n            \"parameters\":[\n               {\n                  \"type\":\"document\",\n                  \"document\":{\n\"link\":\"{{ $('Supabase10').item.json.brochure_url }}\",\n\"filename\":\"{{ $('Supabase10').item.json.name }}\"\n                  }\n               }\n            ]\n         },{\n   \"type\":\"body\",\n   \"parameters\":[\n      {\n         \"type\":\"text\",\n         \"text\":\"{{ $('Webhook').item.json.body.first_name }}\"\n      },\n{\n         \"type\":\"text\",\n         \"text\":\"{{ $('Supabase10').item.json.name }}\"\n      }\n   ]\n}\n      ]\n   }\n}  ",
+        "options": {}
+      },
+      "id": "df109145-18d7-4533-87bd-2bd590236796",
+      "name": "HTTP Request6",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -100,
+        -2580
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "KHcTD6EUGATb3z0D",
+          "name": "Secondary | Marketing Miles Education"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "mode": "expression",
+        "output": "={{ $('Webhook').item.json.body.intrested_in == \"Yes\" ?0 : $('Webhook').item.json.body.intrested_in ==  \"No\" ? 2 :1}}"
+      },
+      "id": "084e6d3e-ea8c-44f6-8845-8b0c5f67a655",
+      "name": "Switch1",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [
+        -340,
+        -2360
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "message_status",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "send_status",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "send_time",
+              "fieldValue": "={{ $now }}"
+            },
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $json.messages[0].id }}"
+            },
+            {
+              "fieldId": "campaign_id",
+              "fieldValue": "47"
+            },
+            {
+              "fieldId": "next_flow_id",
+              "fieldValue": "1Ul1696FsBq1VdS2"
+            },
+            {
+              "fieldId": "root",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "lead_dump_id",
+              "fieldValue": "={{ $('Webhook').item.json.body.id }}"
+            }
+          ]
+        }
+      },
+      "id": "0fbd1ddd-e607-4f6f-aec6-245c4311ae83",
+      "name": "Supabase25",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        140,
+        -2220
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v17.0/108019349036743/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "whatsAppApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n   \"messaging_product\":\"whatsapp\",\n   \"recipient_type\":\"individual\",\n   \"to\":\"‪‪{{ $('Webhook').item.json.body.phone }}‬‬\",\n   \"type\":\"template\",\n   \"template\":{\n      \"name\":\"websitee_other_pages_flow_1\",\n      \"language\":{\n         \"code\":\"en\"\n      },\n      \"components\":[\n         {\n            \"type\":\"header\",\n            \"parameters\":[\n               {\n                  \"type\":\"document\",\n                  \"document\":{\n\"link\":\"{{ $('Supabase10').item.json.brochure_url }}\",\n\"filename\":\"{{ $('Supabase10').item.json.name }}\"\n                  }\n               }\n            ]\n         }\n      ]\n   }\n}",
+        "options": {}
+      },
+      "id": "a68203c7-83a3-4489-8b3b-e8fa4e52659a",
+      "name": "HTTP Request8",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -80,
+        -2220
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "KHcTD6EUGATb3z0D",
+          "name": "Secondary | Marketing Miles Education"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "tableId": "message_status",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "send_status",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "send_time",
+              "fieldValue": "={{ $now }}"
+            },
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $json.messages[0].id }}"
+            },
+            {
+              "fieldId": "campaign_id",
+              "fieldValue": "47"
+            },
+            {
+              "fieldId": "next_flow_id",
+              "fieldValue": "1Ul1696FsBq1VdS2"
+            },
+            {
+              "fieldId": "root",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "lead_dump_id",
+              "fieldValue": "={{ $('Webhook').item.json.body.id }}"
+            }
+          ]
+        }
+      },
+      "id": "3b9a8ebc-017b-45cd-9a57-6c59f97f7c92",
+      "name": "Supabase24",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        120,
+        -2380
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v17.0/108019349036743/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "whatsAppApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n   \"messaging_product\":\"whatsapp\",\n   \"recipient_type\":\"individual\",\n   \"to\":\"‪‪{{ $('Webhook').item.json.body.phone }}‬‬\",\n   \"type\":\"template\",\n   \"template\":{\n      \"name\":\"website_other_page_flow_1_2\",\n      \"language\":{\n         \"code\":\"en\"\n      },\n      \"components\":[\n         {\n            \"type\":\"header\",\n            \"parameters\":[\n               {\n                  \"type\":\"document\",\n                  \"document\":{\n\"link\":\"{{ $('Supabase10').item.json.brochure_url }}\",\n\"filename\":\"{{ $('Supabase10').item.json.name }}\"\n                  }\n               }\n            ]\n         },{\n   \"type\":\"body\",\n   \"parameters\":[\n      {\n         \"type\":\"text\",\n         \"text\":\"{{ $('Webhook').item.json.body.first_name }}\"\n      },\n{\n         \"type\":\"text\",\n         \"text\":\"{{ $('Supabase10').item.json.name }}\"\n      }\n   ]\n}\n      ]\n   }\n}  ",
+        "options": {}
+      },
+      "id": "9e6c6b64-d96c-4bdc-a6b6-a3cb91e892c3",
+      "name": "HTTP Request7",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -100,
+        -2380
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "KHcTD6EUGATb3z0D",
+          "name": "Secondary | Marketing Miles Education"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v17.0/108019349036743/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "whatsAppApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n   \"messaging_product\":\"whatsapp\",\n   \"recipient_type\":\"individual\",\n   \"to\":\"‪‪{{ $('Webhook').item.json.body.phone }}‬‬\",\n   \"type\":\"template\",\n   \"template\":{\n      \"name\":\"website_usp_page_flow_1\",\n      \"language\":{\n         \"code\":\"en\"\n      },\n      \"components\":[\n         {\n            \"type\":\"header\",\n            \"parameters\":[\n               {\n                  \"type\":\"document\",\n                  \"document\":{\n\"link\":\"{{ $('Supabase10').item.json.brochure_url }}\",\n\"filename\":\"{{ $('Supabase10').item.json.name }}\"\n                  }\n               }\n            ]\n         },{\n   \"type\":\"body\",\n   \"parameters\":[\n      {\n         \"type\":\"text\",\n         \"text\":\"{{ $('Webhook').item.json.body.first_name }}\"\n      }\n   ]\n}\n      ]\n   }\n}",
+        "options": {}
+      },
+      "id": "0218b2ce-c59e-46b3-b793-52686254bce9",
+      "name": "HTTP Request9",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -1360,
+        -2100
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "KHcTD6EUGATb3z0D",
+          "name": "Secondary | Marketing Miles Education"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "message_status",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "send_status",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "send_time",
+              "fieldValue": "={{ $now }}"
+            },
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $json.messages[0].id }}"
+            },
+            {
+              "fieldId": "campaign_id",
+              "fieldValue": "47"
+            },
+            {
+              "fieldId": "next_flow_id",
+              "fieldValue": "1Ul1696FsBq1VdS2"
+            },
+            {
+              "fieldId": "root",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "lead_dump_id",
+              "fieldValue": "={{ $('Webhook').item.json.body.id }}"
+            }
+          ]
+        }
+      },
+      "id": "7ce4c53b-6f17-4baa-a066-dfa5da5e9233",
+      "name": "Supabase26",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -1020,
+        -2120
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.course }}",
+              "operation": "equal",
+              "value2": 9
+            }
+          ],
+          "string": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.url_page_path }}",
+              "value2": "={{ null }}"
+            }
+          ]
+        }
+      },
+      "id": "36c80137-5b9e-4b12-8e13-40b96e96ea80",
+      "name": "IF16",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -100,
+        -1860
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "message_status",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "send_status",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "send_time",
+              "fieldValue": "={{ $now }}"
+            },
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $json.messages[0].id }}"
+            },
+            {
+              "fieldId": "campaign_id",
+              "fieldValue": "47"
+            },
+            {
+              "fieldId": "next_flow_id",
+              "fieldValue": "1Ul1696FsBq1VdS2"
+            },
+            {
+              "fieldId": "root",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "lead_dump_id",
+              "fieldValue": "={{ $('Webhook').item.json.body.id }}"
+            }
+          ]
+        }
+      },
+      "id": "9c9abcc2-9d9d-4d6a-bb48-1b217050c9c4",
+      "name": "Supabase27",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        300,
+        -1960
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v17.0/108019349036743/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "whatsAppApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n   \"messaging_product\":\"whatsapp\",\n   \"recipient_type\":\"individual\",\n   \"to\":\"‪‪{{ $('Webhook').item.json.body.phone }}‬‬\",\n   \"type\":\"template\",\n   \"template\":{\n      \"name\":\"website_flow_home_page_usp\",\n      \"language\":{\n         \"code\":\"en\"\n      },\n      \"components\":[\n         {\n            \"type\":\"header\",\n            \"parameters\":[\n               {\n                  \"type\":\"document\",\n                  \"document\":{\n\"link\":\"{{ $('Supabase10').item.json.brochure_url }}\",\n\"filename\":\"{{ $('Supabase10').item.json.name }}\"\n                  }\n               }\n            ]\n         },\n{\n   \"type\":\"body\",\n   \"parameters\":[\n      {\n         \"type\":\"text\",\n         \"text\":\"{{ $('Webhook').item.json.body.first_name }}\"\n      }\n   ]\n}\n      ]\n   }\n} ",
+        "options": {}
+      },
+      "id": "ff8005dd-f965-4ee5-b59f-848ec382edcd",
+      "name": "HTTP Request10",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        980,
+        -2340
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "KHcTD6EUGATb3z0D",
+          "name": "Secondary | Marketing Miles Education"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.course }}",
+              "operation": "notEqual",
+              "value2": 9
+            }
+          ]
+        }
+      },
+      "id": "4bb7221e-6a25-40a1-b28d-929c4bd7d708",
+      "name": "IF17",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -2860
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "message_status",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "send_status",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "send_time",
+              "fieldValue": "={{ $now }}"
+            },
+            {
+              "fieldId": "message_id",
+              "fieldValue": "={{ $json.messages[0].id }}"
+            },
+            {
+              "fieldId": "campaign_id",
+              "fieldValue": "47"
+            },
+            {
+              "fieldId": "next_flow_id",
+              "fieldValue": "1Ul1696FsBq1VdS2"
+            },
+            {
+              "fieldId": "root",
+              "fieldValue": "true"
+            },
+            {
+              "fieldId": "lead_dump_id",
+              "fieldValue": "={{ $('Webhook').item.json.body.id }}"
+            }
+          ]
+        }
+      },
+      "id": "39eecc59-86b0-4883-b636-4665183a1eae",
+      "name": "Supabase28",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        320,
+        -2840
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v17.0/108019349036743/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "whatsAppApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n   \"messaging_product\":\"whatsapp\",\n   \"recipient_type\":\"individual\",\n   \"to\":\"‪‪{{ $('Webhook').item.json.body.phone }}‬‬\",\n   \"type\":\"template\",\n   \"template\":{\n      \"name\":\"website_flow_home_page_usp\",\n      \"language\":{\n         \"code\":\"en\"\n      },\n      \"components\":[\n         {\n            \"type\":\"header\",\n            \"parameters\":[\n               {\n                  \"type\":\"document\",\n                  \"document\":{\n\"link\":\"{{ $('Supabase10').item.json.brochure_url }}\",\n\"filename\":\"{{ $('Supabase10').item.json.name }}\"\n                  }\n               }\n            ]\n         },\n{\n   \"type\":\"body\",\n   \"parameters\":[\n      {\n         \"type\":\"text\",\n         \"text\":\"{{ $('Webhook').item.json.body.first_name }}\"\n      }\n   ]\n}\n      ]\n   }\n} ",
+        "options": {}
+      },
+      "id": "1a6f6892-c8c2-461f-a373-8667f587451b",
+      "name": "HTTP Request11",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        100,
+        -2840
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "KHcTD6EUGATb3z0D",
+          "name": "Secondary | Marketing Miles Education"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "uniq",
+              "value": "={{ $('MF API CALL')?.item.json?.data[0]?.ne_id ?? \"\" }} "
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8a8b497a-cc42-4fc4-8cfb-5f9907ede355",
+      "name": "Set1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        4420,
+        820
+      ],
+      "alwaysOutputData": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.camp_id }}",
+              "operation": "notEqual",
+              "value2": 48
+            }
+          ]
+        }
+      },
+      "id": "96ce19e1-eed1-4ab6-98a0-6e65a6b01607",
+      "name": "IF18",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -1540,
+        -1860
+      ]
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "108019349036743",
+        "recipientPhoneNumber": "={{ $('Webhook').item.json.body.phone }}",
+        "template": "webinar_registration_thank_you_message_other_than_website|en",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $('Webhook').item.json.body.first_name }}"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "header",
+              "headerParameters": {
+                "parameter": [
+                  {
+                    "type": "image",
+                    "imageLink": "https://blcwdqfhupddorxpdcjl.supabase.co/storage/v1/object/public/wa_assets/WhatsApp%20Image%202024-01-02%20at%202.46.56%20PM.jpeg"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "id": "3f2697a0-7989-4d49-8bb3-baa7ba599016",
+      "name": "WhatsApp Business Cloud",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        120,
+        -1960
+      ],
+      "webhookId": "1d18d475-9344-4a6b-862a-a92f3ba492ec",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "KHcTD6EUGATb3z0D",
+          "name": "Secondary | Marketing Miles Education"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://in1.api.clevertap.com/1/upload",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n   \"X-CleverTap-Account-Id\":\"TEST-948-R8Z-KW7Z\",\n   \"X-CleverTap-Passcode\":\"QAE-IQD-GSEL\",\n   \"Content-Type\":\"application/json\"\n}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"d\":\n\t[\n\t\t{\n\t\t\t\"objectId\":\"95b2648189b64f808c26c860153e1de5\",\n\t\t\t\"type\":\"profile\",\n\t\t\t\"profileData\":\n\t\t\t\t{\n\t\t\t\t\t\"Name\": \"Jithin test\",\n                    \"email\" :\"jithin3@gmail.com\",\n                    \"phone\" : \"+916238133298\"\n\t\t\t\t}\n\t\t}\n\t]\n}",
+        "options": {}
+      },
+      "id": "b6104311-b2a3-4746-9b8c-a610966c7995",
+      "name": "HTTP Request2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -1420,
+        -2660
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.clevertap }}",
+              "operation": "notEqual",
+              "value2": "={{ null }}"
+            }
+          ]
+        }
+      },
+      "id": "2605a00d-5f23-4ee3-ac47-569ad5cbe9e9",
+      "name": "IF",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -1160,
+        -2460
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://in1.api.clevertap.com/1/upload",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-CleverTap-Account-Id",
+              "value": "TEST-948-R8Z-KW7Z"
+            },
+            {
+              "name": "X-CleverTap-Passcode",
+              "value": "QAE-IQD-GSEL"
+            },
+            {
+              "name": "Content-Typ",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"d\":\n\t[\n\t\t{\n\t\t\t\"objectId\":\"95b2648189b64f808c26c860153e1de5\",\n\t\t\t\"type\":\"profile\",\n\t\t\t\"profileData\":\n\t\t\t\t{\n\t\t     \"Name\": \"Jithin test\",\n                    \"email\" :\"jithin3@gmail.com\",\n                    \"phone\" : \"+916238133298\"\n\t\t\t\t}\n\t\t}\n\t]\n}",
+        "options": {}
+      },
+      "id": "f497a426-1b2f-41ab-a8ef-3e62df96a651",
+      "name": "HTTP Request4",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -1420,
+        -2900
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "content": "Register From CPA and CMA (Interested in USP YES/MAYBE)",
+        "height": 444.2399999999998,
+        "width": 1910.533333333333
+      },
+      "id": "bf1d0971-456c-41ca-aaa4-f35effa01578",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1580,
+        3460
+      ]
+    },
+    {
+      "parameters": {
+        "content": "MF Registration",
+        "height": 434.2666666666664,
+        "width": 2474.0266666666666
+      },
+      "id": "23deb891-e349-4f80-9d85-c1ee3bb95c9b",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        2840
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Registration for enq course",
+        "height": 434.2666666666664,
+        "width": 2474.0266666666666
+      },
+      "id": "0c5b54b1-1948-4962-9a22-55f7be56bb11",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        1900
+      ]
+    },
+    {
+      "parameters": {
+        "content": "Download browsher",
+        "height": 1441.573333333333,
+        "width": 1279.7199999999998
+      },
+      "id": "66c06239-2fc8-40d6-9196-855e1133e94d",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -600,
+        -3140
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "kibOCgCpd1SSa6Fb",
+        "options": {}
+      },
+      "id": "94308fae-958b-4c83-9284-8a45f23cee41",
+      "name": "Execute Workflow5",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        2280,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "jFa1XeTdv9NfoeWU",
+        "options": {}
+      },
+      "id": "555c1e27-160f-40d7-918b-d4ca617e2179",
+      "name": "MF API CALL",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        2160,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "body",
+              "value": "={{ $('Webhook').item.json.body }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "adb4257a-f07a-4fad-8809-2f40d7cf7335",
+      "name": "Set4",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        1540
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.coming_from }}",
+              "operation": "notEqual",
+              "value2": "website-model"
+            }
+          ]
+        }
+      },
+      "id": "d0e1ebd0-ca70-4285-bd32-3cec96789e73",
+      "name": "IF4",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -300,
+        -2760
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "R64qC5KJybTHznd8",
+        "options": {}
+      },
+      "id": "c8ec9a6f-f6a3-4fbb-a044-2d09a7e3337e",
+      "name": "call WA messages for webinar",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        1500
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://webhook.miles-api.com/webhook/75d4ef37-3645-40ec-8dc1-bc89fe92fc6f",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $json.body }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6ed4223b-4ff1-4402-816b-3eeb2078ead9",
+      "name": "HTTP Request14",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -80,
+        620
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.body.page_full_url }}",
+              "operation": "contains",
+              "value2": "ct.miles"
+            }
+          ]
+        },
+        "combineOperation": "any"
+      },
+      "id": "2d46470d-0a52-47dd-9d7b-cc920d335ecc",
+      "name": "IF11",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "2WygpqKdNOFivFvX",
+        "options": {}
+      },
+      "id": "4c2f684a-c18b-45d0-9f99-6abef9754444",
+      "name": "Execute Workflow1",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        -100,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://webhook.miles-api.com/webhook/ct-form-filled",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data",
+              "value": "={{ $('Webhook').item.json.body }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5e90c00e-c32b-490f-adc6-04fd054b06e5",
+      "name": "HTTP Request15",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2900,
+        540
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.body.camp_id }}",
+              "operation": "notEqual",
+              "value2": 574
+            }
+          ]
+        }
+      },
+      "id": "2fd68250-c5a7-4477-9ac4-19e04d75606d",
+      "name": "IF13",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.body.website_id }}",
+              "operation": "notEqual",
+              "value2": 1
+            }
+          ]
+        }
+      },
+      "id": "cdfbbd60-a5bc-47d4-96b3-9a8b905ae6c2",
+      "name": "IF19",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "appToken",
+        "email": "={{ $json.body.email }}",
+        "additionalFields": {
+          "firstName": "={{ $json.body.first_name }}",
+          "phoneNumber": "={{ $json.body.phone }}",
+          "websiteUrl": "={{ $json.body.url_page_path }}"
+        },
+        "options": {}
+      },
+      "id": "f560819d-ff3c-440e-9800-8eb43ad07989",
+      "name": "HubSpot",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2,
+      "position": [
+        -1440,
+        1820
+      ],
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "9gQS5DtY67JDWDBl",
+          "name": "HubSpot account App Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authorization",
+              "value": "Bearer pat-na1-83fd9a9b-edfb-478f-81db-a8fc31197b7a"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "email",
+              "value": "={{ $json.body.email }}"
+            },
+            {
+              "name": "=phone",
+              "value": "={{ $json.body.phone }}"
+            },
+            {
+              "name": "firstname",
+              "value": "={{ $json.body.first_name }}"
+            },
+            {
+              "name": "lastname",
+              "value": "={{ $json.body.last_name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e9a9bbae-a0e2-4dbb-a1a5-cf52e6c0d618",
+      "name": "HTTP Request16",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -580,
+        2040
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.hubapi.com/crm/v3/objects/contacts/{{ $json.body.email }}?idProperty=email",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authorization",
+              "value": "Bearer pat-na1-83fd9a9b-edfb-478f-81db-a8fc31197b7a"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "page_full_url",
+              "value": "={{ $json.body.page_full_url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8d657462-6dfe-4458-a3bd-d6640cc0c0b0",
+      "name": "HTTP Request17",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -1480,
+        2240
+      ],
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "9gQS5DtY67JDWDBl",
+          "name": "HubSpot account App Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "appToken",
+        "email": "={{ $json.properties.email }}",
+        "additionalFields": {
+          "websiteUrl": "={{ $('Webhook').item.json.body.url_page_path }}"
+        },
+        "options": {}
+      },
+      "id": "9f957bab-c02a-488d-a335-33496479db5a",
+      "name": "HubSpot1",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2,
+      "position": [
+        -1320,
+        2460
+      ],
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "9gQS5DtY67JDWDBl",
+          "name": "HubSpot account App Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.properties.email }}",
+              "operation": "isEmpty"
+            }
+          ]
+        }
+      },
+      "id": "f44d75e2-208a-4268-8796-f56efc887177",
+      "name": "IF20",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -920,
+        2140
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "content": "if new contact is to be created"
+      },
+      "id": "013938b1-a553-45b8-96de-e085e67a53d2",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -540,
+        1940
+      ]
+    },
+    {
+      "parameters": {
+        "content": "to update contact"
+      },
+      "id": "ce914a7c-0a50-40e5-a2eb-9764f5d28c93",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -740,
+        2280
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.hubapi.com//crm/v3/objects/contacts/ {{ $('IF19').item.json.body.email }}?idProperty=email",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authorization",
+              "value": "Bearer pat-na1-83fd9a9b-edfb-478f-81db-a8fc31197b7a"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\n    \"properties\": {\n        \"email\":  {{ $('IF19').item.json.body.email }},\n        \"phone\": {{ $('IF19').item.json.body.phone }}\n    }\n}",
+        "options": {}
+      },
+      "id": "ae728175-5ed8-4f5a-ad60-76128eaa490d",
+      "name": "HTTP Request18",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -580,
+        2280
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n let queryString = item.json.body.page_full_url.split('?')[1];\n    let params = {};\n    if (queryString) {\n        let queries = queryString.split(\"&\");\n        queries.forEach(function(query) {\n            let pair = query.split(\"=\");\n            let key = decodeURIComponent(pair[0]);\n            let value = decodeURIComponent(pair[1] || '');\n            params[key] = value;\n        });\n    }\n  item.json.body.params = params;\n}\n\nreturn $input.all();"
+      },
+      "id": "42c57651-ea3d-43cd-81ad-b11489a57fd9",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1180,
+        1940
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "cjHYkS9fxRTDLjGn",
+        "options": {}
+      },
+      "id": "5054894b-d4c8-472d-8d7b-dc73ae895702",
+      "name": "Execute Workflow3",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        -1980,
+        2220
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authorization",
+              "value": "Bearer pat-na1-83fd9a9b-edfb-478f-81db-a8fc31197b7a"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\n    \"properties\": {\n        \"email\":  {{ $('Webhook').item.json.body.email }},\n        \"phone\": {{ $('Webhook').item.json.body.phone }}\n    }\n} ",
+        "options": {}
+      },
+      "id": "d59aef3c-f5a3-4c9c-ad0d-3d05a0ccf18d",
+      "name": "HTTP Request19",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -1800,
+        2400
+      ]
+    },
+    {
+      "parameters": {
+        "errorMessage": "New contact to be created!"
+      },
+      "id": "4e33f91d-2b61-44ff-a63c-c135f1d5c53b",
+      "name": "Stop and Error",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        -1300,
+        2200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "6ebd4a38-0ddb-4fa4-96b7-fd35f8c5b77c",
+      "name": "IF21",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2160,
+        1000
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "webinar_id",
+              "value": "=84244970481"
+            },
+            {
+              "name": "first_name",
+              "value": "={{ $('Webhook').item.json.body.first_name }}"
+            },
+            {
+              "name": "last_name",
+              "value": "={{ $('Webhook').item.json.body.last_name }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $('Webhook').item.json.body.email }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $('Webhook').item.json.body.phone }}"
+            },
+            {
+              "name": "intrested_in",
+              "value": "={{ $('Webhook').item.json.body.intrested_in }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "31dd6059-3e44-4e80-b7f4-fe4980a10971",
+      "name": "Set5",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        6260,
+        2960
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.id == 2 || $json.id == 3 || $json.id == 9}}",
+              "value2": true
+            },
+            {
+              "value1": "={{ $('Webhook').item.json.body.intrested_in == \"Yes\" || $('Webhook').item.json.body.intrested_in == \"Maybe\" }}",
+              "value2": true
+            }
+          ]
+        },
+        "combineOperation": "any"
+      },
+      "id": "c8d0f4f1-ab07-46ae-a908-43f1be91634b",
+      "name": "IF22",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        6000,
+        2980
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "e953wrH53BK4gHbS",
+        "options": {}
+      },
+      "id": "a420616b-3524-4706-a54e-a6ad69a76397",
+      "name": "Execute Workflow6",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        6465,
+        2960
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ !$json.hasOwnProperty('error') }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "1cbcd6f5-c6fe-4e22-8f8f-976ae3027679",
+      "name": "IF23",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        6625,
+        2960
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "webinar_registration",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "leads_dump_id",
+              "fieldValue": "={{ $('Webhook').item.json.body.id }}"
+            },
+            {
+              "fieldId": "webinar_id",
+              "fieldValue": "={{ $('Set5').item.json.webinar_id }}"
+            },
+            {
+              "fieldId": "join_url",
+              "fieldValue": "={{ $('Execute Workflow6').item.json.join_url }}"
+            },
+            {
+              "fieldId": "registration_email",
+              "fieldValue": "={{ $('Webhook').item.json.body.email }}"
+            }
+          ]
+        }
+      },
+      "id": "f1a512b7-636c-490b-aec7-c6e008f4096d",
+      "name": "Supabase1",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        7105,
+        2940
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mileswebinars.2x2.ninja/api/webinarSource",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "=Authorization",
+              "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjA2ZmRkZTY4NTAyMWU4NGQxNDRhOTYxNDVkMmE4OWQzNmJhZmU0YWRmOTk2YmQ5YzBlMTk4MDMyMjIxNjU5MmM2NTMxNjY5MjQ4YzlkNDNmIn0.eyJhdWQiOiIyIiwianRpIjoiMDZmZGRlNjg1MDIxZTg0ZDE0NGE5NjE0NWQyYTg5ZDM2YmFmZTRhZGY5OTZiZDljMGUxOTgwMzIyMjE2NTkyYzY1MzE2NjkyNDhjOWQ0M2YiLCJpYXQiOjE2OTcxODg1NzcsIm5iZiI6MTY5NzE4ODU3NywiZXhwIjoxODU1MDQxMzc3LCJzdWIiOiI0MTEiLCJzY29wZXMiOlsiKiJdfQ.QKi2JGFtBMqRpXwn21ksp5ri1CX2C6gPpD9TM-UvaFY7UqLzbc150tvmPy3jMJ9-Sl59_gvYontn6ULIqDahd4J4LqbCSlEtjLtJQEuuj36foB64X0IeRsMM9SFcbpXnRSE_D0K93EI7mY_HUrO9E1RNk089lR54okyH6NsOQVBjv46q7GTuEH3OOBEdPb2EaEUsZ9O2FrnF-MAkxJ4Ee6fcouvts3K22B7X2znq4Sa16fHkrEg3GJ67wdF35zVxMUlc980tLhLRNp_u3EN41a7jah8dYL_aT7GY9u7XFyMPIK4vmoJWG-58p58NbBN-ykDdpqWEJY5JyfPzLNMa9mpnx7uCjD6sV3UID4bptIWCKT9elKi_ehtTnFJbgYznHXA32dmIZ7Mz_xUfIsvlcHoIk4nUYKWtCyGy78H-umSp1hdI7LU8BdVT4ZdSvLf-9Y8ihuTcEfyCPlQUhQEpKJzQHKfESVxkexcZxLPGY7VNFEAPvQctTK6RzcabaFWvNhvdPbJ1OjBjSF2KfwXUlt2iKIWDKBzUasQcaWPF81HH_V72RWcajzhwQ5tYX5tsTUjPc6dZw5U1r0_9tsQcVZ8Bc2zK3jG_4rxmPMDTv2ix5fLjVbRmDp6c8K-fGgLTtKi3m4fYGWM8ucUPUOYU0kiIDVOtbzGmko9kE8-A_RA"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "= {\n  \"email\": \"{{ $('Set5').item.json.email }}\",\n  \"webinar_id\":{{ $('Set5').item.json.webinar_id }},\n  \"source\": \"{{ $json.source_name }}\"\n}",
+        "options": {}
+      },
+      "id": "7ff745d9-5b0d-40df-a369-75d81d924fd0",
+      "name": "HTTP Request20",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        6940,
+        2820
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "campaign_source",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "keyValue": "={{ $('Supabase3').item.json.source }}"
+            }
+          ]
+        }
+      },
+      "id": "c707add2-14b1-4c60-9d0d-70bf7098d21d",
+      "name": "Supabase29",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        6780,
+        2820
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "108019349036743",
+        "recipientPhoneNumber": "={{ $('Webhook').item.json.body.phone }}",
+        "template": "18th_nov_webinar_reg|en",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $('Webhook').item.json.body.first_name }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "id": "02479dfd-c056-44b2-849b-9aa8f2289208",
+      "name": "WhatsApp Business Cloud5",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        7405,
+        2980
+      ],
+      "webhookId": "e30713f5-6bd0-43dc-89ac-7c2a47513b40",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "KHcTD6EUGATb3z0D",
+          "name": "Secondary | Marketing Miles Education"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "content": "Register From CPA and CMA (Interested in USP YES/MAYBE)",
+        "height": 444.2399999999998,
+        "width": 1910.533333333333
+      },
+      "id": "282cfcb4-8c8a-4cee-8b29-7192c0a822d9",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        5920,
+        2780
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.id }}",
+              "operation": "equal",
+              "value2": 2
+            }
+          ]
+        }
+      },
+      "id": "89d0941e-d78c-41d6-bc5b-251a8c5643d3",
+      "name": "IF24",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -440,
+        1500
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "webinar",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "course_id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "id": "a46c186c-90eb-427a-a1b0-f0db2707e62e",
+      "name": "Supabase2",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        100,
+        1360
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": "xQk58l0ggLqEZuL2",
+        "options": {}
+      },
+      "id": "07b27fbd-b9c6-40f5-ba7e-7f7eafab292f",
+      "name": "Execute Workflow7",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        -1360,
+        1360
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=http://apilayer.net/api/validate?access_key=3cca95673cdacb79b494c809edeb8048&number=  {{ $('Webhook').item.json.body.phone }}",
+        "options": {}
+      },
+      "id": "f5739f45-9ec7-44a8-9240-acb12cd8f16a",
+      "name": "HTTP Request21",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1360,
+        800
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('IF19').all();  // Fetch all input items\nconst results = [];\n\nfor (let i = 0; i < items.length; i++) {\n    let number = items[i].json.body.phone;  // Assuming the input number is under 'phoneNumber' key\n    let cleanNumber = number.toString().replace(/\\D/g, '');\n\n    let normalizedNumber;\n    \n    if (cleanNumber.startsWith('+91') && cleanNumber.length === 13) {\n        normalizedNumber = cleanNumber;\n    } else if (cleanNumber.startsWith('91') && cleanNumber.length === 12) {\n        normalizedNumber = '+91' + cleanNumber.slice(2);\n    } else if (cleanNumber.length === 10) {\n        normalizedNumber = '+91' + cleanNumber;\n    } else {\n        normalizedNumber = '+'+cleanNumber;\n    }\n    \n    results.push({\n        json: {\n            normalizedPhoneNumber: normalizedNumber\n        }\n    });\n}\n\nreturn results;\n"
+      },
+      "id": "825e0090-3e10-4f7b-96ab-fb3f6e522adf",
+      "name": "Code1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "numVerify logger",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "phone",
+              "fieldValue": "={{ $json.number }}"
+            },
+            {
+              "fieldId": "location",
+              "fieldValue": "={{ $json.location }}"
+            },
+            {
+              "fieldId": "coming_from",
+              "fieldValue": "={{ $('Supabase5').item.json.source_name }}"
+            },
+            {
+              "fieldId": "numverify_number",
+              "fieldValue": "={{ $json.international_format }}"
+            }
+          ]
+        }
+      },
+      "id": "27c7a7e2-d189-49f3-a89f-f7ad9c333271",
+      "name": "Supabase4",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        1000
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mfx-prod-154625965269.asia-south1.run.app/enquiries/add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"first_name\": \"{{ $('Webhook').first().json[\"body\"][\"first_name\"] }}\",\n\"last_name\": \"{{ $('Webhook').first().json[\"body\"][\"last_name\"] }}\",\n\"phone\": \"{{ $('Code1').first().json[\"normalizedPhoneNumber\"] }}\",\n\"email\": \"{{ $('Webhook').first().json[\"body\"][\"email\"] }}\",\n\"course_id\":{{ $('Supabase10').first().json.mf2id }},\n\"coming_from\": \"{{$('Webhook').first().json[\"body\"][\"coming_from\"]}}\",\n\"campaign_id\":{{ $('Supabase3').first().json.mf2_camp_id  }},\n\"campaign_tk\": \" \",\n\"gcl_id\": \" \",\n\"whatsapp_opt_in\": true,\n\"register_for_webinar\": true,\n\"intrested_to_work_in_us\": true,\n\"page_full_url\": \"{{ $('Webhook').first().json[\"body\"][\"page_full_url\"] }}\",\n\"url_page_path\": \"{{ $('Webhook').first().json[\"body\"][\"url_page_path\"] }}\",\n\"linked_in_url\": \"\",\n\"clevertap_id\": \"\",\n\"isFromWelcomeBack\": false,\n\"level\":null,\n\"city_id\": {{ $('Code4').item.json.id }}\n} ",
+        "options": {}
+      },
+      "id": "abcf0422-afa1-46ae-a5ba-37d5db4cddf3",
+      "name": "HTTP Request12",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2480,
+        100
+      ],
+      "retryOnFail": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mfx-prod-154625965269.asia-south1.run.app/enquiries/add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"first_name\": \"{{ $('Webhook').item.json[\"body\"][\"first_name\"] }}\",\n\"last_name\": \"{{ $('Webhook').item.json[\"body\"][\"last_name\"] }}\",\n\"phone\": \"{{ $('Webhook').item.json[\"body\"][\"phone\"] }}\",\n\"email\": \"{{ $('Webhook').item.json[\"body\"][\"email\"] }}\",\n\"course_id\":{{ $('Supabase10').item.json.mf2id }},\n\"coming_from\": \"Data upload\",\n\"campaign_id\":{{ $('Supabase5').item.json.mf2id }},\n\"campaign_tk\": \" \",\n\"gcl_id\": \" \",\n\"whatsapp_opt_in\": true,\n\"register_for_webinar\": true,\n\"intrested_to_work_in_us\": true,\n\"page_full_url\": \"\",\n\"url_page_path\": \"\",\n\"linked_in_url\": \"\",\n\"clevertap_id\": \"\",\n\"isFromWelcomeBack\": false,\n\"level\":null\n}",
+        "options": {}
+      },
+      "id": "886909e1-de68-455a-aa06-5c2f5e59cb07",
+      "name": "HTTP Request13",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1220,
+        -1260
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mfx-prod-154625965269.asia-south1.run.app/enquiries/add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"first_name\": \"{{ $('Webhook').item.json['body']['first_name'] }}\",\n  \"last_name\": \"{{ $('Webhook').item.json['body']['last_name'] }}\",\n  \"phone\": \"{{ $('Webhook').item.json['body']['phone'] }}\",\n  \"email\": \"{{ $('Webhook').item.json['body']['email'] }}\",\n  \"course_id\": {{ $('Supabase10').item.json.mf2id }},\n  \"coming_from\": \"{{ $('Webhook').item.json['body']['coming_from'] }}\",\n  \"campaign_id\": {{ $('Supabase3').item.json.id }},\n  \"whatsapp_opt_in\": true,\n  \"register_for_webinar\": true,\n  \"intrested_to_work_in_us\": true,\n  \"page_full_url\": \"{{ $('Webhook').item.json['body']['page_full_url'] }}\",\n  \"url_page_path\": \"\",\n  \"linked_in_url\": \"\",\n  \"clevertap_id\": \"\",\n  \"isFromWelcomeBack\": false,\n  \"level\": null,\n  \"large_event_registration_info\": {\n    \"type\": \"enrolled\",\n    \"orientation_id\": {{ $json[\"orientation_session_id\"] ?? null }}\n  }\n}\n",
+        "options": {}
+      },
+      "id": "e2236a2e-483d-4218-8107-fb54041148c2",
+      "name": "HTTP Request22",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3940,
+        -1820
+      ],
+      "retryOnFail": true,
+      "alwaysOutputData": false,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Input URL from the previous node's data\nconst page_full_url = $('Set7').first().json.page_url;\n\n// Mapping of webinarId to orientation_session_id\nconst webinarToOrientationMapping = {\n    104: 74,\n    105: 73,\n    113: 80,\n    110: 79,\n    112: 78,\n    109: 77,\n    108: 76,\n    111: 75,\n};\n\n// Function to get orientation_session_id based on webinarId\nfunction getOrientationSessionId(url) {\n    try {\n        // Parse the URL using RegEx as a fallback in case URL class is unavailable\n        const webinarIdMatch = url.match(/[?&]webinarId=([^&]+)/);\n        if (!webinarIdMatch) {\n            throw new Error(\"webinarId parameter is missing in the URL\");\n        }\n\n        const webinarId = webinarIdMatch[1]; // Extract webinarId from the match\n        if (webinarToOrientationMapping[webinarId]) {\n            return webinarToOrientationMapping[webinarId];\n        } else {\n            throw new Error(\"Invalid webinarId\");\n        }\n    } catch (error) {\n        throw new Error(\"Failed to parse URL or extract webinarId: \" + error.message);\n    }\n}\n\n// Get the orientation session ID in n8n-compatible format\ntry {\n    const orientation_session_id = getOrientationSessionId(page_full_url);\n    return [\n        {\n            json: {\n                orientation_session_id,\n            },\n        },\n    ];\n} catch (error) {\n    return [\n        {\n            json: {\n                error: error.message,\n            },\n        },\n    ];\n}\n"
+      },
+      "id": "2e7827f9-5f5a-4359-b7a6-ee9b1bc37990",
+      "name": "Code2",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3300,
+        -1720
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "page_url",
+              "value": "={{ $('Webhook').item.json.body.page_full_url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "05e052ea-446a-4791-8fb2-f2fa639ce2c0",
+      "name": "Set7",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        2240,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "tableId": "conclave_townhall_registrations",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "first_name",
+              "fieldValue": "={{ $('Webhook').item.json.body.first_name }}"
+            },
+            {
+              "fieldId": "phone",
+              "fieldValue": "={{ $('Webhook').item.json.body.phone }}"
+            },
+            {
+              "fieldId": "email",
+              "fieldValue": "={{ $('Webhook').item.json.body.email }}"
+            },
+            {
+              "fieldId": "orientation_id",
+              "fieldValue": "={{ $json.orientation_session_id }}"
+            }
+          ]
+        }
+      },
+      "id": "e6e53417-9a57-49d9-861c-4237fe31c745",
+      "name": "Supabase6",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        3600,
+        -1660
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.orientation_session_id }}",
+              "operation": "isEmpty"
+            }
+          ]
+        }
+      },
+      "id": "6fbff896-9073-4469-b9c4-ee64ff5b3c2a",
+      "name": "IF25",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        3700,
+        -2060
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.page_full_url }}",
+              "operation": "contains",
+              "value2": "event"
+            },
+            {
+              "value1": "={{ $('Webhook').item.json.body.page_full_url }}",
+              "operation": "contains",
+              "value2": "post-card"
+            }
+          ]
+        },
+        "combineOperation": "any"
+      },
+      "id": "ea6825c0-6b73-4bf7-9e3e-db1164bafd28",
+      "name": "IF26",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2840,
+        2460
+      ]
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "171009622770823",
+        "recipientPhoneNumber": "={{ $('Webhook').item.json.body.phone }}",
+        "template": "webinar_confirmation_auto_register|en",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $('Webhook').item.json.body.first_name }}"
+                  },
+                  {
+                    "text": "={{ $('Supabase10').item.json.name }}"
+                  },
+                  {
+                    "text": "={{ $('Supabase12').item.json.webinar_name }}"
+                  },
+                  {
+                    "text": "={{ $('Supabase12').item.json.date_string }}"
+                  },
+                  {
+                    "text": "={{ $('Supabase12').item.json.time_string }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "id": "bd67382b-9a64-4ef9-9a97-07703c85dc0e",
+      "name": "WhatsApp Business Cloud1",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        3480,
+        2560
+      ],
+      "webhookId": "1f966dd6-9220-4b36-be0c-d7dbc409cdf3",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "JPvNp2kC4SudtNkr",
+          "name": "Primary | Marketing Miles Education"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "171009622770823",
+        "recipientPhoneNumber": "={{ $('Webhook').item.json.body.phone }}",
+        "template": "webinar_registration_confirmation|en",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $('Webhook').item.json.body.first_name }}"
+                  },
+                  {
+                    "text": "={{ $('Supabase12').item.json.webinar_name }}"
+                  },
+                  {
+                    "text": "={{ $('Supabase12').item.json.date_string }}"
+                  },
+                  {
+                    "text": "={{ $('Supabase12').item.json.time_string }}"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "id": "2716bab7-1a90-4a6e-8ede-65982c91ec60",
+      "name": "WhatsApp Business Cloud3",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        3380,
+        2340
+      ],
+      "webhookId": "cd948189-f407-4d58-b836-acb0c04a54f8",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "JPvNp2kC4SudtNkr",
+          "name": "Primary | Marketing Miles Education"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://echo.netcorecloud.com/api/v1/bots/mileseducation__milesbot/mod/netcore/webhook ",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"first_name\": \"{{ $json[\"result\"][\"first_name\"] }}\",\n\"email\": \"{{ $json[\"result\"][\"email\"] }}\",\n\"phone\": \"{{ $json[\"result\"][\"phone\"] }}\",\n\"uuid\": \"{{ $json[\"result\"][\"uuid\"] }}\",\n\"course\": \"{{ $json[\"result\"][\"program\"][\"name\"] }}\",\n\"campaign_id\" : \"{{ $json[\"result\"][\"campaign\"][\"id\"] }}\",\n\"campaign_name\": \"{{ $json[\"result\"][\"campaign\"][\"campaign_name\"] }}\",\n\"page_full_url\" : \"{{ $json[\"result\"][\"page_full_url\"] }}\"\n}",
+        "options": {}
+      },
+      "id": "df1990ef-409b-4c6d-828f-96095a908bb8",
+      "name": "HTTP Request23",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        3280,
+        -2060
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "aaac4156-5a09-4ab2-b4dd-5901e81ae372",
+              "leftValue": "={{ $json.result }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2860,
+        240
+      ],
+      "id": "5c41ba12-5862-475a-b41a-141cc9705e75",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "171009622770823",
+        "recipientPhoneNumber": "919705001214",
+        "textBody": "=The following lead was not pushed to MF. \n\nleads_dump_id: {{ $('Webhook').first().json.body.id }}\ncourse: {{ $('Webhook').first().json.body.course }}\ncampaign_name: {{ $('Supabase3').first().json.campaign_name }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        3080,
+        140
+      ],
+      "id": "9231b3dd-b820-4eb6-b34d-4c325d3dda5a",
+      "name": "WhatsApp Business Cloud6",
+      "webhookId": "1b85f0d9-bf0d-482e-8862-a440bde2e8fc",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "JPvNp2kC4SudtNkr",
+          "name": "Primary | Marketing Miles Education"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "171009622770823",
+        "recipientPhoneNumber": "919036270702",
+        "textBody": "=The following lead was not pushed to MF. \n\nleads_dump_id: {{ $('Webhook').first().json.body.id }}\ncourse: {{ $('Webhook').first().json.body.course }}\ncampaign_name: {{ $('Supabase3').first().json.campaign_name }}\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        3080,
+        -60
+      ],
+      "id": "5f9f4b44-3391-4f3d-8cf4-5d86ef99aa0d",
+      "name": "WhatsApp Business Cloud7",
+      "webhookId": "1b85f0d9-bf0d-482e-8862-a440bde2e8fc",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "JPvNp2kC4SudtNkr",
+          "name": "Primary | Marketing Miles Education"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputCity = $('Webhook').first().json.body.city; // Get city name from input\nconst cityMap = {\n    \"Dubai\": 10,\n    \"Ernakulam\": 6,\n    \"Hyderabad\": 5,\n    \"Delhi\": 4,\n    \"Chennai\": 3,\n    \"Bangalore\": 2,\n    \"Ahmedabad\": 1,\n    \"Pune\": 9,\n    \"Mumbai\": 8,\n    \"Kolkata\": 7\n};\n\n// Find the corresponding ID\nconst cityId = cityMap[inputCity] || 100;\n\nreturn [{ json: { city: inputCity, id: cityId } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1760,
+        200
+      ],
+      "id": "08c67cd2-5b86-4a8f-a088-246c35466163",
+      "name": "Code4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mfx-prod-154625965269.asia-south1.run.app/enquiries/add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"first_name\": \"{{ $('Webhook').first().json[\"body\"][\"first_name\"] }}\",\n\"last_name\": \"{{ $('Webhook').first().json[\"body\"][\"last_name\"] }}\",\n\"phone\": \"{{ $('Code1').first().json[\"normalizedPhoneNumber\"] }}\",\n\"email\": \"{{ $('Webhook').first().json[\"body\"][\"email\"] }}\",\n\"course_id\":{{ $('Supabase10').first().json.mf2id }},\n\"coming_from\": \"{{$('Webhook').first().json[\"body\"][\"coming_from\"]}}\",\n\"campaign_id\":{{ $('Supabase3').first().json.mf2_camp_id  }},\n\"campaign_tk\": \" \",\n\"gcl_id\": \" \",\n\"whatsapp_opt_in\": true,\n\"register_for_webinar\": true,\n\"intrested_to_work_in_us\": true,\n\"page_full_url\": \"{{ $('Webhook').first().json[\"body\"][\"page_full_url\"] }}\",\n\"url_page_path\": \"{{ $('Webhook').first().json[\"body\"][\"url_page_path\"] }}\",\n\"linked_in_url\": \"\",\n\"clevertap_id\": \"\",\n\"isFromWelcomeBack\": false,\n\"level\":null\n} ",
+        "options": {}
+      },
+      "id": "48b1e741-e058-482f-9bd3-4478fc74dc75",
+      "name": "HTTP Request24",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        2480,
+        300
+      ],
+      "retryOnFail": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b0f4b2c5-51b4-42f9-a6bd-88eefbf53379",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": 100,
+              "operator": {
+                "type": "number",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1980,
+        200
+      ],
+      "id": "b2eb4943-acce-41bc-a4bf-4b41f3b46429",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "page_url",
+              "value": "={{ $('Webhook').item.json.body.page_full_url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e9d053e0-8440-43be-9012-8f34a881ff7f",
+      "name": "Set8",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        2260,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "IF11",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "IF13",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "IF19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set2": {
+      "main": [
+        [
+          {
+            "node": "MF API CALL",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Execute Workflow5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF2": {
+      "main": [
+        [
+          {
+            "node": "Supabase5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase5": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase3": {
+      "main": [
+        [
+          {
+            "node": "Supabase10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase10": {
+      "main": [
+        [
+          {
+            "node": "IF2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "IF10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Business Cloud2": {
+      "main": [
+        [
+          {
+            "node": "Supabase11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF6": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set3": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF10": {
+      "main": [
+        [
+          {
+            "node": "IF8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase12": {
+      "main": [
+        [
+          {
+            "node": "Set3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow2": {
+      "main": [
+        [
+          {
+            "node": "IF12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Set1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF12": {
+      "main": [
+        [
+          {
+            "node": "Supabase14",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supabase19",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "IF7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase14": {
+      "main": [
+        [
+          {
+            "node": "IF7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF7": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "FunctionItem - To Flow Data": {
+      "main": [
+        [
+          {
+            "node": "Create JSON-items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create JSON-items1": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow4": {
+      "main": [
+        [
+          {
+            "node": "IF14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set6": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase17": {
+      "main": [
+        [
+          {
+            "node": "Set6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF14": {
+      "main": [
+        [
+          {
+            "node": "Supabase18",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "Supabase17",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Item Lists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase18": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists": {
+      "main": [
+        []
+      ]
+    },
+    "IF8": {
+      "main": [
+        [
+          {
+            "node": "Set4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase19": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF1": {
+      "main": [
+        [
+          {
+            "node": "Supabase12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF3": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow": {
+      "main": [
+        [
+          {
+            "node": "IF15",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF15": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supabase21",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase21": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF5": {
+      "main": [
+        [
+          {
+            "node": "IF17",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "IF9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request5": {
+      "main": [
+        [
+          {
+            "node": "Supabase22",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF9": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request6": {
+      "main": [
+        [
+          {
+            "node": "Supabase23",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request8": {
+      "main": [
+        [
+          {
+            "node": "Supabase25",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request7": {
+      "main": [
+        [
+          {
+            "node": "Supabase24",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request9": {
+      "main": [
+        [
+          {
+            "node": "Supabase26",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF16": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF17": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "IF4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request11": {
+      "main": [
+        [
+          {
+            "node": "Supabase28",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set1": {
+      "main": [
+        [
+          {
+            "node": "Supabase13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF18": {
+      "main": [
+        [
+          {
+            "node": "IF5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Business Cloud": {
+      "main": [
+        [
+          {
+            "node": "Supabase27",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MF API CALL": {
+      "main": [
+        [
+          {
+            "node": "IF6",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request15",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set4": {
+      "main": [
+        [
+          {
+            "node": "call WA messages for webinar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF4": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF11": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF13": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF19": {
+      "main": [
+        [
+          {
+            "node": "Supabase3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request17": {
+      "main": [
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF20": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request16",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request18",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "IF20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set5": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF22": {
+      "main": [
+        [
+          {
+            "node": "Set5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow6": {
+      "main": [
+        [
+          {
+            "node": "IF23",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF23": {
+      "main": [
+        [
+          {
+            "node": "Supabase1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supabase29",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase29": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request21": {
+      "main": [
+        [
+          {
+            "node": "Set2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supabase4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request21",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set7": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Supabase6",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "IF25",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF25": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request22",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF26": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "WhatsApp Business Cloud1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request12": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud6",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "WhatsApp Business Cloud7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Set7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set8": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request24",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request24": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Calcutta",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "JugK3JVukMVLS3ax",
+    "saveExecutionProgress": true
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.miles-api.com",
+            "x-real-ip": "172.70.218.219",
+            "x-forwarded-host": "webhook.miles-api.com",
+            "x-forwarded-server": "webhook.miles-api.com",
+            "x-forwarded-for": "2406:da1a:6b0:f602:fc46:c2c9:8a32:fafb, 172.70.218.219",
+            "connection": "close",
+            "content-length": "795",
+            "cf-ray": "92a80303be3e8528-BOM",
+            "cf-connecting-ip": "2406:da1a:6b0:f602:fc46:c2c9:8a32:fafb",
+            "accept-encoding": "gzip, br",
+            "cf-pseudo-ipv4": "240.81.65.233",
+            "x-forwarded-proto": "https",
+            "content-type": "application/json",
+            "charsets": "utf-8",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-ipcountry": "IN",
+            "accept": "*/*",
+            "cdn-loop": "cloudflare; loops=1",
+            "user-agent": "PostgreSQL 15.1 (Ubuntu 15.1-1.pgdg20.04+1) on aarch64-unknown-linux-gnu, compiled by gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0, 64-bit"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "id": 1524564,
+            "city": "Mumbai",
+            "json": null,
+            "email": "kmandalam345@gmail.com",
+            "phone": "+917349206499",
+            "course": 2,
+            "gcl_id": null,
+            "camp_id": 65,
+            "whatsapp": true,
+            "clevertap": null,
+            "last_name": null,
+            "camp_token": null,
+            "first_name": "karan test 3",
+            "push_to_mf": false,
+            "webinar_id": null,
+            "website_id": null,
+            "campaign_id": null,
+            "coming_from": "website-page",
+            "ga_client_id": null,
+            "intrested_in": "Yes",
+            "campaign_name": null,
+            "ga_session_id": "1743575949",
+            "page_full_url": "https://www.mileseducation.com/accounting/us-cpa",
+            "sync_to_sheet": false,
+            "url_page_path": "/accounting/us-cpa",
+            "ga_session_number": "2",
+            "english_proficiency": null,
+            "registration_status": false,
+            "register_for_webinar": null,
+            "whatsapp_send_status": false,
+            "education_qualification": "graduating_in_2026_or_later"
+          },
+          "webhookUrl": "https://webhook.miles-api.com/webhook/registerwebinar",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "WhatsApp Business Cloud": [
+      {
+        "json": {
+          "name": "First item",
+          "code": 1
+        }
+      },
+      {
+        "json": {
+          "name": "Second item",
+          "code": 2
+        }
+      }
+    ]
+  },
+  "versionId": "ef875632-cfce-459b-8e99-3e35074fd901",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2023-08-25T10:27:51.285Z",
+      "updatedAt": "2023-08-25T10:27:51.285Z",
+      "role": "workflow:owner",
+      "workflowId": "YAQRSrjVleMY3eCQ",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

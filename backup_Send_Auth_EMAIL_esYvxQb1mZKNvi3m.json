@@ -1,0 +1,263 @@
+{
+  "createdAt": "2024-08-06T12:37:37.747Z",
+  "updatedAt": "2025-04-17T13:53:55.000Z",
+  "id": "esYvxQb1mZKNvi3m",
+  "name": "Send Auth EMAIL",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "send-otp-email",
+        "options": {}
+      },
+      "id": "bf410ac2-23a1-47a3-a1d4-e45fcf23df84",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        340,
+        280
+      ],
+      "webhookId": "9b403bc9-7aa5-4e73-b165-defb9b4befd5"
+    },
+    {
+      "parameters": {
+        "template": "miles-sso-otp",
+        "fromEmail": "sso-miles@mileseducation.com",
+        "toEmail": "={{ $json.body.email }}",
+        "options": {
+          "subject": "=One-time password {{ $json.body.app }}"
+        },
+        "mergeVarsUi": {
+          "mergeVarsValues": [
+            {
+              "name": "OTP",
+              "content": "={{ $json.body.otp }}"
+            },
+            {
+              "name": "NAME",
+              "content": "={{ $json.body.name }}"
+            },
+            {
+              "name": "APP",
+              "content": "={{ $json.body.app }}"
+            }
+          ]
+        }
+      },
+      "id": "bca00753-3a90-47ab-8f3f-331cafc9dbd5",
+      "name": "Mandrill",
+      "type": "n8n-nodes-base.mandrill",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        280
+      ],
+      "credentials": {
+        "mandrillApi": {
+          "id": "t5XAtcUI45PwVrj0",
+          "name": "Mandrill account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "272e1b6e-5f2e-4b94-bcc9-2d3f4cb49fea",
+              "leftValue": "={{ $json.body.app }}",
+              "rightValue": "Miles Masterclass",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        280
+      ],
+      "id": "edcdbecc-b308-4a1a-b7b8-bc391f07c03d",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "template": "otp-miles-talent-hub",
+        "fromEmail": "sso-miles@mileseducation.com",
+        "toEmail": "={{ $json.body.email }}",
+        "options": {
+          "subject": "OTP for Miles Masterclass Login"
+        },
+        "mergeVarsUi": {
+          "mergeVarsValues": [
+            {
+              "name": "OTP",
+              "content": "={{ $json.body.otp }}"
+            },
+            {
+              "name": "NAME",
+              "content": "={{ $json.body.name }}"
+            }
+          ]
+        }
+      },
+      "id": "762c25ac-1afa-4f1b-a5f8-acd53e11d1e5",
+      "name": "Mandrill1",
+      "type": "n8n-nodes-base.mandrill",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        100
+      ],
+      "credentials": {
+        "mandrillApi": {
+          "id": "t5XAtcUI45PwVrj0",
+          "name": "Mandrill account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Mandrill1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mandrill",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.miles-api.com",
+            "x-real-ip": "172.69.179.200",
+            "x-forwarded-host": "webhook.miles-api.com",
+            "x-forwarded-server": "webhook.miles-api.com",
+            "x-forwarded-for": "34.96.40.21, 172.69.179.200",
+            "connection": "close",
+            "content-length": "72",
+            "cf-ray": "931c3c670e483c6a-BOM",
+            "user-agent": "axios/1.8.3",
+            "accept-encoding": "gzip, br",
+            "content-type": "application/json",
+            "x-forwarded-proto": "https",
+            "cdn-loop": "cloudflare; loops=1",
+            "accept": "application/json, text/plain, */*",
+            "cf-connecting-ip": "34.96.40.21",
+            "cf-ipcountry": "US"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "name": "there",
+            "otp": 212775,
+            "app": "Miles Masterclass",
+            "email": "jithinkpraveen@gmail.com"
+          }
+        }
+      }
+    ]
+  },
+  "versionId": "0020d926-194c-4e5b-b735-33ee3f8ae14b",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2024-08-06T12:37:37.752Z",
+      "updatedAt": "2024-08-06T12:37:37.752Z",
+      "role": "workflow:owner",
+      "workflowId": "esYvxQb1mZKNvi3m",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

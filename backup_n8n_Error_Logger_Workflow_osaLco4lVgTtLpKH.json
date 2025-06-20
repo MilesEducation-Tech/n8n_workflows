@@ -1,0 +1,222 @@
+{
+  "createdAt": "2025-05-12T07:57:30.722Z",
+  "updatedAt": "2025-05-14T10:59:40.000Z",
+  "id": "osaLco4lVgTtLpKH",
+  "name": "n8n Error Logger Workflow",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "tableId": "Log n8n Errors",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "created_at",
+              "fieldValue": "={{ $now }}"
+            },
+            {
+              "fieldId": "url",
+              "fieldValue": "={{ $json.execution.url }}"
+            },
+            {
+              "fieldId": "message",
+              "fieldValue": "={{ $json.execution.error.message }}"
+            },
+            {
+              "fieldId": "description",
+              "fieldValue": "={{ $json.execution.error.stack.toJsonString() }}"
+            },
+            {
+              "fieldId": "workflow_name",
+              "fieldValue": "={{ $json.workflow.name }}"
+            },
+            {
+              "fieldId": "lastNode",
+              "fieldValue": "={{ $json.execution.lastNodeExecuted }}"
+            },
+            {
+              "fieldId": "workflow_id",
+              "fieldValue": "={{ $json.workflow.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -100
+      ],
+      "id": "bda42ca3-ec5f-48c1-bbc5-f090ce2ae409",
+      "name": "Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        -100
+      ],
+      "id": "e2115145-bd5d-4ed8-bf33-cef1f454a487",
+      "name": "Error Trigger"
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "saveExecutionProgress": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "JugK3JVukMVLS3ax"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Error Trigger": [
+      {
+        "json": {
+          "execution": {
+            "id": "13949648",
+            "url": "https://webhook.miles-api.com/workflow/6sbzkhFEfPZfrk9k/executions/13949648",
+            "error": {
+              "level": "warning",
+              "tags": {},
+              "context": {
+                "itemIndex": 0
+              },
+              "functionality": "regular",
+              "name": "NodeOperationError",
+              "timestamp": 1747220304795,
+              "node": {
+                "parameters": {
+                  "curlImport": "",
+                  "method": "POST",
+                  "url": "https://api2.netcoresmartech.com/v1/activity/upload",
+                  "authentication": "none",
+                  "provideSslCertificates": false,
+                  "sendQuery": false,
+                  "sendHeaders": true,
+                  "specifyHeaders": "keypair",
+                  "headerParameters": {
+                    "parameters": [
+                      {
+                        "name": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "name": "Authorization",
+                        "value": "Bearer 9fe318e8ece9299a6945bea578bad979"
+                      }
+                    ]
+                  },
+                  "sendBody": true,
+                  "contentType": "json",
+                  "specifyBody": "json",
+                  "jsonBody": "=[\n    {\n        \"asset_id\": \"5110a91370e379b21165d47435cf6106\",\n        \"activity_name\": \"{{ $('When Executed by Another Workflow').item.json.event_name }}\",\n        \"timestamp\": \"{{ new Date().toISOString()\n }}\",\n        \"identity\": \"{{ $('When Executed by Another Workflow').item.json.uuid }}\",\n        \"activity_source\": \"web\",\n        \"activity_params\": {\n                  \"first_name\": \"{{ $('Switch').item.json.first_name }}\",\n                  \"email\": \"{{ $('When Executed by Another Workflow').item.json.email }}\",\n\"phone\": \"{{ $('When Executed by Another Workflow').item.json.phone }}\",\n\"campaign_id\": {{ $('When Executed by Another Workflow').item.json.campaign_id }},\n\"visit_date\": \"{{ $('When Executed by Another Workflow').item.json.visit_date.toDateTime().format('dd LLLL, yyyy') }}\",\n\"visit_time\": \"{{ $('When Executed by Another Workflow').item.json.visit_date.toDateTime().setZone('Asia/Kolkata').format('t') }}\",\n\"meet_link\": \"{{ $('When Executed by Another Workflow').item.json.meet_link ?? \"offline\" }}\",\n\"spoc_name\": \"{{ $('When Executed by Another Workflow').item.json.spoc_name }}\",\n\"visit_type\": \"{{ $('When Executed by Another Workflow').item.json.visit_type }}\",\n\"visit_city\": \"{{ $('When Executed by Another Workflow').item.json.visit_city ?? \"Virtual\" }}\",\n\"maps_link\": \"{{ $('When Executed by Another Workflow').item.json.maps_link ?? \"Virtual\" }}\",\n\"office_address\": \"{{ $json.cleanedAddress }}\",\n\"leadid\": \"{{ $('When Executed by Another Workflow').item.json.lead_id }}\"\n        }\n    }\n]\n",
+                  "options": {},
+                  "infoMessage": ""
+                },
+                "id": "b3b72d09-82fd-4c09-a8b8-fb85134abf07",
+                "name": "HTTP Request6",
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.1,
+                "position": [
+                  2200,
+                  1020
+                ]
+              },
+              "messages": [],
+              "message": "JSON parameter needs to be valid JSON",
+              "stack": "NodeOperationError: JSON parameter needs to be valid JSON\n    at ExecuteContext.execute (/usr/local/lib/node_modules/n8n/node_modules/n8n-nodes-base/dist/nodes/HttpRequest/V3/HttpRequestV3.node.js:256:23)\n    at WorkflowExecute.runNode (/usr/local/lib/node_modules/n8n/node_modules/n8n-core/dist/execution-engine/workflow-execute.js:681:50)\n    at /usr/local/lib/node_modules/n8n/node_modules/n8n-core/dist/execution-engine/workflow-execute.js:913:62\n    at /usr/local/lib/node_modules/n8n/node_modules/n8n-core/dist/execution-engine/workflow-execute.js:1246:20"
+            },
+            "lastNodeExecuted": "HTTP Request6",
+            "mode": "integrated"
+          },
+          "workflow": {
+            "id": "6sbzkhFEfPZfrk9k",
+            "name": "Send Activity to Netcore"
+          }
+        }
+      }
+    ]
+  },
+  "versionId": "71a491e9-8e4b-4d25-a2a7-4374df608c91",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-05-12T07:57:30.728Z",
+      "updatedAt": "2025-05-12T07:57:30.728Z",
+      "role": "workflow:owner",
+      "workflowId": "osaLco4lVgTtLpKH",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

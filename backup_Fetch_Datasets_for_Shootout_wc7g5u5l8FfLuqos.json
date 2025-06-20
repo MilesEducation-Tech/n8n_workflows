@@ -1,0 +1,557 @@
+{
+  "createdAt": "2025-06-05T20:44:01.751Z",
+  "updatedAt": "2025-06-11T06:10:45.000Z",
+  "id": "wc7g5u5l8FfLuqos",
+  "name": "Fetch Datasets for Shootout",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "c055762a-8fe7-4141-a639-df2372f30060",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        140,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.reminder_type }}",
+                    "rightValue": "={{ $json.reminder_type }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "53ec1f84-f94e-4336-a41b-24b4263dee3b"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        360,
+        500
+      ],
+      "id": "102065fc-4575-455a-97ed-21c7f323c03c",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT DISTINCT ON (\"Phone\".\"phoneNumber\")\n  \"public\".\"webinar_registration\".\"id\" AS \"id\",\n  \"public\".\"webinar_registration\".\"email\" AS \"registration_email\",\n  \"public\".\"webinar_registration\".\"webinarId\" AS \"webinarId\",\n  \"public\".\"webinar_registration\".\"join_url\" AS \"link\",\n  \"Lead - LeadId\".\"id\" AS \"lead_id\",\n  \"Lead - LeadId\".\"first_name\" AS \"name\",\n  \"Lead - LeadId\".\"uuid\" AS \"uuid\",\n  \"Phone\".\"phoneNumber\" AS \"phone\",\n  \"Phone\".\"countryCode\" AS \"country_code\",\n  \"Webinar - WebinarId\".\"webinar_name\" AS \"webinar_name\",\n  \"Webinar - WebinarId\".\"date_string\" AS \"webinar_date\",\n  \"Webinar - WebinarId\".\"time_string\" AS \"webinar_time\",\n  \"Email\".\"email\" AS \"email\",\n  \"Campaign - CampignId\".\"id\" AS \"campaign_id\",\n  \"Campaign - CampignId\".\"campaign_name\" AS \"campaign_name\",\n  \"Program - CourseId\".\"id\" AS \"course_id\"\nFROM\n  \"public\".\"webinar_registration\"\nLEFT JOIN \"public\".\"lead\" AS \"Lead - LeadId\" ON \"public\".\"webinar_registration\".\"leadId\" = \"Lead - LeadId\".\"id\"\nLEFT JOIN \"public\".\"phone\" AS \"Phone\" ON \"Lead - LeadId\".\"id\" = \"Phone\".\"leadId\"\nLEFT JOIN \"public\".\"webinar\" AS \"Webinar - WebinarId\" ON \"public\".\"webinar_registration\".\"webinarId\" = \"Webinar - WebinarId\".\"id\"\nLEFT JOIN \"public\".\"email\" AS \"Email\" ON \"Lead - LeadId\".\"id\" = \"Email\".\"leadId\"\nLEFT JOIN \"public\".\"campaign\" AS \"Campaign - CampignId\" ON \"public\".\"webinar_registration\".\"campignId\" = \"Campaign - CampignId\".\"id\"\nLEFT JOIN \"public\".\"source\" AS \"Source - SourceId\" ON \"Campaign - CampignId\".\"sourceId\" = \"Source - SourceId\".\"id\"\nLEFT JOIN \"public\".\"program\" AS \"Program - CourseId\" ON \"Webinar - WebinarId\".\"courseId\" = \"Program - CourseId\".\"id\"\nWHERE\n  \"public\".\"webinar_registration\".\"webinarId\" = {{ $('When Executed by Another Workflow').item.json.id }}\nORDER BY\n  \"Phone\".\"phoneNumber\",\n  \"public\".\"webinar_registration\".\"created_at\" DESC",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        660,
+        340
+      ],
+      "id": "9903de17-98e4-4ae5-b62c-0babdb7c0ded",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 500,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1880,
+        360
+      ],
+      "id": "04069c68-6c99-49e2-9f04-c256165ed4c3",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "dqr4NavCVqG9EN1a",
+          "mode": "list",
+          "cachedResultName": "(NEW) Fetch Template from Supabase"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        680,
+        -120
+      ],
+      "id": "8acf303b-bad8-4164-b018-634687f2c582",
+      "name": "Execute Workflow2"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "event_messages_mapping_wati",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "event_name",
+              "keyValue": "={{ $json.reminder_type }}"
+            },
+            {
+              "keyName": "program_id",
+              "keyValue": "={{ $json.courseId }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        580,
+        800
+      ],
+      "id": "ec6928d2-6fba-4ddb-8aa3-567cdeced2fa",
+      "name": "Supabase",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "Ob3B7XMSxqBOUtpK",
+          "cachedResultName": "Prep and Send Batch Messages"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        2340,
+        560
+      ],
+      "id": "54f23346-65f0-42db-874a-08fcaf0a81ef",
+      "name": "Prep and Send Batch Messages"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "tableId": "wati_message_templates",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "template_name",
+              "keyValue": "={{ $json.template_name }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        820,
+        800
+      ],
+      "id": "9b8d0871-47d1-455d-8b43-6004763a0306",
+      "name": "Supabase2",
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "349fa204-153c-4783-b87f-183f58eab281",
+              "name": "customParams",
+              "value": "={{ $json.customParams }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1040,
+        800
+      ],
+      "id": "85dd84db-9ea2-46ec-912e-792a5c19aa4c",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        1460,
+        360
+      ],
+      "id": "803622f8-25aa-44bf-b36e-47fe10658429",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "njllfvxNDtnYBEQf",
+          "mode": "list",
+          "cachedResultName": "Netcore Batch Activity Upload"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        2360,
+        -120
+      ],
+      "id": "78740dae-a955-4502-9f74-dc8d24e4cc5d",
+      "name": "Netcore Batch Activity Upload"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d8d2961f-0620-4e65-8293-7d3f6f9921f1",
+              "name": "wati_account_id",
+              "value": "={{ $('Supabase2').item.json.wati_account_id }}",
+              "type": "number"
+            },
+            {
+              "id": "6a60b2f3-8ed7-426d-a5e8-678e59651d5d",
+              "name": "template_name",
+              "value": "={{ $('Supabase').item.json.template_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1640,
+        360
+      ],
+      "id": "36f86f8c-5d61-481c-a915-36718202576d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        880,
+        340
+      ],
+      "id": "26198898-487a-4568-bbc6-1c63d878a888",
+      "name": "Limit",
+      "disabled": true
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Prep and Send Batch Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "main": [
+        [
+          {
+            "node": "Supabase2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Netcore Batch Activity Upload": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep and Send Batch Messages": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "id": 74,
+          "status": true,
+          "created_by": 58,
+          "updated_by": 58,
+          "created_at": "2025-05-31T11:40:00.508Z",
+          "updated_at": "2025-05-31T11:40:10.034Z",
+          "webinar_id": "94968796029",
+          "webinar_name": "Webinar on AI for Business Professionals",
+          "host": "Varun Jain",
+          "title_on_website": "Webinar on AI for Business Professionals",
+          "date_string": "June 7, 2025",
+          "time_string": "03:00 PM",
+          "duration": 90,
+          "webinar_type": "Online",
+          "courseId": 58,
+          "tagline_1": null,
+          "tagline_2": null,
+          "about": null,
+          "text_highlight": null,
+          "what_you_learn": null,
+          "acc_city_id": null,
+          "isOffline": null,
+          "card_banner_image": null,
+          "date_time": "2025-06-07T15:00:00.000Z",
+          "zoomAccount": "events@mileseducation.com",
+          "enrol_status": "none",
+          "is_meet_and_greet": false,
+          "auto_register": true,
+          "ist_date": "2025-06-07T00:00:00.000Z",
+          "batch_workflow": true,
+          "reminder_type": "webinar_registered_d_1_day"
+        }
+      }
+    ]
+  },
+  "versionId": "2532956a-a651-4451-8c04-801328f32f11",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-06-05T20:44:01.755Z",
+      "updatedAt": "2025-06-05T20:44:01.755Z",
+      "role": "workflow:owner",
+      "workflowId": "wc7g5u5l8FfLuqos",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

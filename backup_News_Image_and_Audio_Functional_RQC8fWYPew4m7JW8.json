@@ -1,0 +1,1588 @@
+{
+  "createdAt": "2025-04-09T17:37:22.912Z",
+  "updatedAt": "2025-06-18T14:27:23.000Z",
+  "id": "RQC8fWYPew4m7JW8",
+  "name": "News Image and Audio Functional",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "={{ $json[''][''].article_url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        380,
+        -80
+      ],
+      "id": "56c6b595-b597-42d9-b35e-41ddbd81a594",
+      "name": "getContent",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "html": "={{ $json.data }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        660,
+        -80
+      ],
+      "id": "a9964107-9a68-47ff-8fd7-e2c76df6ba56",
+      "name": "Markdown",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b79c0c8a-7201-4e88-a004-bc16f31b3500",
+              "name": "data",
+              "value": "={{ $json.data }}",
+              "type": "string"
+            },
+            {
+              "id": "bc06f4c4-de50-411a-bb80-4177994d9f10",
+              "name": "data 2",
+              "value": "={{ $('Edit Fields2').first().json}}",
+              "type": "object"
+            },
+            {
+              "id": "2ffb968d-28d8-4127-9276-2b2d31c92478",
+              "name": "id",
+              "value": "={{ $('Edit Fields2').item.json[\"\"][\"\"].id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        940,
+        -80
+      ],
+      "id": "a760fe40-9559-49bc-a766-f4d4a83176c5",
+      "name": "Edit Fields",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "event_newsdata",
+          "mode": "list",
+          "cachedResultName": "event_newsdata"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Edit Fields').item.json['data 2'][''][''].id }}",
+            "image_url": "=https://storage.googleapis.com/milesone-news-audio/{{ $json.name }}",
+            "processed_image_url": "=https://storage.googleapis.com/milesone-news-audio/{{ $json.name }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": true,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "likes",
+              "displayName": "likes",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "article_url",
+              "displayName": "article_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "featured",
+              "displayName": "featured",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "image_url",
+              "displayName": "image_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "published_at",
+              "displayName": "published_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "mini_description",
+              "displayName": "mini_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "trending",
+              "displayName": "trending",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "processed_image_url",
+              "displayName": "processed_image_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "news_start_date",
+              "displayName": "news_start_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "news_end_date",
+              "displayName": "news_end_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "active",
+              "displayName": "active",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "uploaded_image",
+              "displayName": "uploaded_image",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "category_id",
+              "displayName": "category_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "audio",
+              "displayName": "audio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "bulletin",
+              "displayName": "bulletin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        3780,
+        -40
+      ],
+      "id": "cf8f9124-073a-454b-a921-e105e232cb8f",
+      "name": "postgres milesone",
+      "retryOnFail": true,
+      "credentials": {
+        "postgres": {
+          "id": "iOOTVit15R9PSjWX",
+          "name": "Milesone-Production(DO NOT TOUCH)"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1300,
+        -20
+      ],
+      "id": "35906c6b-f618-48b5-beab-a531ae0d409e",
+      "name": "Loop Over Items",
+      "retryOnFail": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "400f543d-9505-4607-b279-f39e43c653b2",
+              "name": "",
+              "value": "={{ $('Loop Over Items').first().json.toJsonString() }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -760,
+        -40
+      ],
+      "id": "b404cd68-9d4e-4b38-9cf2-c08aa6f8bdb0",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a08d6a68-65f4-4346-b795-5176951e15e6",
+              "leftValue": "={{ $json[''].active }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -480,
+        -40
+      ],
+      "id": "87560f98-d5c3-418b-a866-fce818af4864",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2362c1e1-4026-4cdc-9382-260992248674",
+              "name": "",
+              "value": "={{ $('If').first().json.toJsonString() }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -160,
+        -60
+      ],
+      "id": "d487fffc-660d-409f-9eda-c235685d8a84",
+      "name": "Edit Fields2",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "model": "=gpt-4o-mini-tts",
+        "input": "={{ $json.output }}",
+        "voice": "=coral",
+        "options": {
+          "response_format": "mp3"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        5180,
+        760
+      ],
+      "id": "c1f04ec4-b74b-4eb8-8b5b-1eeb4463e22e",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "ZD83SOWo0kbWe8pu",
+          "name": "CTO Office - Open AI Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        4280,
+        1020
+      ],
+      "id": "b5c2e141-da9e-4b6c-8834-e05878924915",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "gMimpnq5xUYwijxb",
+          "name": "Miles AI/ML - Analytics Account - Open Router"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "42e5b0b8-91e6-4775-ac44-4bbf9d55627e",
+              "name": "output",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "84004fd9-cf3f-478b-bf36-3bc363c72bc9",
+              "name": "File Name",
+              "value": "={{ $('Edit Fields').item.json['data 2'][''][''].id }}.mps",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4720,
+        400
+      ],
+      "id": "ff413862-56a4-4f4f-9535-98f58a6aaffb",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "[\n  {\n    \"tone\": \"cautious\",\n    \"text\": \"Japan's Nikkei index has taken a notable tumble, falling 3.1% to settle at 32,010.93. This drop mirrors the recent downturn experienced on Wall Street amid growing concerns about economic growth.\"\n  },\n  {\n    \"tone\": \"informative\",\n    \"text\": \"The broader Topix index also felt the impact, losing 3% to reach 2,360.32, following a sharp sell-off in the S&P 500.\"\n  },\n  {\n    \"tone\": \"alarmed\",\n    \"text\": \"Investors are particularly concerned about the state of technology stocks, which led the decline—Advantest plummeted by 9%, while SoftBank Group saw a significant decrease of nearly 6%.\"\n  },\n  {\n    \"tone\": \"analytical\",\n    \"text\": \"With tariff negotiations still looming, analysts are closely monitoring these developments, signaling potential future instability in the markets.\"\n  }\n]\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        4560,
+        1100
+      ],
+      "id": "cbd03ef1-eed1-41ce-b274-72621a9ab055",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1440,
+        220
+      ],
+      "id": "33edbac2-26ef-4e10-948c-52dc7a8ee163",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "gMimpnq5xUYwijxb",
+          "name": "Miles AI/ML - Analytics Account - Open Router"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"main_subject_action\": \"A journalist interviewing a protester who is passionately speaking and gesturing, while holding a placard.\",\n  \"scene_background_location\": \"A large urban city square with crowds, surrounded by tall government buildings.\",\n  \"supporting_objects_symbols\": [\n    \"Protest signs\",\n    \"Microphone\",\n    \"Camera equipment\",\n    \"Press badge\",\n    \"Banners promoting peace\",\n    \"Onlookers recording with phones\"\n  ],\n  \"lighting\": \"Overcast daylight with diffused natural light, no harsh shadows\",\n  \"color_palette\": \"Muted greys and soft blues for a subdued and serious atmosphere\",\n  \"composition_type\": \"wide shot\",\n  \"emotional_tone\": \"serious and reflective, emphasizing civic responsibility and calm activism\",\n  \"style\": \"Photographic\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1740,
+        240
+      ],
+      "id": "5e319ceb-ad52-4784-98be-15d746a4bd36",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ebce66b0-f125-4832-927b-b995249a26b9",
+              "name": "Prompt",
+              "value": "={\n  \"mainsubject action\": \"{{ $json.output.main_subject_action }}\", \"scene_background_location\": \"{{ $json.output.scene_background_location }}\", \"Style\": \"{{ $json.output.style }}\",  \"lighting\": \"{{ $json.output.lighting }}\", \"Composition_type\": \"{{ $json.output.composition_type }}\", \"emotional_tone\": \"{{ $json.output.emotional_tone }}\", \"color_palettee\": \"{{ $json.output.color_palette }}\", \"supporting_objects_symbols\" : \"{{ $json.output.supporting_objects_symbols }}\",\n\n}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2000,
+        -160
+      ],
+      "id": "004b5ae9-28c6-400c-8854-dbb765f3b393",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json['data 2'][''][''].mini_description }} {{ $json['data 2'][''][''].description }} {{ $json['data 2'][''][''].title }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "Generate a concise, clear text-to-image prompt that describes a realistic scene for a news article. This prompt will be used in Google Imagen3 model text-to-image generator.  \n\nThe prompt must follow this order, applying all fields where relevant:\n\n1. Main Subject & Action\nClearly describe the primary entity (person, group, object) and what is happening. \nDon-not take use name of celebrities and known personals for image generation prompt as it is not allowed\n\nExample:\n“A group of scientists inspecting a satellite module”\n\n2. Setting / Background Environment\nSpecify the physical location, environment, or context.\n\nExample:\n“inside a futuristic space research facility with digital displays”\n\n3. Key Details & Supporting Elements\nAdd relevant objects, people, symbols, or actions enhancing the scene.\n\nExample:\n“data holograms projected in the air, space agency logos on walls”\n\n4. Lighting & Mood (Optional but Encouraged)\nMention time of day, color tone, or visual feel.\n\nExample:\n“well-lit lab with a cool blue ambiance”\n\n5. Composition Type (Optional)\nIndicate framing or perspective for more precise generation.\n\nOptions:\nwide shot, close-up, aerial view, over-the-shoulder, side angle, etc.\n\n6. Emotional Tone\nMatch the news article’s emotional intent. Choose from:\n\nhopeful, urgent, tense, inspiring, neutral, somber, celebratory, critical, etc.\n\n7. Style\nChoose the most fitting from:\n\nNo Style, Photographic, Anime, Digital Art, Comic Book, Fantasy Art, Analog Film, Neon Punk,\nIsometric, Low Poly, Origami, Line Art, Cinematic, 3D Model, Pixel Art, Vaporwave, Cyberpunk, Retro,\nWatercolor, Oil Painting, Pencil Sketch, Concept Art, Surrealism, Minimalist, Realism, Matte Painting\n\nDefault to Photographic unless clearly matched to a non-realistic tone.\n\n8. Resolution & File Constraints (Internal)\n\nEnsure prompt leads to an image under 200 KB.\n\nAvoid overly detailed textures or high-complexity scenes if space is constrained.\n\n\n\nDescribe: Based on the news article content, generate a concise and accurate text-to-image prompt that includes:\n\n1. Main subject and action\n\n2. Scene background and location\n\n3. Relevant supporting objects or symbols\n\n4. Lighting and color palette\n\n5.  Composition type (e.g., wide shot, aerial, close-up)\n\n6. Emotional tone that matches the article\n\n7. Style: Pick the best-fit from the provided style list \n\nUse vivid but simple language. Be precise. The resulting image must stay under 200 KB.\n\nRail Guard - Don-not take use name of celebrities and known personals for image generation prompt as it is not allowed\"\n"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        1520,
+        -120
+      ],
+      "id": "e77e6609-c1ee-46c2-9ac6-5112b85ac665",
+      "name": "Image Prompt",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "alwaysOutputData": true,
+      "executeOnce": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data }} {{ $('Edit Fields').item.json['data 2'][''][''].source }} {{ $('Edit Fields').item.json['data 2'][''][''].title }} ",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are an expert news anchor and professional scriptwriter.\n\nGiven a news article, your task is to:\n\nWrite a full news bulletin script (30 to 40 seconds long) as if it's being read on-air by a news anchor for a digital news platform.\n\nStart the script directly with the story — avoid generic openings like \"Good evening\" or salutations.\n\nUse natural transitions and engaging language to keep the listener's attention.\n\nEmphasize the narrative by marking implicit voice modulation and emotional tone for each section, using a \"tone\" key in your output. For example: \"tone\": \"confident\", \"tone\": \"cautious\", \"tone\": \"reassuring\", etc.\n\nStructure your final output as a JSON object with two fields:\n\n\"toneScript\": an array where each paragraph of the script is paired with its narrative tone.\n\n\nDo not include literal markers like \"[pause]\" or formatting syntax like asterisks or brackets in the final narration text."
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        4260,
+        420
+      ],
+      "id": "02044cb5-6646-4608-a0cf-521df9d1953a",
+      "name": "Audio Prompt",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "alwaysOutputData": true,
+      "executeOnce": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "prompt": "={{ $json.output }} {{ $json['File Name'] }}",
+        "options": {
+          "quality": "standard",
+          "size": "1024x1024",
+          "style": "natural"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1840,
+        -1360
+      ],
+      "id": "dec030e4-1a86-415a-a69e-be42d8798cb6",
+      "name": "Image Creation",
+      "credentials": {
+        "openAiApi": {
+          "id": "ZD83SOWo0kbWe8pu",
+          "name": "CTO Office - Open AI Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "requestMethod": "POST",
+        "url": "https://clipdrop-api.co/text-to-image/v1",
+        "responseFormat": "file",
+        "dataPropertyName": "Clipdrop_Generated_Image",
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "={{ $json.Prompt }}",
+        "headerParametersJson": "{\"x-api-key\":\"e14ebd0ddf0799cc5ec83cbcdfaebfead48df6839c83d8769f653ea9d0f9bc8f12a417f4edd147eabab34920af92bb55\",\"Content-Type\":\"application/json\"}"
+      },
+      "name": "Clipdrop Text-to-Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        -1340
+      ],
+      "id": "74dea296-431d-4242-9863-a364a2e8cb66"
+    },
+    {
+      "parameters": {
+        "operation": "multiStep",
+        "operations": {
+          "operations": [
+            {
+              "operation": "resize",
+              "width": 320,
+              "height": 200,
+              "resizeOption": "ignoreAspectRatio"
+            }
+          ]
+        },
+        "options": {
+          "fileName": "Megha_Generated_Image_Resized",
+          "format": "jpeg"
+        }
+      },
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        2980,
+        -140
+      ],
+      "id": "74d83b76-ec37-45b4-bb02-18c491a94dcf",
+      "name": "Edit Image",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemma-3-12b-it",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        -1180
+      ],
+      "id": "d9afebb1-138e-490a-970b-5a07c246805a",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NjYJTjppEAHlxQKN",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.Prompt }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "type": "AIMessagePromptTemplate",
+              "message": "=Generate and Image based prompt"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.6,
+      "position": [
+        1400,
+        -1380
+      ],
+      "id": "9e9ae894-b9a9-44d7-a96b-4c693a2fdc87",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Create and idea about ",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        940,
+        -1400
+      ],
+      "id": "8933b89c-cbd2-4b71-903f-7c474d1b8782",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "projectId": {
+          "__rl": true,
+          "value": "miles-ai-platform",
+          "mode": "list",
+          "cachedResultName": "Miles-AI-Platform"
+        },
+        "modelName": "imagen",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleVertex",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        -1160
+      ],
+      "id": "24dd5155-10c6-4aad-9d45-4334b276200b",
+      "name": "Google Vertex Image Generation Model",
+      "credentials": {
+        "googleApi": {
+          "id": "4BdyRQ4A2gYv0QWX",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "event_newsdata",
+          "mode": "list",
+          "cachedResultName": "event_newsdata"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "id",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1900,
+        0
+      ],
+      "id": "5a714533-fa5c-4ae8-96ab-2b4e2ba5bd35",
+      "name": "Postgres1",
+      "credentials": {
+        "postgres": {
+          "id": "iOOTVit15R9PSjWX",
+          "name": "Milesone-Production(DO NOT TOUCH)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://miles.one/v2/generate-image",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "={{ $json.Prompt }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2300,
+        -160
+      ],
+      "id": "b64b9b59-8231-4755-9b2a-36596bc2f3b5",
+      "name": "HTTP Request",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "image",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        2660,
+        -160
+      ],
+      "id": "6538ac44-69a4-4779-bd73-e3f9ffc8550d",
+      "name": "Convert b64 to image"
+    },
+    {
+      "parameters": {
+        "resource": "object",
+        "operation": "create",
+        "bucketName": "milesone-news-audio",
+        "objectName": "={{ $('Edit Fields').item.json['data 2'][''][''].id }}.audio.mp3",
+        "createBinaryPropertyName": "=data",
+        "createData": {},
+        "createQuery": {},
+        "encryptionHeaders": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.googleCloudStorage",
+      "typeVersion": 1,
+      "position": [
+        5760,
+        740
+      ],
+      "id": "655ab20a-b5c5-441b-a003-4562fcaed97b",
+      "name": "Audio GCP",
+      "retryOnFail": true,
+      "credentials": {
+        "googleCloudStorageOAuth2Api": {
+          "id": "cc1RLJ5V7mGeNNvQ",
+          "name": "Megha Storage for MilesOne"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "object",
+        "operation": "create",
+        "bucketName": "milesone-news-audio",
+        "objectName": "={{ $('Edit Fields').item.json['data 2'][''][''].id }}.image.jpeg",
+        "createBinaryPropertyName": "=data",
+        "createData": {},
+        "createQuery": {},
+        "encryptionHeaders": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.googleCloudStorage",
+      "typeVersion": 1,
+      "position": [
+        3240,
+        -160
+      ],
+      "id": "b084cba4-70c5-43ca-a456-606db7427e5c",
+      "name": "Image GCP",
+      "retryOnFail": true,
+      "credentials": {
+        "googleCloudStorageOAuth2Api": {
+          "id": "cc1RLJ5V7mGeNNvQ",
+          "name": "Megha Storage for MilesOne"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "event_newsdata",
+          "mode": "list",
+          "cachedResultName": "event_newsdata"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Edit Fields').item.json['data 2'][''][''].id }}",
+            "audio": "=https://storage.googleapis.com/milesone-news-audio/{{ $json.name }}",
+            "bulletin": "={{ $('Audio Prompt').item.json.output[0] }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": true,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "likes",
+              "displayName": "likes",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "article_url",
+              "displayName": "article_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "featured",
+              "displayName": "featured",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "image_url",
+              "displayName": "image_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "published_at",
+              "displayName": "published_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "mini_description",
+              "displayName": "mini_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "trending",
+              "displayName": "trending",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "processed_image_url",
+              "displayName": "processed_image_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "news_start_date",
+              "displayName": "news_start_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "news_end_date",
+              "displayName": "news_end_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "active",
+              "displayName": "active",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "uploaded_image",
+              "displayName": "uploaded_image",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "category_id",
+              "displayName": "category_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "audio",
+              "displayName": "audio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "bulletin",
+              "displayName": "bulletin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        6060,
+        740
+      ],
+      "id": "53bc58e8-dd6e-4de3-8824-e7965e57e688",
+      "name": "postgres milesone1",
+      "retryOnFail": true,
+      "credentials": {
+        "postgres": {
+          "id": "iOOTVit15R9PSjWX",
+          "name": "Milesone-Production(DO NOT TOUCH)"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -2460,
+        0
+      ],
+      "id": "691ba102-ddff-4121-aef0-99d3ada31c7b",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "connections": {
+    "getContent": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Image Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "getContent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Audio GCP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Audio Prompt",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Audio Prompt",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "postgres milesone": {
+      "main": [
+        [
+          {
+            "node": "Audio Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Image Prompt",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Image Prompt",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Prompt": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audio Prompt": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image Creation": {
+      "main": [
+        []
+      ]
+    },
+    "Clipdrop Text-to-Image": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Image": {
+      "main": [
+        [
+          {
+            "node": "Image GCP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        []
+      ]
+    },
+    "Google Vertex Image Generation Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Convert b64 to image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert b64 to image": {
+      "main": [
+        [
+          {
+            "node": "Edit Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audio GCP": {
+      "main": [
+        [
+          {
+            "node": "postgres milesone1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image GCP": {
+      "main": [
+        [
+          {
+            "node": "postgres milesone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "postgres milesone1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Postgres1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "9dfe50c6-4226-4e92-b2bd-a3be9559a656",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-04-09T17:37:22.921Z",
+      "updatedAt": "2025-04-09T17:37:22.921Z",
+      "role": "workflow:owner",
+      "workflowId": "RQC8fWYPew4m7JW8",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2025-05-01T05:41:24.451Z",
+      "updatedAt": "2025-05-01T05:41:24.451Z",
+      "id": "gs2WZHb5YEz6CGx9",
+      "name": "Miles One"
+    }
+  ]
+}

@@ -1,0 +1,579 @@
+{
+  "createdAt": "2025-04-17T05:57:36.373Z",
+  "updatedAt": "2025-04-17T06:38:38.000Z",
+  "id": "gq6VOUmifF0t4qXs",
+  "name": "Reminders - Office Visit Booked",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        -220
+      ],
+      "id": "31f8ea67-102a-4759-ba1b-ea2f28ea62f5",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n  \"public\".\"office_visit\".\"id\" AS \"id\",\n  \"public\".\"office_visit\".\"status\" AS \"status\",\n  \"public\".\"office_visit\".\"lead_id\" AS \"lead_id\",\n  \"public\".\"office_visit\".\"visit_date\" AS \"visit_date\",\n  \"public\".\"office_visit\".\"schedule\" AS \"schedule\",\n  \"public\".\"office_visit\".\"visit_status\" AS \"visit_status\",\n  \"public\".\"office_visit\".\"gm_approvel\" AS \"gm_approvel\",\n  \"public\".\"office_visit\".\"google_calender_id\" AS \"google_calender_id\",\n  \"public\".\"office_visit\".\"spoc_id\" AS \"spoc_id\",\n  \"public\".\"office_visit\".\"duration\" AS \"duration\",\n  \"public\".\"office_visit\".\"visitCityId\" AS \"visitCityId\",\n  \"public\".\"office_visit\".\"google_meet_link\" AS \"google_meet_link\"\nFROM\n  \"public\".\"office_visit\"\nWHERE\n  (\n    \"public\".\"office_visit\".\"visit_date\" >= CAST(CAST((NOW() + INTERVAL '1 day') AS date) AS timestamptz)\n  )\n \n   AND (\n    \"public\".\"office_visit\".\"visit_date\" < CAST(CAST((NOW() + INTERVAL '2 day') AS date) AS timestamptz)\n  )",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -280,
+        -220
+      ],
+      "id": "3126f41c-951d-4523-9f67-01818a21060d",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Visit Date is Tomorrow"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -400,
+        -340
+      ],
+      "typeVersion": 1,
+      "id": "29b31059-2bc7-492a-aaf9-c9f7d7f5a453",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -40,
+        -220
+      ],
+      "id": "e1e0f109-cf04-4668-ac85-085b88984adb",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2d8544fa-86b3-4bc9-a7ab-b141de43123d",
+              "name": "first_name",
+              "value": "={{ $('Postgres1').item.json.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "58e126a6-e2d9-4727-a498-6d27b4524019",
+              "name": "visit_time",
+              "value": "={{ $('If').item.json.visit_date.toDateTime().toLocal().format('t') }}",
+              "type": "string"
+            },
+            {
+              "id": "a2a34e49-0daa-41e7-9215-5a48b03d3b0f",
+              "name": "phoneNumber",
+              "value": "={{ $json.countryCode }}{{ $json.phoneNumber }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        800,
+        -200
+      ],
+      "id": "6a987614-106d-4408-85d5-66cae9b678fc",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n  \"public\".\"office_visit\".\"id\" AS \"id\",\n  \"public\".\"office_visit\".\"status\" AS \"status\",\n  \"public\".\"office_visit\".\"lead_id\" AS \"lead_id\",\n  \"public\".\"office_visit\".\"visit_date\" AS \"visit_date\",\n  \"public\".\"office_visit\".\"schedule\" AS \"schedule\",\n  \"public\".\"office_visit\".\"visit_status\" AS \"visit_status\",\n  \"public\".\"office_visit\".\"gm_approvel\" AS \"gm_approvel\",\n  \"public\".\"office_visit\".\"google_calender_id\" AS \"google_calender_id\",\n  \"public\".\"office_visit\".\"spoc_id\" AS \"spoc_id\",\n  \"public\".\"office_visit\".\"duration\" AS \"duration\",\n  \"public\".\"office_visit\".\"visitCityId\" AS \"visitCityId\",\n  \"public\".\"office_visit\".\"google_meet_link\" AS \"google_meet_link\"\nFROM\n  \"public\".\"office_visit\"\nWHERE\n  (\n    \"public\".\"office_visit\".\"visit_date\" >= CAST(CAST((NOW() + INTERVAL '1 day') AS date) AS timestamptz)\n  )\n \n   AND (\n    \"public\".\"office_visit\".\"visit_date\" < CAST(CAST((NOW() + INTERVAL '2 day') AS date) AS timestamptz)\n  )",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -380,
+        1620
+      ],
+      "id": "424d2223-32b6-4854-94a6-8fbb0a7a7fe7",
+      "name": "Postgres2",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Visit Date is Tomorrow"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -500,
+        1500
+      ],
+      "typeVersion": 1,
+      "id": "b7e7666b-c169-48b4-9f0a-1b320da277ba",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -140,
+        1620
+      ],
+      "id": "57bbb907-cc50-416e-8b0e-5c855d3b27be",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n  \"public\".\"lead\".\"candidate_id\" AS \"candidate_id\",\n  \"public\".\"lead\".\"first_name\" AS \"first_name\",\n  \"User - SpocId\".\"firstName\" AS \"User - SpocId__firstName\",\n  \"User - SpocId\".\"virtual_number\" AS \"User - SpocId__virtual_number\"\nFROM\n  \"public\".\"lead\"\n \nLEFT JOIN \"public\".\"user\" AS \"User - SpocId\" ON \"public\".\"lead\".\"spocId\" = \"User - SpocId\".\"id\"\nWHERE\n  \"public\".\"lead\".\"id\" = {{ $json.lead_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        520,
+        1540
+      ],
+      "id": "c9abe2b1-d986-4c53-a6a7-fa76d98d8165",
+      "name": "Postgres3",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6ab6148a-205d-4775-b673-d47afc67f027",
+              "leftValue": "={{ $json.schedule }}",
+              "rightValue": "1",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        180,
+        1640
+      ],
+      "id": "808baf7c-6988-4d35-a117-0317a7260f3c",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c03efced-fe81-4c77-8648-46b091fa4897",
+              "name": "candidate_id",
+              "value": "={{ $json.candidate_id }}",
+              "type": "string"
+            },
+            {
+              "id": "2d8544fa-86b3-4bc9-a7ab-b141de43123d",
+              "name": "first_name",
+              "value": "={{ $json.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "018cdb1d-a3a3-4baa-b1ac-63421795919d",
+              "name": "spoc_name",
+              "value": "={{ $json['User - SpocId__firstName'] }}",
+              "type": "string"
+            },
+            {
+              "id": "92a0d56e-f680-4f1a-9615-c7378f6c6a86",
+              "name": "spoc_phone",
+              "value": "={{ $json['User - SpocId__virtual_number'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ce2e1d09-39fa-4ce7-a0c5-fb2af5f18c21",
+              "name": "visit_date",
+              "value": "={{ $('If1').item.json.visit_date.toDateTime().format('dd LLL, yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "58e126a6-e2d9-4727-a498-6d27b4524019",
+              "name": "visit_time",
+              "value": "={{ $('If1').item.json.visit_date.toDateTime().toLocal().format('t') }}",
+              "type": "string"
+            },
+            {
+              "id": "fea6c6d7-fad2-473b-beb9-034255ee241d",
+              "name": "office_location",
+              "value": "=",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        740,
+        1540
+      ],
+      "id": "43018f4c-6874-4157-bcf3-72ab814c48dd",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "lead",
+          "mode": "name"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "id",
+              "value": "={{ $json.lead_id }}"
+            }
+          ]
+        },
+        "options": {
+          "outputColumns": [
+            "first_name",
+            "id"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        360,
+        -200
+      ],
+      "id": "98c49047-0f1b-4487-9b62-3c6725f75f46",
+      "name": "Postgres1",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://live-mt-server.wati.io/413503/api/v2/sendTemplateMessage",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "whatsappNumber",
+              "value": "={{ $json.phoneNumber }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "*/*"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4NGFiZDUzMy1mNmZlLTRmODEtODVlMS0zZjYxNTI2NDk0ZWIiLCJ1bmlxdWVfbmFtZSI6Im1hbmRhbGFtLmthcmFuQG1pbGVzZWR1Y2F0aW9uLmNvbSIsIm5hbWVpZCI6Im1hbmRhbGFtLmthcmFuQG1pbGVzZWR1Y2F0aW9uLmNvbSIsImVtYWlsIjoibWFuZGFsYW0ua2FyYW5AbWlsZXNlZHVjYXRpb24uY29tIiwiYXV0aF90aW1lIjoiMDQvMDQvMjAyNSAxMjoyMDowOSIsInRlbmFudF9pZCI6IjQxMzUwMyIsImRiX25hbWUiOiJtdC1wcm9kLVRlbmFudHMiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBRE1JTklTVFJBVE9SIiwiZXhwIjoyNTM0MDIzMDA4MDAsImlzcyI6IkNsYXJlX0FJIiwiYXVkIjoiQ2xhcmVfQUkifQ.8xqEz39ggf6RghrEmXg-iHdwacDPfCgzwFexcJ3iaBQ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"template_name\": \"cpa_util_d_day_reminder\",\n  \"broadcast_name\": \"visit_reminder_cpa\",\n  \"parameters\": [\n    {\n      \"name\": \"1\",\n      \"value\": \"{{ $json.first_name }}\"\n    },\n    {\n      \"name\": \"2\",\n      \"value\": \"{{ $json.visit_time }}\"\n    }\n  ]\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1020,
+        -200
+      ],
+      "id": "10370e0f-a6b3-48f6-b242-27538bb1d427",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "phone",
+          "mode": "name"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "leadId",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        580,
+        -200
+      ],
+      "id": "04c6c836-814d-46b2-b5a3-a252cb68fbf9",
+      "name": "Postgres4",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Postgres1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Postgres3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres1": {
+      "main": [
+        [
+          {
+            "node": "Postgres4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "ba6b6d57-05d6-4a12-bcce-4c295c9d48de",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-04-17T05:57:36.419Z",
+      "updatedAt": "2025-04-17T05:57:36.419Z",
+      "role": "workflow:owner",
+      "workflowId": "gq6VOUmifF0t4qXs",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

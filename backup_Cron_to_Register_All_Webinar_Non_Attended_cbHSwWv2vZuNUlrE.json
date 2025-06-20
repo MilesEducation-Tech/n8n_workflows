@@ -1,0 +1,1036 @@
+{
+  "createdAt": "2025-04-16T11:54:27.004Z",
+  "updatedAt": "2025-04-30T06:52:34.000Z",
+  "id": "cbHSwWv2vZuNUlrE",
+  "name": "Cron to Register All Webinar Non-Attended",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mfx-prod-154625965269.asia-south1.run.app/webinar/add-lead",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('HTTP Request1').item.json.result.token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"lead_id\": {{ $('Loop Over Items').item.json.leadId }},\n\"campaign_id\":{{ $('Loop Over Items').item.json.campignId ?? 357 }},\n\"webinar_id\": {{ $('Edit Fields1').item.json.upcoming_webinar }}\n}",
+        "options": {}
+      },
+      "id": "ec651bfe-6763-47b7-a1a6-52a9a50d08af",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        520,
+        -680
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "webinar",
+          "mode": "name"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "date_string",
+              "value": "={{ $today.minus(3,'days').format('LLLL d, yyyy') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1420,
+        -720
+      ],
+      "id": "1e6c77d0-22f0-4e92-8518-9994a7a04f7a",
+      "name": "Postgres1",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "webinar_registration",
+          "mode": "name"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "webinarId",
+              "value": "={{ $('Edit Fields').item.json.previous_webinar }}"
+            },
+            {
+              "column": "webinar_status",
+              "value": "2"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -540,
+        -720
+      ],
+      "id": "2623c2a6-a842-4c97-92cb-fe5895225ab6",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -200,
+        -720
+      ],
+      "id": "bd442ea7-06be-4181-b20c-a938f3d9f76c",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "webinar_registration",
+          "mode": "name"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "webinarId",
+              "value": "=48"
+            },
+            {
+              "column": "leadId",
+              "value": "={{ $json.leadId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        20,
+        -580
+      ],
+      "id": "2db2d5dd-ec98-4a88-bc53-1c00981906e4",
+      "name": "Postgres2",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8706b76b-922a-4069-a976-1f2983bef591",
+              "name": "previous_webinar",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1200,
+        -720
+      ],
+      "id": "d8ba29f9-ee04-49d9-9046-86332564120f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n  \"public\".\"webinar\".\"id\" AS \"id\",\n  \"public\".\"webinar\".\"webinar_id\" AS \"webinar_id\",\n  \"public\".\"webinar\".\"webinar_name\" AS \"webinar_name\",\n  \"public\".\"webinar\".\"date_string\" AS \"date_string\",\n  \"public\".\"webinar\".\"time_string\" AS \"time_string\",\n  \"public\".\"webinar\".\"date_time\" AS \"date_time\",\n  \"public\".\"webinar\".\"enrol_status\" AS \"enrol_status\"\nFROM\n  \"public\".\"webinar\"\nWHERE\n  (\n    \"public\".\"webinar\".\"date_time\" >= CAST(CAST((NOW() + INTERVAL '1 day') AS date) AS timestamptz)\n  )\n \n   AND (\n    \"public\".\"webinar\".\"date_time\" < CAST(CAST((NOW() + INTERVAL '8 day') AS date) AS timestamptz)\n  )\n  AND (\"public\".\"webinar\".\"courseId\" = {{ $('Postgres1').item.json.courseId }} )\nORDER BY\n  \"public\".\"webinar\".\"id\" DESC",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -980,
+        -720
+      ],
+      "id": "689fa10e-2122-4f3e-9c15-d32a40b71616",
+      "name": "Postgres3",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e371dc1e-156e-4ed6-a00b-5cd9234cf843",
+              "name": "upcoming_webinar",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -760,
+        -720
+      ],
+      "id": "48c21bac-19c8-47dc-9bc6-d998a73e8980",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "241b4d45-6488-410a-9ecd-4d2eebedf9c1",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "number",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        240,
+        -580
+      ],
+      "id": "1f3ed78c-7f15-46f7-a7e6-e05f4cba423f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mfx-prod-154625965269.asia-south1.run.app/auth/login",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "email",
+              "value": "jithin.kumar@mileseducation.com"
+            },
+            {
+              "name": "password",
+              "value": "123"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "c5c1ee86-a805-41b0-aac4-ff96f1c7b709",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -1640,
+        -720
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1920,
+        -120
+      ],
+      "id": "5421bf74-359a-484f-b3b7-232411a1cf28",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const minDelay = 1000; // in milliseconds\nconst maxDelay = 5000;\n\nconst randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;\n\nconsole.log(`Generated random delay: ${randomDelay} ms`);\n\nreturn [{ json: { randomDelay } }];"
+      },
+      "id": "568fe779-6460-4b9f-a994-68325ed5c640",
+      "name": "Code",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        840,
+        -700
+      ]
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.randomDelay/1000 }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1060,
+        -700
+      ],
+      "id": "0d602d7f-193f-43a9-9b14-0a691ecf4e3b",
+      "name": "Wait",
+      "webhookId": "45340eb6-ce09-4ad7-a980-2fb474003f76"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "webinar",
+          "mode": "name"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "date_string",
+              "value": "={{ $today.minus(5,'days').format('LLLL d, yyyy') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -300,
+        400
+      ],
+      "id": "033115c5-085d-41a3-ac50-0405b469d28b",
+      "name": "Postgres4",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "webinar_registration",
+          "mode": "name"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "webinarId",
+              "value": "={{ $('Edit Fields2').item.json.previous_webinar }}"
+            },
+            {
+              "column": "webinar_status",
+              "value": "2"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        580,
+        400
+      ],
+      "id": "834bb54f-522c-4c44-b717-4594ecaea630",
+      "name": "Postgres5",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8706b76b-922a-4069-a976-1f2983bef591",
+              "name": "previous_webinar",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        400
+      ],
+      "id": "9694d9c0-bd87-40b8-b1f8-f84897f4f8ac",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n  \"public\".\"webinar\".\"id\" AS \"id\",\n  \"public\".\"webinar\".\"webinar_id\" AS \"webinar_id\",\n  \"public\".\"webinar\".\"webinar_name\" AS \"webinar_name\",\n  \"public\".\"webinar\".\"date_string\" AS \"date_string\",\n  \"public\".\"webinar\".\"time_string\" AS \"time_string\",\n  \"public\".\"webinar\".\"date_time\" AS \"date_time\",\n  \"public\".\"webinar\".\"enrol_status\" AS \"enrol_status\"\nFROM\n  \"public\".\"webinar\"\nWHERE\n  (\n    \"public\".\"webinar\".\"date_time\" >= CAST(CAST((NOW() + INTERVAL '1 day') AS date) AS timestamptz)\n  )\n \n   AND (\n    \"public\".\"webinar\".\"date_time\" < CAST(CAST((NOW() + INTERVAL '8 day') AS date) AS timestamptz)\n  )\n  AND (\"public\".\"webinar\".\"courseId\" = {{ $('Postgres4').item.json.courseId }} )\nORDER BY\n  \"public\".\"webinar\".\"id\" DESC",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        140,
+        400
+      ],
+      "id": "62d67219-4b1c-438f-9f8b-99bc55afcc22",
+      "name": "Postgres6",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e371dc1e-156e-4ed6-a00b-5cd9234cf843",
+              "name": "upcoming_webinar",
+              "value": "={{ $json.id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        360,
+        400
+      ],
+      "id": "51c5d0a5-8099-4aa1-ba74-1ebf32c40810",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mfx-prod-154625965269.asia-south1.run.app/auth/login",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "email",
+              "value": "jithin.kumar@mileseducation.com"
+            },
+            {
+              "name": "password",
+              "value": "123"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "56c4ba2b-95d5-4bbc-9e6a-e071058a1dcb",
+      "name": "HTTP Request2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -520,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "webinar_registration",
+          "mode": "name"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "webinarId",
+              "value": "=36"
+            },
+            {
+              "column": "leadId",
+              "value": "={{ $json.leadId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        880,
+        420
+      ],
+      "id": "80f38499-f945-462c-8bad-f51bde5d984b",
+      "name": "Postgres7",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1eJwNX9jUku5Gz5HLw6kfmHy_S40QnFemqHFXHH8SDEQ/edit?gid=1226957815#gid=1226957815",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1032771402,
+          "mode": "list",
+          "cachedResultName": "all leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1eJwNX9jUku5Gz5HLw6kfmHy_S40QnFemqHFXHH8SDEQ/edit#gid=1032771402"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -840,
+        1160
+      ],
+      "id": "303ca6b1-5274-498e-9772-7f8314214f5c",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleApi": {
+          "id": "aiCprsG1ZRAOjrNn",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -620,
+        1160
+      ],
+      "id": "c3e93dc9-3b6e-4e1b-bb9a-62877a4fae59",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mfx-prod-154625965269.asia-south1.run.app/webinar/add-lead",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzYsInN0YXR1cyI6dHJ1ZSwiY3JlYXRlZF9hdCI6IjIwMjQtMDktMDZUMTc6NDQ6NDAuMjUzWiIsInVwZGF0ZWRfYXQiOiIyMDI0LTA5LTA2VDE3OjQ0OjQwLjI1M1oiLCJ1c2VySWQiOiJmNzc1NmY3MC00MjA1LTQ2NjItYjY2NS0zZDljNmE2ZGRhMzAiLCJmaXJzdE5hbWUiOiJqaXRoaW4iLCJsYXN0TmFtZSI6Imt1bWFyIiwicm9sZSI6MCwidXNlck5hbWUiOiJqaXRoaW4ua3VtYXJAbWlsZXNlZHVjYXRpb24uY29tIiwiZW1haWwiOiJqaXRoaW4ua3VtYXJAbWlsZXNlZHVjYXRpb24uY29tIiwicGhvbmUiOiI5OTgwNzgzNjA5IiwiY291bnRyeUNvZGUiOiI5MSIsIm1mYUVuYWJsZWQiOmZhbHNlLCJtZmFUeXBlIjpudWxsLCJtZmFTZWNyZXQiOm51bGwsInVzZXJUeXBlIjoxLCJsYXN0TG9naW4iOm51bGwsImFwcGxpY2F0aW9ucyI6W3siaWQiOjQxLCJzdGF0dXMiOnRydWUsImNyZWF0ZWRfYXQiOiIyMDI0LTA5LTA2VDE3OjQ0OjQwLjQzM1oiLCJ1cGRhdGVkX2F0IjoiMjAyNC0wOS0wNlQxNzo0NDo0MC40MzNaIiwiaXNBY3RpdmUiOnRydWUsImFwcGxpY2F0aW9uIjp7ImlkIjozLCJzdGF0dXMiOnRydWUsImNyZWF0ZWRfYXQiOiIwMDAxLTAxLTAxVDA1OjQ2OjE4Ljc3MloiLCJ1cGRhdGVkX2F0IjoiMDAwMS0wMS0wMVQwNTo0NjoxOC43NzJaIiwiYXBwbGljYXRpb25fbmFtZSI6Ik1GIiwiYXBwbGljYXRpb25fZGVzY3JpcHRpb24iOiJNRngiLCJhcHBsaWNhdGlvbl91cmwiOiJodHRwOi8vbG9jYWxob3N0OjMyMTEvYXBpL2NiP3Rva2VuPSIsImFwcGxpY2F0aW9uX3R5cGUiOiJXRUIiLCJyZWZyZXNoX3Rva2VuX2xpZmUiOiIyZCIsImFjY2Vzc190b2tlbl9saWZlIjpudWxsLCJpc0FjdGl2ZSI6dHJ1ZSwiaXNfZGV2bW9kZSI6dHJ1ZSwiaXNfZnJlZV9hY2Nlc3MiOmZhbHNlfX1dLCJ1c2VyIjp7ImlkIjozNSwic3RhdHVzIjp0cnVlLCJjcmVhdGVkX2F0IjoiMjAyNC0wOS0wNlQxNzo0NDo0MC4wNjNaIiwidXBkYXRlZF9hdCI6IjIwMjQtMDktMDZUMTc6NDQ6NDAuMDYzWiIsImZpcnN0TmFtZSI6ImppdGhpbiIsImxhc3ROYW1lIjoia3VtYXIiLCJlbWFpbCI6ImppdGhpbi5rdW1hckBtaWxlc2VkdWNhdGlvbi5jb20iLCJwaG9uZSI6Ijk5ODA3ODM2MDkiLCJjb3VudHJ5Q29kZSI6IjkxIiwidXNlclR5cGUiOjEsImxhc3RMb2dpbiI6bnVsbCwiZ2VuZGVyIjpudWxsLCJsb2NhdGlvbiI6bnVsbCwicGF0aFdheVByb2ZpbGUiOm51bGwsImpvYlByZWZlcmVuY2UiOm51bGwsImRldmljZUlkIjpudWxsLCJlbXBsb3llZUlkIjpudWxsfSwic2Vzc2lvbiI6MTExMTU5LCJpYXQiOjE3NDU1ODMyODQsImV4cCI6MTc0NTY2OTY4NH0.pSIZTFfXPpWifsrWZUPZbcSje3sIx3RZVWbYQHKGnr4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"lead_id\": {{ $json.leadID }},\n\"campaign_id\": 357,\n\"webinar_id\": {{ $json.webinar_id }}\n}",
+        "options": {}
+      },
+      "id": "24f27b9d-63dc-4a62-89c4-642fa8f69605",
+      "name": "HTTP Request3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        -300,
+        1240
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const minDelay = 1000; // in milliseconds\nconst maxDelay = 5000;\n\nconst randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;\n\nconsole.log(`Generated random delay: ${randomDelay} ms`);\n\nreturn [{ json: { randomDelay } }];"
+      },
+      "id": "4cd97eab-7009-43ce-9a3a-323b58bdee91",
+      "name": "Code1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        20,
+        1220
+      ]
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.randomDelay/1000 }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        240,
+        1220
+      ],
+      "id": "82b5f404-ac56-4beb-98fc-7bbe04bdda78",
+      "name": "Wait2",
+      "webhookId": "45340eb6-ce09-4ad7-a980-2fb474003f76"
+    }
+  ],
+  "connections": {
+    "Postgres1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Postgres2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Postgres3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres2": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Postgres1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Postgres6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres6": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Postgres5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Postgres4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres5": {
+      "main": [
+        [
+          {
+            "node": "Postgres7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner",
+    "saveExecutionProgress": true
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "745a3532-b95a-4f6c-9302-389e955ab79a",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-04-16T11:54:27.015Z",
+      "updatedAt": "2025-04-16T11:54:27.015Z",
+      "role": "workflow:owner",
+      "workflowId": "cbHSwWv2vZuNUlrE",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

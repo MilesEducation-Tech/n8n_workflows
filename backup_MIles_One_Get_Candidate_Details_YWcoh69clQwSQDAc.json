@@ -1,0 +1,417 @@
+{
+  "createdAt": "2025-06-20T07:28:28.551Z",
+  "updatedAt": "2025-06-20T07:56:09.000Z",
+  "id": "YWcoh69clQwSQDAc",
+  "name": "MIles_One_Get_Candidate_Details",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "account_user",
+          "mode": "list",
+          "cachedResultName": "account_user"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "password",
+              "condition": "IS NULL"
+            },
+            {
+              "column": "id",
+              "value": "={{ $json.user_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1640,
+        40
+      ],
+      "id": "a66cb49d-4859-4161-ae09-eda88198e98e",
+      "name": "Milesone Users",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "iOOTVit15R9PSjWX",
+          "name": "Milesone-Production(DO NOT TOUCH)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "lead",
+          "mode": "list",
+          "cachedResultName": "lead"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "uuid",
+              "value": "={{ $json.user_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -920,
+        40
+      ],
+      "id": "62faca29-2a60-4de3-b628-adfd01527426",
+      "name": "MF Lead",
+      "alwaysOutputData": true,
+      "notesInFlow": false,
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "email",
+          "mode": "name"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "leadId",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        140,
+        40
+      ],
+      "id": "5148bad6-f856-4246-9b1f-5682dd8afd0a",
+      "name": "MF Email",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3bef5d21-1c93-4694-ae70-860bdfc010c7",
+              "leftValue": "={{ $('MF Lead').item.json.keys().length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -400,
+        20
+      ],
+      "id": "6df5f552-88f2-45af-b361-34ff04bdd992",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -2120,
+        20
+      ],
+      "id": "15153f83-4bc9-4cbb-a3bc-59f3e9c60a32",
+      "name": "Loop Over Items1",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "path": "35a71a0f-4431-4c44-aebe-c8e665ed4b72",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2680,
+        20
+      ],
+      "id": "5a9f1ba9-f448-4ee2-867e-6991fa8bc71a",
+      "name": "Webhook",
+      "webhookId": "35a71a0f-4431-4c44-aebe-c8e665ed4b72"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n\"MF_lead_id\": \"{{ $('If').item.json.id }}\",\n\"MF_can_id\": \"{{ $('If').item.json.candidate_id }}\",\n\"MF_uuid\": \"{{ $('If').item.json.uuid }}\",\n\"MF_first_name\": \"{{ $('If').item.json.first_name }}\",\n\"MF_last_name\" : \"{{ $('If').item.json.last_name }}\",\n\"MF_email\" : \"{{ $json.email }}\",\n\"Miles_one_uuid\" : \"{{ $('Milesone Users').item.json.id }}\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        60
+      ],
+      "id": "a66e4a3d-424c-4735-8d08-a63e6bded328",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n\"MF_lead_id\": \"{{ $('If').item.json.id }}\",\n\"MF_can_id\": \"{{ $('If').item.json.candidate_id }}\",\n\"MF_uuid\": \"{{ $('If').item.json.uuid }}\",\n\"MF_first_name\": \"{{ $('If').item.json.first_name }}\",\n\"MF_last_name\" : \"{{ $('If').item.json.last_name }}\",\n\"MF_email\" : \"{{ $json.email }}\",\n\"Miles_one_uuid\" : \"{{ $('Milesone Users').item.json.id }}\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -140,
+        400
+      ],
+      "id": "e02ab29d-5b5e-4c1c-bc7d-2786dc8eb60c",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n\"MF_lead_id\": \"{{ $('If').item.json.id }}\",\n\"MF_can_id\": \"{{ $('If').item.json.candidate_id }}\",\n\"MF_uuid\": \"{{ $('If').item.json.uuid }}\",\n\"MF_first_name\": \"{{ $('If').item.json.first_name }}\",\n\"MF_last_name\" : \"{{ $('If').item.json.last_name }}\",\n\"MF_email\" : \"{{ $json.email }}\",\n\"Miles_one_uuid\" : \"{{ $('Milesone Users').item.json.id }}\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -560,
+        260
+      ],
+      "id": "8cbf3f2b-0ee6-412a-b9be-82bd23cd3127",
+      "name": "MF LEAD DETAILS NOT FOUND"
+    }
+  ],
+  "connections": {
+    "Milesone Users": {
+      "main": [
+        [
+          {
+            "node": "MF Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MF Lead": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MF LEAD DETAILS NOT FOUND",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MF Email": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MF Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Milesone Users",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MF LEAD DETAILS NOT FOUND": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "99025123-1ffa-4013-97a6-6dc5d372ae07",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-06-20T07:28:28.571Z",
+      "updatedAt": "2025-06-20T07:28:28.571Z",
+      "role": "workflow:owner",
+      "workflowId": "YWcoh69clQwSQDAc",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

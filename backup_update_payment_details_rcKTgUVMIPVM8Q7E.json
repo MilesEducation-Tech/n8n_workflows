@@ -1,0 +1,194 @@
+{
+  "createdAt": "2023-08-17T11:51:39.349Z",
+  "updatedAt": "2023-12-13T12:26:48.000Z",
+  "id": "rcKTgUVMIPVM8Q7E",
+  "name": "update payment details",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "update-payment-details",
+        "options": {}
+      },
+      "id": "1997b09a-8fbd-410f-b9ca-7b70ecadbd20",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        580,
+        320
+      ],
+      "webhookId": "5deb80d3-d139-4383-8a5a-cf94306db327"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "webinar_payments",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "pid",
+              "condition": "eq",
+              "keyValue": "={{ $json.body.pid }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "payment_status",
+              "fieldValue": "={{ $json.body.status }}"
+            },
+            {
+              "fieldId": "payment_details",
+              "fieldValue": "={{ $json.body }}"
+            }
+          ]
+        }
+      },
+      "id": "bc807b89-4781-41d1-bc80-646c22e16cf7",
+      "name": "Supabase",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        800,
+        320
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.miles-api.com",
+            "x-real-ip": "172.68.154.132",
+            "x-forwarded-host": "webhook.miles-api.com",
+            "x-forwarded-server": "webhook.miles-api.com",
+            "x-forwarded-for": "49.204.70.102, 172.68.154.132",
+            "connection": "close",
+            "content-length": "777",
+            "accept-encoding": "gzip",
+            "cf-ray": "7f81bb71ffe33c13-BLR",
+            "x-forwarded-proto": "https",
+            "content-type": "application/json",
+            "user-agent": "PostmanRuntime/7.32.3",
+            "accept": "*/*",
+            "postman-token": "07653962-6f52-438c-83b1-2d47c7513665",
+            "cdn-loop": "cloudflare",
+            "cf-connecting-ip": "49.204.70.102",
+            "cf-ipcountry": "IN"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "pid": 3,
+            "payment_status": "success",
+            "payment_details": {
+              "id": 9,
+              "title": "Infinix INBOOK",
+              "description": "Infinix Inbook X1 Ci3 10th 8GB...",
+              "price": 1099,
+              "discountPercentage": 11.83,
+              "rating": 4.54,
+              "stock": 96,
+              "brand": "Infinix",
+              "category": "laptops",
+              "thumbnail": "https://i.dummyjson.com/data/products/9/thumbnail.jpg",
+              "images": [
+                "https://i.dummyjson.com/data/products/9/1.jpg",
+                "https://i.dummyjson.com/data/products/9/2.png",
+                "https://i.dummyjson.com/data/products/9/3.png",
+                "https://i.dummyjson.com/data/products/9/4.jpg",
+                "https://i.dummyjson.com/data/products/9/thumbnail.jpg"
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  "versionId": "d3a7b956-a113-4eb7-9799-716e1d76c35b",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2023-08-17T11:51:39.355Z",
+      "updatedAt": "2023-08-17T11:51:39.355Z",
+      "role": "workflow:owner",
+      "workflowId": "rcKTgUVMIPVM8Q7E",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}
