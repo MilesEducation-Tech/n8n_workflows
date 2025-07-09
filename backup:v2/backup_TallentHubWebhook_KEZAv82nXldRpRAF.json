@@ -1,0 +1,205 @@
+{
+  "createdAt": "2024-05-17T17:26:37.849Z",
+  "updatedAt": "2025-03-05T13:13:33.000Z",
+  "id": "KEZAv82nXldRpRAF",
+  "name": "TallentHubWebhook",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "3a744b7d-e474-4455-8741-13aebd072d97",
+        "options": {}
+      },
+      "id": "217f8699-d0aa-45c6-973e-18fd4593b9a0",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        380,
+        120
+      ],
+      "webhookId": "3a744b7d-e474-4455-8741-13aebd072d97"
+    },
+    {
+      "parameters": {
+        "authentication": "appToken",
+        "email": "={{ $json.body.record.email ?? \"\" }}",
+        "additionalFields": {
+          "city": "",
+          "companyName": "={{ $json.body.record.company_url }}",
+          "firstName": "={{ $json.body.record.name }}",
+          "phoneNumber": "={{ $json.body.record.phone }}"
+        },
+        "options": {}
+      },
+      "id": "fa966be8-7bcc-4e69-ba6f-28a48e801b19",
+      "name": "HubSpot",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2,
+      "position": [
+        820,
+        120
+      ],
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "9gQS5DtY67JDWDBl",
+          "name": "HubSpot account App Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authorization",
+              "value": "Bearer pat-na1-83fd9a9b-edfb-478f-81db-a8fc31197b7a"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\n    \"properties\": {\n        \"email\": \"jithin.4@miles.com\",\n        \"phone\":\"+916238133298\"\n    }\n}",
+        "options": {}
+      },
+      "id": "c995ecae-b872-4106-acb1-03dc24c644e9",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        800,
+        -80
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HubSpot",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.miles-api.com",
+            "x-real-ip": "172.69.87.221",
+            "x-forwarded-host": "webhook.miles-api.com",
+            "x-forwarded-server": "webhook.miles-api.com",
+            "x-forwarded-for": "2406:da1a:6b0:f600:9d40:b1de:69b3:c910, 172.69.87.221",
+            "connection": "close",
+            "content-length": "333",
+            "accept-encoding": "gzip, br",
+            "cf-ray": "8855e240edd347b3-BOM",
+            "x-forwarded-proto": "https",
+            "accept": "*/*",
+            "content-type": "application/json",
+            "user-agent": "pg_net/0.8.0",
+            "cf-connecting-ip": "2406:da1a:6b0:f600:9d40:b1de:69b3:c910",
+            "cdn-loop": "cloudflare",
+            "cf-pseudo-ipv4": "253.238.239.231",
+            "cf-ipcountry": "IN"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "type": "INSERT",
+            "table": "Hire_Miles_Alumni_for_your_US_Offices",
+            "record": {
+              "id": 2,
+              "name": "Jithin",
+              "email": "jithin@miles.com",
+              "phone": "6238133298",
+              "state": 2,
+              "created_at": "2024-05-17T19:06:16.78738+00:00",
+              "company_url": "https://www.mileseducation.com/",
+              "whatsappAllow": true
+            },
+            "schema": "public",
+            "old_record": null
+          }
+        }
+      }
+    ]
+  },
+  "versionId": "e91f61f8-aa98-4d70-9476-e43405838d35",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2024-05-17T17:26:37.856Z",
+      "updatedAt": "2024-05-17T17:26:37.856Z",
+      "role": "workflow:owner",
+      "workflowId": "KEZAv82nXldRpRAF",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

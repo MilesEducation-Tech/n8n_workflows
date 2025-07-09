@@ -1,0 +1,707 @@
+{
+  "createdAt": "2025-03-12T08:16:18.870Z",
+  "updatedAt": "2025-03-18T14:38:47.000Z",
+  "id": "ldk8IoB6vj0JxYK4",
+  "name": "url checks - website",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -660,
+        -260
+      ],
+      "id": "413267c3-588e-4bce-9e7f-306cdc9a60db",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "content": "build all urls from the repo\nfetch all urls from sitemap\nfetch all urls from navbar and footer\n\ncompare repo built URLs with sitemap and website",
+        "height": 240,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -940,
+        -320
+      ],
+      "typeVersion": 1,
+      "id": "319a61ef-a4e6-4903-b08b-ea5e1bc9dca7",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "url": "https://www.mileseducation.com/sitemap_index.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -380,
+        100
+      ],
+      "id": "49c5aa2d-2e39-4375-a5fe-6f6896579426",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a helpful, intelligent web scraping chat assistant. "
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "message": "your role is to convert the raw markdown presented and convert it to structured data. The data if HTML for a sitemap. \nDo not Fetch URLs from the navbar, footer and header. \nthe URL for relative to absolute conversion is https://www.mileseducation.com. This is useful for images and other relative paths. \n"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        1780,
+        -1040
+      ],
+      "id": "ed791ecb-fa5a-4925-b924-de7d52009fd1",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseFormat": "json_object"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        -800
+      ],
+      "id": "f4092083-31fa-43a9-a895-a90ae52bd4f1",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "ZE1PPZaN2o0t1Ijy",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\"links\": [\"array\",\"of\",\"absolute URLs\",\"of\",\"links\"],\n\"body\": \"this is body text\",\n\"images\": [\"array\",\"of\",\"absolute\",\"URLs\",\"of\",\"images\"],\n\"summary\": \"one line summary of the blog\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        2000,
+        -820
+      ],
+      "id": "f286e714-c07d-463d-bed7-3fe5728e6919",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "url": "https://api.github.com/orgs/MilesEducation-Tech/repos?per_page=100&page=1",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer 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"
+            },
+            {
+              "name": "Accept",
+              "value": "application/vnd.github.v3+json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -340,
+        -260
+      ],
+      "id": "57f062f1-de03-4687-ad2e-d14c3ebff378",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ebf374ba-df67-49bd-8d2d-e45c6b4af4bf",
+              "leftValue": "={{ $json.full_name }}",
+              "rightValue": "Miles-Website-NextJS",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -20,
+        -260
+      ],
+      "id": "b1fcb905-694d-45ed-bbab-a9a54ee296fe",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "https://www.mileseducation.com/",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        -1060
+      ],
+      "id": "48cd3439-c336-47e1-80f4-2f316f4458b9",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a helpful, intelligent web scraping chat assistant. "
+            },
+            {
+              "type": "HumanMessagePromptTemplate",
+              "message": "your role is to convert the raw markdown presented and convert it to structured data. \nFetch all URLs also from the navbar, footer and header. \nthe URL for relative to absolute conversion is https://www.mileseducation.com. This is useful for images and other relative paths. \n"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        720,
+        -1060
+      ],
+      "id": "fefa7557-fa9b-4de8-b8ac-62480066df6c",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseFormat": "json_object"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        700,
+        -820
+      ],
+      "id": "560c887d-6f72-4296-a4ca-ebd7d8493c48",
+      "name": "OpenRouter Chat Model1"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\"links\": [\"array\",\"of\",\"absolute URLs\",\"of\",\"links\"],\n\"body\": \"this is body text\",\n\"images\": [\"array\",\"of\",\"absolute\",\"URLs\",\"of\",\"images\"],\n\"summary\": \"one line summary of the blog\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        900,
+        -840
+      ],
+      "id": "6f6358b2-59ca-42b2-a810-f078bf3a29b5",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "content": "fetch sitemap\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -220,
+        -1140
+      ],
+      "typeVersion": 1,
+      "id": "6794e306-b774-4f73-8f77-cb6405de8eae",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "fetch navbar and footer"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -560,
+        160
+      ],
+      "typeVersion": 1,
+      "id": "bc8faf75-0dd6-4f80-98ee-e227fd941830",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        300,
+        100
+      ],
+      "id": "08c388f7-534c-45ec-ba96-c62d6e7f9059",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        180
+      ],
+      "id": "aa3ca9a2-1277-4280-a1a2-d16d971c1c17",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const xmlData = $input.first().json.data; // Get XML from the previous node\n\n// Use regex to extract all <loc> URLs\nconst urls = [...xmlData.matchAll(/<loc>(.*?)<\\/loc>/g)].map(match => match[1]);\n\n// Return in the correct n8n format\nreturn urls.map(url => ({ json: { url } }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        100
+      ],
+      "id": "4ab9e320-907e-4a5c-872f-809ae5a93d67",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "const xmlData = $input.first().json.data; // Get XML from the previous node\n\n// Use regex to extract all <loc> URLs\nconst urls = [...xmlData.matchAll(/<loc>(.*?)<\\/loc>/g)].map(match => match[1]);\n\n// Return in the correct n8n format\nreturn urls.map(url => ({ json: { url } }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        180
+      ],
+      "id": "34ec3999-1764-49b5-98d8-651f73471a5e",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "method": "HEAD",
+        "url": "={{ $json.url }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1420,
+        240
+      ],
+      "id": "70b20603-fc23-4a8e-b83f-0b7dd15039a5",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1140,
+        180
+      ],
+      "id": "801f0170-b633-418b-a993-3d3de62343d0",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0350c0aa-5e01-4c36-b534-923ba0dcade5",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": 200,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1640,
+        240
+      ],
+      "id": "14bed226-2d4d-42fe-a3a9-db6807c713fc",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3c545dd2-a9fc-4cc2-8803-877635490242",
+              "name": "url",
+              "value": "={{ $('Loop Over Items1').first().json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "a5ae2b0f-9c97-4ff5-9cc9-f8027b79e2f4",
+              "name": "status_code",
+              "value": "={{ $json.statusCode }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1860,
+        340
+      ],
+      "id": "3fb4ad2a-c646-4a62-bdc4-ee5423884b3e",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "url"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2100,
+        340
+      ],
+      "id": "a8a8f941-0921-4185-bee6-19ca4f7abe06",
+      "name": "Aggregate"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        []
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "599a25ed-7d67-46f2-9979-402890ce3c31",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-03-12T08:16:18.886Z",
+      "updatedAt": "2025-03-12T08:16:18.886Z",
+      "role": "workflow:owner",
+      "workflowId": "ldk8IoB6vj0JxYK4",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

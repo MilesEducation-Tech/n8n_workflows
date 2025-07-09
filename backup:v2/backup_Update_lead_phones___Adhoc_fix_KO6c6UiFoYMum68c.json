@@ -1,0 +1,571 @@
+{
+  "createdAt": "2025-07-09T07:30:03.394Z",
+  "updatedAt": "2025-07-09T08:31:58.000Z",
+  "id": "KO6c6UiFoYMum68c",
+  "name": "Update lead phones - Adhoc fix",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        220
+      ],
+      "id": "f77509c2-1a78-4770-b874-3bb8c7fe31f6",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "net_enquiry",
+          "mode": "name"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "coming_from",
+              "condition": "LIKE",
+              "value": "%wati%"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        420,
+        -420
+      ],
+      "id": "29d6b215-418f-4ff5-9911-87dd0dcd8423",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "VPJUosohtvWNBW4H",
+          "name": "MF Prod (DO NOT USE)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/14RHOVHt-GFpRyMsoVkHu5e-BmhJRxnfwVVCp66Pc2UU/edit?gid=1252731635#gid=1252731635",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1983098653,
+          "mode": "list",
+          "cachedResultName": "fix",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14RHOVHt-GFpRyMsoVkHu5e-BmhJRxnfwVVCp66Pc2UU/edit#gid=1983098653"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        180,
+        220
+      ],
+      "id": "5562f01b-c151-45e0-b40b-75faba66ce3d",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleApi": {
+          "id": "aiCprsG1ZRAOjrNn",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        720,
+        -420
+      ],
+      "id": "a1909ad9-4a79-4250-92ad-7b9d7a801ce2",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "phone",
+          "mode": "name"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "phoneNumber",
+              "value": "={{ $json.phone.toString() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        940,
+        -320
+      ],
+      "id": "210b432e-10d1-4d53-8f40-93f53f1b47b7",
+      "name": "Postgres1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "VPJUosohtvWNBW4H",
+          "name": "MF Prod (DO NOT USE)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "phone",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": true,
+            "isActive": true,
+            "id": "={{ $json.id }}",
+            "phoneNumber": "={{ $('Loop Over Items').item.json.clean_phone }}",
+            "isWhatsAppNumber": true
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_by",
+              "displayName": "created_by",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "updated_by",
+              "displayName": "updated_by",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "countryCode",
+              "displayName": "countryCode",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "phoneNumber",
+              "displayName": "phoneNumber",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "isActive",
+              "displayName": "isActive",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "isWhatsAppNumber",
+              "displayName": "isWhatsAppNumber",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "isPrimary",
+              "displayName": "isPrimary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "maskedPhoneNo",
+              "displayName": "maskedPhoneNo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "phoneType",
+              "displayName": "phoneType",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "options",
+              "canBeUsedToMatch": true,
+              "options": [
+                {
+                  "name": "1",
+                  "value": "1"
+                },
+                {
+                  "name": "2",
+                  "value": "2"
+                },
+                {
+                  "name": "3",
+                  "value": "3"
+                }
+              ],
+              "removed": true
+            },
+            {
+              "id": "contact_removal_request_date",
+              "displayName": "contact_removal_request_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "reason_for_delete",
+              "displayName": "reason_for_delete",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "mode_of_communication",
+              "displayName": "mode_of_communication",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "leadId",
+              "displayName": "leadId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1160,
+        -320
+      ],
+      "id": "7c90aaf0-2402-44c3-9bee-2a7fadafb05d",
+      "name": "Postgres2",
+      "credentials": {
+        "postgres": {
+          "id": "VPJUosohtvWNBW4H",
+          "name": "MF Prod (DO NOT USE)"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        380,
+        220
+      ],
+      "id": "12bbd625-58ce-4bc9-84e1-fd043793d40c",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mfx-prod-154625965269.asia-south1.run.app/requests/merge-lead",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzYsInN0YXR1cyI6dHJ1ZSwiY3JlYXRlZF9hdCI6IjIwMjQtMDktMDZUMTc6NDQ6NDAuMjUzWiIsInVwZGF0ZWRfYXQiOiIyMDI0LTA5LTA2VDE3OjQ0OjQwLjI1M1oiLCJ1c2VySWQiOiJmNzc1NmY3MC00MjA1LTQ2NjItYjY2NS0zZDljNmE2ZGRhMzAiLCJmaXJzdE5hbWUiOiJqaXRoaW4iLCJsYXN0TmFtZSI6Imt1bWFyIiwicm9sZSI6MCwidXNlck5hbWUiOiJqaXRoaW4ua3VtYXJAbWlsZXNlZHVjYXRpb24uY29tIiwiZW1haWwiOiJqaXRoaW4ua3VtYXJAbWlsZXNlZHVjYXRpb24uY29tIiwicGhvbmUiOiI5OTgwNzgzNjA5IiwiY291bnRyeUNvZGUiOiI5MSIsIm1mYUVuYWJsZWQiOmZhbHNlLCJtZmFUeXBlIjpudWxsLCJtZmFTZWNyZXQiOm51bGwsInVzZXJUeXBlIjoxLCJsYXN0TG9naW4iOm51bGwsInVzZXIiOnsiaWQiOjM1LCJzdGF0dXMiOnRydWUsImNyZWF0ZWRfYXQiOiIyMDI0LTA5LTA2VDE3OjQ0OjQwLjA2M1oiLCJ1cGRhdGVkX2F0IjoiMjAyNC0wOS0wNlQxNzo0NDo0MC4wNjNaIiwiZmlyc3ROYW1lIjoiaml0aGluIiwibGFzdE5hbWUiOiJrdW1hciIsImVtYWlsIjoiaml0aGluLmt1bWFyQG1pbGVzZWR1Y2F0aW9uLmNvbSIsInBob25lIjoiOTk4MDc4MzYwOSIsImNvdW50cnlDb2RlIjoiOTEiLCJ1c2VyVHlwZSI6MSwibGFzdExvZ2luIjpudWxsLCJnZW5kZXIiOm51bGwsImxvY2F0aW9uIjpudWxsLCJwYXRoV2F5UHJvZmlsZSI6bnVsbCwiam9iUHJlZmVyZW5jZSI6bnVsbCwiZGV2aWNlSWQiOm51bGwsImVtcGxveWVlSWQiOm51bGx9LCJzZXNzaW9uIjoxNzY4MDMsImlhdCI6MTc1MjA0OTYyMiwiZXhwIjoxNzUyMTM2MDIyfQ.Rfrg41s1zkVcP2-pbb_nzMTdjHP06khatuRIMyBuLu8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "leadId1",
+              "value": "={{ $json[\"lead_id (og)\"] }}"
+            },
+            {
+              "name": "leadId2",
+              "value": "={{ $json[\"lead_id (incorrect)\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        600,
+        320
+      ],
+      "id": "8752e25b-905d-4859-99b5-c18da0ec8c7e",
+      "name": "HTTP Request"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        []
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Postgres1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres1": {
+      "main": [
+        [
+          {
+            "node": "Postgres2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "9072a0ae-0a9f-4288-ac6d-f25cdb2ce6d2",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-07-09T07:30:03.403Z",
+      "updatedAt": "2025-07-09T07:30:03.403Z",
+      "role": "workflow:owner",
+      "workflowId": "KO6c6UiFoYMum68c",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

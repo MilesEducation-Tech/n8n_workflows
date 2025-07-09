@@ -1,0 +1,201 @@
+{
+  "createdAt": "2024-08-09T11:57:02.320Z",
+  "updatedAt": "2024-08-09T12:01:56.000Z",
+  "id": "VWsyZFTvEAfgRLRO",
+  "name": "send pre departure shootout",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "d2ac5688-f874-4faf-b2b0-91477f25026d",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        140,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v17.0/171009622770823/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "whatsAppApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=\n{\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"{{ $json[\"phone\"] }}\",\n  \"type\": \"template\",\n  \"template\": {\n      \"name\": \"post_pre_departure\",\n      \"language\": {\n          \"code\": \"en\"\n      },\n      \"components\": [\n          {\n              \"type\": \"header\",\n              \"parameters\": [\n                  {\n                      \"type\": \"document\",\n                      \"document\": {                   \"link\":\"https://one.mileseducation.us/storage/v1/object/public/wa_assets/Predeparture%20checklist%20for%20the%20USA.pdf\",\n\"filename\": \"Pre-Departure Checklist\"\n                      }\n                  }\n              ]\n          },\n          {\n              \"type\": \"body\",\n              \"parameters\": [\n                  {\n                      \"type\": \"text\",\n                      \"text\": \"{{ $json[\"first_name\"] }}\"\n                  }\n              ]\n          }\n      ]\n  }\n}",
+        "options": {}
+      },
+      "id": "1b1bb2a6-e406-4aca-8c3e-33f60ddc1ba5",
+      "name": "HTTP Request36",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        980,
+        180
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "JPvNp2kC4SudtNkr",
+          "name": "WhatsApp account New"
+        }
+      },
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "send_whatsapp_import",
+        "returnAll": true,
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "camp_id",
+              "condition": "eq",
+              "keyValue": "853"
+            }
+          ]
+        }
+      },
+      "id": "4e97d32f-69f2-49e4-b458-6493f798557e",
+      "name": "Supabase",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        340,
+        320
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "867d9395-22ae-4854-86cc-af60470c3419",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [
+        600,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request36",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request36": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "c62d095c-ab52-4b8f-8e31-04795e1dd317",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2024-08-09T11:57:02.325Z",
+      "updatedAt": "2024-08-09T11:57:02.325Z",
+      "role": "workflow:owner",
+      "workflowId": "VWsyZFTvEAfgRLRO",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

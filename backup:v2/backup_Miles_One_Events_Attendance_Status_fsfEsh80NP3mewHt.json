@@ -1,0 +1,229 @@
+{
+  "createdAt": "2025-06-04T08:09:24.235Z",
+  "updatedAt": "2025-06-04T12:49:55.000Z",
+  "id": "fsfEsh80NP3mewHt",
+  "name": "Miles One Events Attendance Status",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "path": "a66e1151-ecfc-4a71-b339-7ead08a2d336",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "83d68ee6-9a7d-4999-9064-61f028ced7b1",
+      "name": "Webhook",
+      "webhookId": "a66e1151-ecfc-4a71-b339-7ead08a2d336"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "lead",
+          "mode": "list",
+          "cachedResultName": "lead"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "uuid",
+              "value": "={{ $json.query.user_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        220,
+        0
+      ],
+      "id": "84545259-3e52-4795-a09f-155c9b3c1029",
+      "name": "MF LEAD",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "webinar_registration",
+          "mode": "list",
+          "cachedResultName": "webinar_registration"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "leadId",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "column": "webinarId",
+              "value": "={{ $('Webhook').item.json.query.webinar_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        440,
+        0
+      ],
+      "id": "3bf7ad04-a844-4f95-aac2-da77bb02dbaf",
+      "name": "Postgres",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n\"webinar_status\": \"{{ $json.webinar_status }}\",\n\"uuid\": \"{{ $('MF LEAD').item.json.uuid }}\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        0
+      ],
+      "id": "51793bcc-18e6-4b41-91ca-8b52e34ecde2",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "MF LEAD",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MF LEAD": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "d48366ba-bc64-4f2b-8ddf-c08713d19124",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-06-04T08:09:24.246Z",
+      "updatedAt": "2025-06-04T08:09:24.246Z",
+      "role": "workflow:owner",
+      "workflowId": "fsfEsh80NP3mewHt",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

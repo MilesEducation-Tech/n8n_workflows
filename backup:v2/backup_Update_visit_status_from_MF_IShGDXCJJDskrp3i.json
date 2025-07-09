@@ -1,0 +1,264 @@
+{
+  "createdAt": "2024-02-09T09:50:26.775Z",
+  "updatedAt": "2024-03-15T13:49:21.000Z",
+  "id": "IShGDXCJJDskrp3i",
+  "name": "Update visit status from MF",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "update-visit-status",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "17a97384-ab14-4254-9d6a-a62b8ae4be8b",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        600,
+        320
+      ],
+      "webhookId": "cbbdef4c-7523-4522-924e-0abae703f12f"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"success\":true}",
+        "options": {}
+      },
+      "id": "846e64d2-7515-44f2-b79c-090ae22d9e3c",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        760,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "leads_dump",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "unique_id",
+              "condition": "ilike",
+              "keyValue": "=%{{ $json.body.ne_id }}%"
+            }
+          ]
+        }
+      },
+      "id": "55ff4a1b-cb24-461e-aae7-f170b4f41c3e",
+      "name": "Supabase",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        840,
+        320
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $('Webhook').item.json.body.hasField('visit_approval_status') }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "08ec9508-4bc8-422e-b873-c65ca6909122",
+      "name": "IF",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "visit_office",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "leads_dump_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status_gm",
+              "fieldValue": "={{ $('Webhook').item.json.body.visit_approval_status }}"
+            }
+          ]
+        }
+      },
+      "id": "118f4509-7e1c-4d2f-a9e9-1a3671abf6c2",
+      "name": "Supabase1",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        120
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "6stEFLC7gtftREcf",
+          "name": "Supabase Campaign manager"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supabase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase": {
+      "main": [
+        [
+          {
+            "node": "IF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF": {
+      "main": [
+        [
+          {
+            "node": "Supabase1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.miles-api.com",
+            "x-real-ip": "172.70.147.45",
+            "x-forwarded-host": "webhook.miles-api.com",
+            "x-forwarded-server": "webhook.miles-api.com",
+            "x-forwarded-for": "52.66.204.68, 172.70.147.45",
+            "connection": "close",
+            "content-length": "106",
+            "accept-encoding": "gzip, br",
+            "cf-ray": "864cdc17e870919c-SIN",
+            "x-forwarded-proto": "https",
+            "accept": "*/*",
+            "user-agent": "Thunder Client (https://www.thunderclient.com)",
+            "content-type": "application/json",
+            "cf-connecting-ip": "52.66.204.68",
+            "cdn-loop": "cloudflare",
+            "cf-ipcountry": "IN"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "ne_id": "1710177301722",
+            "visit_approval_status": "Yes",
+            "visit_date": "2024-03-15 17:30:36",
+            "added_by": 3069
+          }
+        }
+      }
+    ]
+  },
+  "versionId": "0febc5da-bf1c-4132-97c0-a0ff63cc0f32",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2024-02-09T09:50:26.780Z",
+      "updatedAt": "2024-02-09T09:50:26.780Z",
+      "role": "workflow:owner",
+      "workflowId": "IShGDXCJJDskrp3i",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

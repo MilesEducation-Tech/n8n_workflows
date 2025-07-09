@@ -1,0 +1,183 @@
+{
+  "createdAt": "2024-07-09T14:35:09.705Z",
+  "updatedAt": "2024-07-09T14:38:44.000Z",
+  "id": "1P0DnmjpQIfZ7WvQ",
+  "name": "Send OTP (Mobile App)",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "32fb6be2-97d4-4c2e-b300-4f94fa445bf8",
+        "options": {}
+      },
+      "id": "5f46b81c-09d0-4ab9-9908-55a4be696514",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        660,
+        280
+      ],
+      "webhookId": "32fb6be2-97d4-4c2e-b300-4f94fa445bf8"
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "108019349036743",
+        "recipientPhoneNumber": "={{ $json.body.phone }}",
+        "template": "test_otp|en",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "={{ $json.body.otp }}"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "button",
+              "sub_type": "url",
+              "buttonParameters": {
+                "parameter": {
+                  "payload": "={{ $json.body.otp }}"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "id": "f034f5a0-f6f4-45f5-89a1-3e582cc17e64",
+      "name": "WhatsApp Business Cloud",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        880,
+        280
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "KHcTD6EUGATb3z0D",
+          "name": "WhatsApp account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.miles-api.com",
+            "x-real-ip": "172.70.93.36",
+            "x-forwarded-host": "webhook.miles-api.com",
+            "x-forwarded-server": "webhook.miles-api.com",
+            "x-forwarded-for": "115.240.189.114, 172.70.93.36",
+            "connection": "close",
+            "content-length": "48",
+            "accept-encoding": "gzip, br",
+            "cf-ray": "8a090b702f394c65-SIN",
+            "x-forwarded-proto": "https",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "content-type": "application/json",
+            "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsInN0YXR1cyI6dHJ1ZSwiY3JlYXRlZF9hdCI6IjIwMjQtMDYtMjdUMTE6MjY6NDIuNDQ5WiIsInVwZGF0ZWRfYXQiOiIyMDI0LTA2LTI3VDExOjI2OjQyLjQ0OVoiLCJ1c2VySWQiOiJkOTg2NzU3MS1mNjQxLTQyZmYtYTQyZS0zODIzNmIwNTVhZTMiLCJmaXJzdE5hbWUiOm51bGwsImxhc3ROYW1lIjpudWxsLCJwcm9maWxlUGljdHVyZSI6bnVsbCwicm9sZSI6bnVsbCwidXNlck5hbWUiOm51bGwsImVtYWlsIjpudWxsLCJwaG9uZSI6IjYyMzgxMzMyOTgiLCJjb3VudHJ5Q29kZSI6Iis5MSIsInBhc3N3b3JkSGFzaCI6bnVsbCwibWZhRW5hYmxlZCI6ZmFsc2UsIm1mYVR5cGUiOm51bGwsIm1mYVNlY3JldCI6bnVsbCwidXNlclR5cGUiOjAsImxhc3RMb2dpbiI6bnVsbCwiZ2VuZGVyIjpudWxsLCJsb2NhdGlvbiI6bnVsbCwicGF0aFdheVByb2ZpbGUiOm51bGwsInNlc3Npb24iOjU3LCJpYXQiOjE3MTk1Nzg5ODIsImV4cCI6MTcxOTY2NTM4Mn0.qtr2YF5ADKVSCum5phcESzaFtpG6H2RnKYZVfBsWCYQ",
+            "user-agent": "PostmanRuntime/7.39.0",
+            "accept": "*/*",
+            "cache-control": "no-cache",
+            "postman-token": "20b57bd2-094c-4eb7-baf9-368740e74931",
+            "cf-connecting-ip": "115.240.189.114",
+            "cdn-loop": "cloudflare",
+            "cf-ipcountry": "IN"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "phone": "916238133298",
+            "otp": 129684
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "5e0e72cb-f927-424a-9af6-7af82955281b",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2024-07-09T14:35:09.712Z",
+      "updatedAt": "2024-07-09T14:35:09.712Z",
+      "role": "workflow:owner",
+      "workflowId": "1P0DnmjpQIfZ7WvQ",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

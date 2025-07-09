@@ -1,0 +1,135 @@
+{
+  "createdAt": "2025-05-07T10:02:51.897Z",
+  "updatedAt": "2025-06-10T11:10:34.000Z",
+  "id": "Lf017yrOvlz9RcTq",
+  "name": "MilesOne_BE_News_Status_Check",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://miles-usp-backend-154625965269.asia-south1.run.app/devops_api/check-news-status",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "37d6f4b9-bf81-4a72-b5f0-bb8f2db5e9f0",
+      "name": "HTTP Request",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 1500
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "e7b60d25-40c6-4fd7-9787-3879421caab5",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        0
+      ],
+      "id": "cf50f298-b286-45c1-986e-0fcd7395e9ce",
+      "name": "Webhook",
+      "webhookId": "e7b60d25-40c6-4fd7-9787-3879421caab5"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        12
+      ]
+    }
+  },
+  "meta": null,
+  "pinData": {},
+  "versionId": "0c775b06-5b2a-42db-8896-5c6ff16a781a",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-05-07T10:02:51.901Z",
+      "updatedAt": "2025-05-07T10:02:51.901Z",
+      "role": "workflow:owner",
+      "workflowId": "Lf017yrOvlz9RcTq",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": [
+    {
+      "createdAt": "2025-05-01T05:41:24.451Z",
+      "updatedAt": "2025-05-01T05:41:24.451Z",
+      "id": "gs2WZHb5YEz6CGx9",
+      "name": "Miles One"
+    }
+  ]
+}

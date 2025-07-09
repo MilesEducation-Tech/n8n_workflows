@@ -1,0 +1,187 @@
+{
+  "createdAt": "2025-01-25T13:12:07.798Z",
+  "updatedAt": "2025-01-25T14:27:38.000Z",
+  "id": "JTnLznlyrx16SfnZ",
+  "name": "webinar attended",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "0f925f6a-4f7b-4bca-bf16-d015ab1792fb",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        360,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n  \"public\".\"webinar_registration\".\"id\" AS \"id\",\n  \"public\".\"webinar_registration\".\"created_at\" AS \"created_at\",\n  \"public\".\"webinar_registration\".\"leadId\" AS \"leadId\",\n  \"public\".\"webinar_registration\".\"joined_at\" AS \"joined_at\",\n  \"public\".\"webinar_registration\".\"left_time\" AS \"left_time\",\n  \"public\".\"webinar_registration\".\"webinar_status\" AS \"webinar_status\",\n  \"public\".\"webinar_registration\".\"in_session\" AS \"in_session\",\n  \"Lead - LeadId\".\"first_name\" AS \"Lead - LeadId__first_name\",\n  \"Lead - LeadId\".\"candidate_id\" AS \"Lead - LeadId__candidate_id\",\n  \"Lead - LeadId\".\"uuid\" AS \"Lead - LeadId__uuid\",\n  \"Phone\".\"phoneNumber\" AS \"Phone__phoneNumber\",\n  \"Email\".\"email\" AS \"Email__email\"\nFROM\n  \"public\".\"webinar_registration\"\n \nLEFT JOIN \"public\".\"lead\" AS \"Lead - LeadId\" ON \"public\".\"webinar_registration\".\"leadId\" = \"Lead - LeadId\".\"id\"\n  LEFT JOIN \"public\".\"phone\" AS \"Phone\" ON \"Lead - LeadId\".\"id\" = \"Phone\".\"leadId\"\n  LEFT JOIN \"public\".\"email\" AS \"Email\" ON \"Lead - LeadId\".\"id\" = \"Email\".\"leadId\"\nWHERE\n  (\n    \"public\".\"webinar_registration\".\"webinar_status\" = CAST('1' AS \"webinar_registration_webinar_status_enum\")\n  )\n \n   AND (\n    \"public\".\"webinar_registration\".\"joined_at\" IS NOT NULL\n  )\nLIMIT\n  1048575",
+        "options": {}
+      },
+      "id": "c5d5e823-2b0b-4334-8b46-96cebc88c7ae",
+      "name": "Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.2,
+      "position": [
+        600,
+        320
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "VPJUosohtvWNBW4H",
+          "name": "MF Prod (DO NOT USE)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "b610ecee-a956-413a-a7c6-8cac2c852b35",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [
+        860,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "108019349036743",
+        "recipientPhoneNumber": "=+919460596406",
+        "template": "post_webinar_attendees|en",
+        "components": {
+          "component": [
+            {
+              "bodyParameters": {
+                "parameter": [
+                  {
+                    "text": "karan"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "id": "f2359021-1cfd-4bda-ac2d-7aa4242874e8",
+      "name": "WhatsApp Business Cloud",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        1160,
+        220
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "KHcTD6EUGATb3z0D",
+          "name": "Secondary | Marketing Miles Education"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "5996a8fa-80fb-4f75-ab44-03a8b46e54aa",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-01-25T13:12:07.802Z",
+      "updatedAt": "2025-01-25T13:12:07.802Z",
+      "role": "workflow:owner",
+      "workflowId": "JTnLznlyrx16SfnZ",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

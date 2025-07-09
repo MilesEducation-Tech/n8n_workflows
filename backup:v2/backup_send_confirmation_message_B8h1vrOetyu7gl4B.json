@@ -1,0 +1,217 @@
+{
+  "createdAt": "2025-06-25T07:55:17.601Z",
+  "updatedAt": "2025-06-25T12:29:57.000Z",
+  "id": "B8h1vrOetyu7gl4B",
+  "name": "send-confirmation-message",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "send-confirmation-message",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6905f3b1-43fd-44cb-bc68-b448394f54f4",
+      "name": "Webhook",
+      "webhookId": "45fb5aeb-4640-4150-b208-3d3ddc257bd2"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"webinar_date\": \"{{ $json.date_string }}\",\n  \"webinar_time\": \"{{ $json.time_string }}\"\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        0
+      ],
+      "id": "27914bd0-0aa4-4a59-829b-8adab594f403",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "webinar",
+          "mode": "name"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "courseId",
+              "value": "={{ $json.body.course_id }}"
+            }
+          ]
+        },
+        "sort": {
+          "values": [
+            {
+              "column": "id",
+              "direction": "DESC"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        220,
+        0
+      ],
+      "id": "fc287002-5dba-40af-9001-9b9e5bff03a4",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "UlHvqQraJFrdqkr2",
+          "name": "MF Prod Read"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.miles-api.com",
+            "x-real-ip": "172.71.124.38",
+            "x-forwarded-host": "webhook.miles-api.com",
+            "x-forwarded-server": "webhook.miles-api.com",
+            "x-forwarded-for": "34.87.85.253, 172.71.124.38",
+            "connection": "close",
+            "content-length": "72",
+            "cf-ray": "9554742edddace17-SIN",
+            "cf-connecting-ip": "34.87.85.253",
+            "accept-encoding": "gzip, br",
+            "x-forwarded-proto": "https",
+            "content-type": "application/json; charset=UTF-8",
+            "tracestate": "dd=s:0;p:8a5fb3b6bb9873e1",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "traceparent": "00-dc88ce298f7a6881e66718035eb69129-8a5fb3b6bb9873e1-00",
+            "x-datadog-tags": "_dd.p.tid=dc88ce298f7a6881",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-ipcountry": "SG",
+            "x-datadog-sampling-priority": "0",
+            "x-datadog-parent-id": "9970885697434317793",
+            "x-datadog-trace-id": "16602264954077614377"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "message": "@first_incoming_message",
+            "phone": "{{phone}}",
+            "course_id": 58
+          },
+          "webhookUrl": "https://webhook.miles-api.com/webhook/send-confirmation-message",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "versionId": "d4f52244-8553-450a-ba26-1642c5ffc19e",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-06-25T07:55:17.610Z",
+      "updatedAt": "2025-06-25T07:55:17.610Z",
+      "role": "workflow:owner",
+      "workflowId": "B8h1vrOetyu7gl4B",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

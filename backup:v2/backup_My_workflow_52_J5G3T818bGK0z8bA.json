@@ -1,0 +1,144 @@
+{
+  "createdAt": "2025-04-29T08:11:34.394Z",
+  "updatedAt": "2025-04-29T08:11:47.000Z",
+  "id": "J5G3T818bGK0z8bA",
+  "name": "My workflow 52",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://accounts.zoho.com/oauth/v2/auth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "scope",
+              "value": "ZohoCliq.Webhooks.CREATE"
+            },
+            {
+              "name": "client_id",
+              "value": "1000.Q76UMRH5DM6541ZWD20GM6D9HLAJ3Q"
+            },
+            {
+              "name": "client_secret",
+              "value": "0217164233686f67ed00728acabbc1a39fc96c80a6"
+            },
+            {
+              "name": "state",
+              "value": "5466400890088961855"
+            },
+            {
+              "name": "response_type",
+              "value": "code"
+            },
+            {
+              "name": "redirect_uri",
+              "value": "https://miles.app.n8n.cloud/webhook/use-cliq"
+            },
+            {
+              "name": "access_type",
+              "value": "online"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        520,
+        -20
+      ],
+      "id": "aa824c29-ff39-433a-a3c7-26f6e15beef1",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        80
+      ],
+      "id": "7574df54-c08f-4126-b4dc-4b5c5bb79b98",
+      "name": "When clicking ‘Test workflow’"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "bf8305ab-7ef7-4d90-9e9c-e2cb09d263c2",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-04-29T08:11:34.398Z",
+      "updatedAt": "2025-04-29T08:11:34.398Z",
+      "role": "workflow:owner",
+      "workflowId": "J5G3T818bGK0z8bA",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

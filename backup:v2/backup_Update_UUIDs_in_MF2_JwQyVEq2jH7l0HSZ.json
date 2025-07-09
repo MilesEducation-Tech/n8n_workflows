@@ -1,0 +1,233 @@
+{
+  "createdAt": "2025-06-27T05:42:17.959Z",
+  "updatedAt": "2025-06-27T11:54:41.000Z",
+  "id": "JwQyVEq2jH7l0HSZ",
+  "name": "Update UUIDs in MF2",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -360,
+        -140
+      ],
+      "id": "5b06dd78-7fd6-4390-b8da-98e14ac63aa0",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1mXhhDTAJ-J0DQMO_DwVZqCZyzpQd_NuyFEicjC2PGPU/edit?gid=1664831660#gid=1664831660",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1664831660,
+          "mode": "list",
+          "cachedResultName": "final",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mXhhDTAJ-J0DQMO_DwVZqCZyzpQd_NuyFEicjC2PGPU/edit#gid=1664831660"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -140,
+        -140
+      ],
+      "id": "5bb94b44-97d0-41d0-9fde-c73eac8cdd1a",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleApi": {
+          "id": "aiCprsG1ZRAOjrNn",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4a04a12d-010c-43a5-873d-71194b12414a",
+              "leftValue": "={{ $json.Match }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "9b5ad86e-70dd-48fc-b6a9-c267d8f97404",
+              "leftValue": "={{ $json.lead_id.toString() }}",
+              "rightValue": "not",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        80,
+        -140
+      ],
+      "id": "4c006bc3-2291-4634-81b1-e9a8a4ea1d3b",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "application_master",
+          "mode": "list",
+          "cachedResultName": "application_master"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        300,
+        -240
+      ],
+      "id": "47149d7d-d855-450b-a919-b473f958074a",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "5b93PyQsfRuWDF9t",
+          "name": "SSO Prod (DO NOT USE)"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "d8b3556a-2a2a-408f-a852-871fffbf94dc",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-06-27T05:42:17.969Z",
+      "updatedAt": "2025-06-27T05:42:17.969Z",
+      "role": "workflow:owner",
+      "workflowId": "JwQyVEq2jH7l0HSZ",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

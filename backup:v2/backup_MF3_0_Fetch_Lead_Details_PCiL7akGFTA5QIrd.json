@@ -1,0 +1,194 @@
+{
+  "createdAt": "2025-06-25T06:43:06.975Z",
+  "updatedAt": "2025-06-25T06:51:37.000Z",
+  "id": "PCiL7akGFTA5QIrd",
+  "name": "MF3.0 Fetch Lead Details",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "c055762a-8fe7-4141-a639-df2372f30060",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        260,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT l.id as lead_id, l.lead_uuid, c.first_name, c.last_name, e.email, p.phone_number, p.country_code FROM public.lead as l \nleft join public.contact as c on l.contact_id = c.id \nleft join public.email as e on c.primary_email_id = e.id \nleft join public.phone as p on c.primary_phone_id = p.id\nwhere l.id = {{ $json.lead_id.toNumber() }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        480,
+        340
+      ],
+      "id": "7ab72429-e246-4f44-b997-ccbf72aa2ecb",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "KNtkMSxkGIecd43J",
+          "name": "MF 3.0 Prod Read"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b16f371c-1bd7-4388-a56b-3ffe65f37741",
+              "name": "lead_id",
+              "value": "={{ $json.lead_id }}",
+              "type": "number"
+            },
+            {
+              "id": "271f5b48-0736-40dc-a507-00062623ec0f",
+              "name": "uuid",
+              "value": "={{ $json.lead_uuid }}",
+              "type": "string"
+            },
+            {
+              "id": "1e9f8796-1242-409f-9194-e27246fe3ddb",
+              "name": "first_name",
+              "value": "={{ $json.first_name }}",
+              "type": "string"
+            },
+            {
+              "id": "3d81ba60-14e0-471a-825f-dc1749b7d79a",
+              "name": "email",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "41ec4908-945d-41d0-afcc-2aa233d948e5",
+              "name": "phone",
+              "value": "={{ $json.phone_number }}",
+              "type": "string"
+            },
+            {
+              "id": "b159ed15-aebc-4f38-a333-d9e5240add21",
+              "name": "country_code",
+              "value": "={{ $json.country_code }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        700,
+        340
+      ],
+      "id": "f224f119-d818-4fcc-86e9-5594e4d3436f",
+      "name": "Edit Fields"
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "lead_id": "1"
+        }
+      }
+    ]
+  },
+  "versionId": "fd2b35e4-27b6-4e1d-9bb1-7be16f235998",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-06-25T06:43:06.979Z",
+      "updatedAt": "2025-06-25T06:43:06.979Z",
+      "role": "workflow:owner",
+      "workflowId": "PCiL7akGFTA5QIrd",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

@@ -1,0 +1,121 @@
+{
+  "createdAt": "2025-06-21T10:35:47.624Z",
+  "updatedAt": "2025-06-21T10:35:47.624Z",
+  "id": "2r7PJr4sXXJcr29V",
+  "name": "My workflow 68",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e80ee589-f20e-43fc-9471-52fa5550d67a",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "phoneNumberId": "115484311630426",
+        "recipientPhoneNumber": "916238133298",
+        "template": "20thwebinar_7th_aug|en"
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        220,
+        0
+      ],
+      "id": "7dc9f2d0-2b69-44a5-86e2-62668d706377",
+      "name": "WhatsApp Business Cloud",
+      "webhookId": "a75789b4-5358-43c0-98bc-a054ad9e5357",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "FoPXmnu4lAta3dqt",
+          "name": "Miles US Pathway"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "a947c7bc-eaaa-474c-9bb5-d365d3633a60",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "createdAt": "2025-06-21T10:35:47.632Z",
+      "updatedAt": "2025-06-21T10:35:47.632Z",
+      "role": "workflow:owner",
+      "workflowId": "2r7PJr4sXXJcr29V",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}

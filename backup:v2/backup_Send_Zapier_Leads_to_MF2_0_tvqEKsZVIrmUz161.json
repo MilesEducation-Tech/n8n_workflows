@@ -1,0 +1,164 @@
+{
+  "createdAt": "2025-06-17T07:25:03.087Z",
+  "updatedAt": "2025-06-17T10:01:29.000Z",
+  "id": "tvqEKsZVIrmUz161",
+  "name": "Send Zapier Leads to MF2.0",
+  "active": true,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fetch-zapier-leads",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        0
+      ],
+      "id": "545cf19a-2b4b-433f-a002-2b4c2f302dc7",
+      "name": "Webhook",
+      "webhookId": "59ec1615-70be-4235-ba64-dbb59552c3bf"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://mfx-prod-154625965269.asia-south1.run.app/enquiries/add",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\"first_name\":\"{{ $json.body.first_name }}\",\n\"phone\":\"{{ $json.body.phone }}\",\n\"contact_number\":\"{{ $json.body.contact_number }}\",\n\"course_id\": {{ $json.body.course_id.toNumber() }},\n\"whatsapp_opt_in\":true,\n\"campaign_id\": {{ $json.body.campaign_id.toNumber() }},\n\"register_for_webinar\":true,\n\"coming_from\": \"{{ $json.body.coming_from }}\",\n\"email\": \"{{ $json.body.email }}\"\n}",
+        "options": {}
+      },
+      "id": "42486d2d-1383-4c56-bdb7-584222bee082",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        260,
+        0
+      ],
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "webhook.miles-api.com",
+            "x-real-ip": "172.71.191.66",
+            "x-forwarded-host": "webhook.miles-api.com",
+            "x-forwarded-server": "webhook.miles-api.com",
+            "x-forwarded-for": "44.222.103.196, 172.71.191.66",
+            "connection": "close",
+            "content-length": "321",
+            "cf-ray": "95112e0cae1de61d-IAD",
+            "accept": "*/*",
+            "accept-encoding": "gzip, br",
+            "user-agent": "Zapier",
+            "x-forwarded-proto": "https",
+            "cdn-loop": "cloudflare; loops=1",
+            "content-type": "application/json; charset=utf-8",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-connecting-ip": "44.222.103.196",
+            "cf-ipcountry": "US"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "campaign_id": "1679",
+            "coming_from": "MBA_in_AI_Finance_TG [V5]",
+            "contact_number": "+917013318264",
+            "course_id": "58",
+            "created_at": "2025-06-17T08:29:26+0000",
+            "email": "manchumanu12312@gmail.com",
+            "first_name": "Allu Kumar",
+            "phone": "+917013318264",
+            "Qualifier Question": "Completed in 2024 or before",
+            "register_for_webinar": "true"
+          },
+          "webhookUrl": "https://webhook.miles-api.com/webhook/fetch-zapier-leads",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "versionId": "e0482d89-03d1-454d-9d9d-6a70d2e7a672",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "createdAt": "2025-06-17T07:25:03.096Z",
+      "updatedAt": "2025-06-17T07:25:03.096Z",
+      "role": "workflow:owner",
+      "workflowId": "tvqEKsZVIrmUz161",
+      "projectId": "cR71BtEHrwxYg2T3",
+      "project": {
+        "createdAt": "2025-03-05T09:02:14.120Z",
+        "updatedAt": "2025-03-05T09:02:14.120Z",
+        "id": "cR71BtEHrwxYg2T3",
+        "name": "jithin jithin.kumar@mileseducation.com <jithin.kumar@mileseducation.com>",
+        "type": "personal",
+        "icon": null,
+        "projectRelations": [
+          {
+            "createdAt": "2025-03-05T09:02:14.123Z",
+            "updatedAt": "2025-03-05T09:02:14.123Z",
+            "role": "project:personalOwner",
+            "userId": "f51de756-6885-4866-9956-6527c235116c",
+            "projectId": "cR71BtEHrwxYg2T3",
+            "user": {
+              "createdAt": "2023-08-04T07:13:39.569Z",
+              "updatedAt": "2025-03-27T08:36:36.628Z",
+              "id": "f51de756-6885-4866-9956-6527c235116c",
+              "email": "jithin.kumar@mileseducation.com",
+              "firstName": "jithin",
+              "lastName": "jithin.kumar@mileseducation.com",
+              "personalizationAnswers": {
+                "version": "v4",
+                "personalization_survey_submitted_at": "2023-08-04T07:16:29.938Z",
+                "personalization_survey_n8n_version": "1.1.1"
+              },
+              "settings": {
+                "userActivated": true,
+                "firstSuccessfulWorkflowId": "AI5qL0olh221f3jV",
+                "isOnboarded": true,
+                "userActivatedAt": 1741165335002,
+                "easyAIWorkflowOnboarded": true,
+                "npsSurvey": {
+                  "responded": true,
+                  "lastShownAt": 1743064591892
+                }
+              },
+              "role": "global:owner",
+              "disabled": false,
+              "mfaEnabled": false,
+              "isPending": false,
+              "isOwner": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "tags": []
+}
